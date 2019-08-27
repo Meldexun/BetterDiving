@@ -2,7 +2,7 @@
 name: Bug report
 about: Create a report to help us improve
 title: ''
-labels: ''
+labels: bug
 assignees: ''
 
 ---
@@ -13,8 +13,8 @@ A clear and concise description of what the bug is.
 **To Reproduce**
 Steps to reproduce the behavior:
 1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
+2. Use item '...'
+3. Place block '...'
 4. See error
 
 **Versions**
@@ -22,4 +22,6 @@ Better Diving:
 Forge:
 Minecraft
 
+**Other**
+Crash report (if one exists):
 Other mods (that are necessary to produce the bug):
