@@ -14,3 +14,6 @@ The question you want to ask.
 Better Diving:
 Forge:
 Minecraft:
+
+**Other**
+Singleplayer/Multiplayer:
