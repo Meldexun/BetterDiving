@@ -12,3 +12,6 @@ Describe what you want to be added to the mod.
 
 **Versions**
 Minecraft:
+
+**Other**
+Other mods:
