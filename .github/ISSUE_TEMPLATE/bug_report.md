@@ -27,6 +27,7 @@ Minecraft:
 
 **Other**
 Crash report (if one exists):
+Latest log:
 Singleplayer/Multiplayer:
 Other mods (that are necessary to produce the bug):
 Other mods (that are also installed):
