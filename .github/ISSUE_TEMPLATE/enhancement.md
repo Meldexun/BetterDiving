@@ -8,10 +8,15 @@ assignees: ''
 ---
 
 **Enhancement**
-Describe what you want to be added to the mod.
+Description of what exactly you want to be added to the mod.
 
 **Versions**
+Better Diving:
+Forge:
 Minecraft:
 
 **Other**
-Other mods:
+Crash report (if one exists):
+Singleplayer/Multiplayer:
+Other mods (that are necessary to produce the bug):
+Other mods (that are also installed):
