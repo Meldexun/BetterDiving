@@ -1,6 +1,6 @@
 ---
 name: Question
-about: Want to ask a question?
+about: Want to ask a question or need help with something?
 title: ''
 labels: question
 assignees: ''
@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 **Question**
-The question you want to ask.
+Description of the question or problem you are encountering.
 
 **Versions**
 Better Diving:
@@ -16,4 +16,7 @@ Forge:
 Minecraft:
 
 **Other**
+Crash report (if one exists):
 Singleplayer/Multiplayer:
+Other mods (that are necessary to produce the bug):
+Other mods (that are also installed):
