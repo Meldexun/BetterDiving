@@ -1,0 +1,19 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern":
+	[
+		"S"
+	],
+	"key":
+	{
+		"S":
+		{
+			"item": "better_diving:creepvine_seed_cluster"
+		}
+	},
+	"result":
+	{
+		"item": "better_diving:silicone_rubber",
+		"count": 2
+	}
+}

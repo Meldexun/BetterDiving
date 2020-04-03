@@ -1,0 +1,18 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern":
+	[
+		"S S"
+	],
+	"key":
+	{
+		"S":
+		{
+			"item": "better_diving:silicone_rubber"
+		}
+	},
+	"result":
+	{
+		"item": "better_diving:fins"
+	}
+}

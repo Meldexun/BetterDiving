@@ -1,0 +1,28 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern":
+	[
+		"FTF",
+		"S S"
+	],
+	"key":
+	{
+        "S":
+        {
+            "item": "better_diving:silicone_rubber"
+        },
+        "T":
+        {
+            "type": "forge:ore_dict",
+            "ore": "oreTitanium"
+        },
+        "F":
+        {
+            "item": "better_diving:fiber_mesh"
+        }
+	},
+	"result":
+	{
+		"item": "better_diving:wetsuit_leggings"
+	}
+}

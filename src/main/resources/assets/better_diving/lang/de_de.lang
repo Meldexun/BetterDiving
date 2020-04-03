@@ -1,0 +1,154 @@
+﻿
+#German
+itemGroup.tab_better_diving=Better Diving
+
+#Items
+item.diving_mask.name=Tauchmaske
+item.standard_o2_tank.name=Standard-Tauchflasche
+item.wetsuit_leggings.name=Neoprenanzug
+item.fins.name=Schwimmflossen
+
+item.rebreather.name=Kreislauftauchgerät
+item.high_capacity_o2_tank.name=Tauchflasche mit hoher Kapazität
+item.improved_wetsuit_leggings.name=Verbesserter Neoprenanzug
+item.ultra_glide_fins.name=Ultragleitfähige Schwimmflossen
+
+item.reinforced_diving_mask.name=Verstärkte Tauchmaske
+item.reinforced_o2_tank.name=Verstärkte Tauchflasche
+item.reinforced_wetsuit_leggings.name=Verstärkter Neoprenanzug
+item.reinforced_fins.name=Verstärkte Schwimmflossen
+
+item.titanium.name=Titan
+item.copper_ore.name=Kupfererz
+item.silver_ore.name=Silbererz
+item.lead.name=Blei
+item.gold.name=Gold
+item.titanium_ingot.name=Titanbarren
+item.wiring_kit.name=Kabelsatz
+item.battery.name=Batterie
+item.power_cell.name=Energiezelle
+item.creepvine_seed_cluster.name=Schlingpflanzensamenbüschel
+item.silicone_rubber.name=Silikongummi
+item.fiber_mesh.name=Fasergewebe
+item.lubricant.name=Schmierstoff
+
+item.seamoth.name=Seemotte
+item.peeper.name=Glubscher
+item.peeper_cooked.name=Gekochter Glubscher
+item.peeper_cured.name=Gepökelter Glubscher
+item.bladderfish.name=Blasenfisch
+item.bladderfish_cooked.name=Gekochter Blasenfisch
+item.bladderfish_cured.name=Gepökelter Blasenfisch
+item.garryfish.name=Stielauge
+item.garryfish_cooked.name=Gekochtes Stielauge
+item.garryfish_cured.name=Gepökeltes Stielauge
+item.holefish.name=Lochfisch
+item.holefish_cooked.name=Gekochter Lochfisch
+item.holefish_cured.name=Gepökelter Lochfisch
+item.boomerang.name=Bumerang
+item.boomerang_cooked.name=Gekochter Bumerang
+item.boomerang_cured.name=Gepökelter Bumerang
+
+#Item tooltips
+item.diving_mask.tooltip=Notwendig um Tauchflaschen zu nutzen.
+item.standard_o2_tank.tooltip=Lässt den Spieler %d Sekunden länger tauchen.
+item.wetsuit_leggings.tooltip=Erhöht die Abbaugeschwindigkeit unter Wasser um ungefähr %d%%.
+item.fins.tooltip=Erhöht die Schwimmgeschwindigkeit um ca. %d%%.
+
+item.rebreather.tooltip=Notwendig um Tauchflaschen zu nutzen.%sSpart Sauerstoff beim Tieftauchen. Absorbiert CO₂ und erzeugt daraus Atemluft.
+item.high_capacity_o2_tank.tooltip=Lässt den Spieler %d Sekunden länger tauchen.
+item.improved_wetsuit_leggings.tooltip=Erhöht die Abbaugeschwindigkeit unter Wasser um ungefähr %d%%.
+item.ultra_glide_fins.tooltip=Erhöht die Schwimmgeschwindigkeit um ca. %d%%.
+
+item.reinforced_diving_mask.tooltip=Notwendig um Tauchflaschen zu nutzen.%sBietet größeren Schutz als normale Tauchausrüstung.
+item.reinforced_o2_tank.tooltip=Lässt den Spieler %d Sekunden länger tauchen.%sBietet größeren Schutz als normale Tauchausrüstung.
+item.reinforced_wetsuit_leggings.tooltip=Erhöht die Abbaugeschwindigkeit unter Wasser um ungefähr %d%%.%sBietet größeren Schutz als normale Tauchausrüstung.
+item.reinforced_fins.tooltip=Erhöht die Schwimmgeschwindigkeit um ca. %d%%.%sBietet größeren Schutz als normale Tauchausrüstung.
+
+item.titanium.tooltip=Ti. Grundlegendes Baumaterial.
+item.copper_ore.tooltip=Cu. Unentbehrliche Verdrahtungskomponente.
+item.silver_ore.tooltip=Ag. Leitfähiges Element und Mikrobizid.
+item.lead.tooltip=Pb. Isoliert gegen Strahlung.
+item.gold.tooltip=Au. Wertvolle Leiteigenschaften. Sehr wertvolles Eigentum der Gesellschaft.
+item.titanium_ingot.tooltip=Ti. Verdichteter Titanbarren.
+item.wiring_kit.tooltip=Isolierter Draht. Unentbehrliche elektronische Komponente.
+item.battery.tooltip=Eine tragbare Energiequelle.
+item.power_cell.tooltip=Tragbare Energiequelle mit hoher Kapazität.
+item.creepvine_seed_cluster.tooltip=Einheimische Samen mit hohem Silikon- und Ölanteil.
+item.silicone_rubber.tooltip=Synthetisches, silikonhaltiges Gummi.
+item.fiber_mesh.tooltip=Starke natürliche Fasern. Bequem.
+item.lubricant.tooltip=Ölhaltiger Schmierstoff aus natürlicher Quelle. Industrielle Anwendungen.
+
+item.seamoth.tooltip=Wasser- und Weltraum-Fahrzeug für eine Person.
+
+item.peeper.tooltip=Essbarer Beutefisch, hoher Kaloriengehalt.
+item.peeper_cooked.tooltip=Proteinreiche Augäpfel. Sehr nahrhaft
+item.peeper_cured.tooltip=In Salz konserviert. Eine gesunde und nahrhafte Mahlzeit. Macht durstig, aber hält sich lange.
+
+item.bladderfish.tooltip=Die einzigartige äußere Membran dient als natürlicher Wasserfilter.
+item.bladderfish_cooked.tooltip=Schwammig. Knorpelig. Wenig Kalorien. Glücklicherweise geruchlos.
+item.bladderfish_cured.tooltip=Erinnert and Trockenfleisch. Macht durstig, aber hält sich lange.
+
+item.garryfish.tooltip=Kleiner, essbarer Beutefisch.
+item.garryfish_cooked.tooltip=Blumiger Geschmack, jedoch nur dezent.
+item.garryfish_cured.tooltip=Der einzige Geschmack ist Salz. Macht durstig, aber hält sich lange.
+
+item.holefish.tooltip=Kleiner, essbarer Beutefisch.
+item.holefish_cooked.tooltip=Gallertartiges Fleisch.
+item.holefish_cured.tooltip=Das Salzen hat dem Fleisch eine cremeartige Konsistenz gegeben. Macht durstig, aber hält sich lange.
+
+item.boomerang.tooltip=Kleiner, essbarer Beutefisch.
+item.boomerang_cooked.tooltip=Schmeckt gut um die Flossen herum.
+item.boomerang_cured.tooltip=Zäh, aber wohlschmeckend. Macht durstig, aber hält sich lange.
+
+#Blocks
+tile.limestone_outcrop.name=Kalksteinablagerung
+tile.sandstone_outcrop.name=Sandsteinablagerung
+tile.creepvine.name=Schlingpflanzenprobe
+tile.seagrass.name=Seegras
+tile.acid_mushroom.name=Säurepilz
+
+#Block Tooltips
+tile.limestone_outcrop.tooltip=
+tile.sandstone_outcrop.tooltip=
+tile.creepvine.tooltip=Silikonhaltiges Pflanzenmaterial.
+tile.seagrass.tooltip=
+tile.acid_mushroom.tooltip=Ein violetter Pilz. Säurehaltiges Fleisch.
+
+#Entities
+entity.seamoth.name=Seemotte
+entity.peeper.name=Glubscher
+entity.bladderfish.name=Blasenfisch
+entity.garryfish.name=Stielauge
+entity.holefish.name=Lochfisch
+entity.boomerang.name=Bumerang
+
+#Config
+config.category_general=01 - General
+config.category_modules=02 - Modules
+config.category_ores=03 - Ores
+config.category_plants=04 - Plants
+config.category_diving_values=05 - Diving Values
+config.category_diving_gear=06 - Diving Gear
+config.category_client_settings=07 - Client Settings
+config.category_entity_settings=08 - Entity Settings
+config.limestone=Limestone
+config.sandstone=Sandstone
+config.sand_layer=Sand Layer
+config.acid_mushroom=Acid Mushroom
+config.creepvine=Creepvine
+config.seagrass=Seagrass
+config.diving_gear=Diving Gear
+config.improved_diving_gear=Improved Diving Gear
+config.reinforced_diving_gear=Reinforced Diving Gear
+config.gui_oxygen=Oxygen Gui
+config.gui_seamoth=Seamoth Gui
+config.fog_settings=Fog Settings
+config.peeper=Peeper
+config.bladderfish=Bladderfish
+config.garryfish=Garryfish
+config.holefish=Holefish
+config.boomerang=Boomerang
+
+#Gui
+gui.temperature=°C

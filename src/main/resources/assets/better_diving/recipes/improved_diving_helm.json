@@ -1,0 +1,33 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern":
+	[
+        "SXS",
+        "TFT"
+    ],
+    "key":
+    {
+        "T":
+        {
+            "type": "forge:ore_dict",
+            "ore": "oreTitanium"
+        },
+        "F":
+        {
+            "item": "better_diving:fiber_mesh"
+        },
+        "S":
+        {
+            "type": "forge:ore_dict",
+            "ore": "oreSilver"
+        },
+		"X":
+		{
+			"item": "better_diving:diving_mask"
+		}
+	},
+	"result":
+	{
+		"item": "better_diving:rebreather"
+	}
+}

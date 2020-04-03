@@ -1,0 +1,6 @@
+{
+    "parent": "better_diving:item/holefish",
+    "textures": {
+        "0": "better_diving:entity/holefish"
+    }
+}

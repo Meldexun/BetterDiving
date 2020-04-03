@@ -1,0 +1,18 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern":
+	[
+		"SS"
+	],
+	"key":
+	{
+		"S":
+		{
+			"item": "better_diving:creepvine_seed_cluster"
+		}
+	},
+	"result":
+	{
+		"item": "better_diving:lubricant"
+	}
+}
