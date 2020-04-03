@@ -1,0 +1,22 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern":
+	[
+		"BBS"
+	],
+	"key":
+	{
+		"B":
+        {
+            "item": "better_diving:battery"
+        },
+        "S":
+        {
+            "item": "better_diving:silicone_rubber"
+        }
+	},
+	"result":
+	{
+		"item": "better_diving:power_cell"
+	}
+}

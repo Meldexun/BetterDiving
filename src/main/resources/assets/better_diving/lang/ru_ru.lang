@@ -1,0 +1,154 @@
+﻿
+#Russian
+itemGroup.tab_better_diving=Better Diving
+
+#Items
+item.diving_mask.name=Маска для дайвинга
+item.standard_o2_tank.name=Стандартный кислородный резервуар
+item.wetsuit_leggings.name=Леггинсы гидрокостюма
+item.fins.name=Ласты
+
+item.rebreather.name=Ребризер
+item.high_capacity_o2_tank.name=Высокоемкостный кислородный резервуар
+item.improved_wetsuit_leggings.name=Улучшенные леггинсы гидрокостюма
+item.ultra_glide_fins.name=Ультра скользящие ласты
+
+item.reinforced_diving_mask.name=Усиленная маска для дайвинга
+item.reinforced_o2_tank.name=Усиленный кислородный резервуар
+item.reinforced_wetsuit_leggings.name=Усиленные леггинсы гидрокостюма
+item.reinforced_fins.name=Усиленные ласты
+
+item.titanium.name=Титан
+item.copper_ore.name=Медная руда
+item.silver_ore.name=Серебряная руда
+item.lead.name=Свинец
+item.gold.name=Золото
+item.titanium_ingot.name=Титановый слиток
+item.wiring_kit.name=Комплект проводов
+item.battery.name=Батарея
+item.power_cell.name=Энергоячейка
+item.creepvine_seed_cluster.name=Гроздь семян водоросли
+item.silicone_rubber.name=Силиконовая резина
+item.fiber_mesh.name=Сетчатое волокно
+item.lubricant.name=Смазка
+
+item.seamoth.name=Мотылк
+item.peeper.name=Peeper
+item.peeper_cooked.name=Cooked Peeper
+item.peeper_cured.name=Cured Peeper
+item.bladderfish.name=Bladderfish
+item.bladderfish_cooked.name=Cooked Bladderfish
+item.bladderfish_cured.name=Cured Bladderfish
+item.garryfish.name=Garryfish
+item.garryfish_cooked.name=Cooked Garryfish
+item.garryfish_cured.name=Cured Garryfish
+item.holefish.name=Holefish
+item.holefish_cooked.name=Cooked Holefish
+item.holefish_cured.name=Cured Holefish
+item.boomerang.name=Boomerang
+item.boomerang_cooked.name=Cooked Boomerang
+item.boomerang_cured.name=Cured Boomerang
+
+#Item tooltips
+item.diving_mask.tooltip=Необходимо для погружений с кислородным резервуаром.
+item.standard_o2_tank.tooltip=Позволяет погружаться на %d секунд дольше.
+item.wetsuit_leggings.tooltip=Увеличивает скорость ломания под водой примерно на %d%%.
+item.fins.tooltip=Увеличивает скорость плавания примерно на %d%%.
+ 
+item.rebreather.tooltip=Необходимо для погружений с кислородным резервуаром.%sРециркулирует воздух для погружения с нормальной эффективностью на глубинах более 30 метров.
+item.high_capacity_o2_tank.tooltip=Позволяет погружаться на %d секунд дольше.
+item.improved_wetsuit_leggings.tooltip=Увеличивает скорость ломания под водой примерно на %d%%.
+item.ultra_glide_fins.tooltip=Увеличивает скорость плавания примерно на %d%%.
+ 
+item.reinforced_diving_mask.tooltip=Необходимо для погружений с кислородным резервуаром.%sПредоставляет больше защиты, чем обычные снаряжение для дайвинга.
+item.reinforced_o2_tank.tooltip=Позволяет погружаться на %d секунд дольше.%sПредоставляет больше защиты, чем обычные снаряжение для дайвинга.
+item.reinforced_wetsuit_leggings.tooltip=Увеличивает скорость ломания под водой примерно на %d%%.%sПредоставляет больше защиты, чем обычные снаряжение для дайвинга.
+item.reinforced_fins.tooltip=Увеличивает скорость плавания примерно на %d%%.%sПредоставляет больше защиты, чем обычные снаряжение для дайвинга.
+
+item.titanium.tooltip=Ti. Basic building material.
+item.copper_ore.tooltip=Cu. Essential wiring component.
+item.silver_ore.tooltip=Ag. Conductive element and microbicide.
+item.lead.tooltip=Pb. Screening from radiation.
+item.gold.tooltip=Au. Valuable conductive properties. Highly valuable social property.
+item.titanium_ingot.tooltip=Ti. Condensed titanium bar.
+item.wiring_kit.tooltip=Insulated silver wire. Essential electronic component.
+item.battery.tooltip=Mobile power source.
+item.power_cell.tooltip=High-capacity mobile power source.
+item.creepvine_seed_cluster.tooltip=Indigenous seeds with high silicone and oil content.
+item.silicone_rubber.tooltip=Synthetic, silicone-based rubber.
+item.fiber_mesh.tooltip=Strong natural fiber. Comfy.
+item.lubricant.tooltip=Naturally-derived, oil-based lubricant. Industrial applications.
+
+item.seamoth.tooltip=One-person sea-and-space vehicle.
+
+item.peeper.tooltip=Edible prey fish. High calorie count.
+item.peeper_cooked.tooltip=Protein-rich eyeballs. Highly nutritious.
+item.peeper_cured.tooltip=Preserved in salt. A healthy and nutritious meal. Dehydrating, but keeps well.
+
+item.bladderfish.tooltip=Unique outer membrane has potential as a natural water filter.
+item.bladderfish_cooked.tooltip=Spongy. Gristly. Low calorie count. Thankfully odorless.
+item.bladderfish_cured.tooltip=Reminiscent of jerky. Dehydrating, but keeps well.
+
+item.garryfish.tooltip=Small, edible prey fish.
+item.garryfish_cooked.tooltip=Floral flavor, but very little of it.
+item.garryfish_cured.tooltip=The only flavor is salt. Dehydrating, but keeps well.
+
+item.holefish.tooltip=Small, edible prey fish.
+item.holefish_cooked.tooltip=Gelatinous flesh.
+item.holefish_cured.tooltip=Salting has given the flesh a mousse-like consistency. Dehydrating, but keeps well.
+
+item.boomerang.tooltip=Small, edible prey fish.
+item.boomerang_cooked.tooltip=Good eating around the fins.
+item.boomerang_cured.tooltip=Tough but flavorsome. Dehydrating, but keeps well.
+
+#Blocks
+tile.limestone_outcrop.name=Выступ известняка
+tile.sandstone_outcrop.name=Выступ песчаника
+tile.creepvine.name=Образец водоросли
+tile.seagrass.name=Морская трава
+tile.acid_mushroom.name=Кислотный гриб
+
+#Block tooltips
+tile.limestone_outcrop.tooltip=
+tile.sandstone_outcrop.tooltip=
+tile.creepvine.tooltip=Silicone-based plant material.
+tile.seagrass.tooltip=
+tile.acid_mushroom.tooltip=Purple fungus. Acidic flesh.
+
+#Entities
+entity.seamoth.name=Мотылк
+entity.peeper.name=Peeper
+entity.bladderfish.name=Bladderfish
+entity.garryfish.name=Garryfish
+entity.holefish.name=Holefish
+entity.boomerang.name=Boomerang
+
+#Config
+config.category_general=01 - General
+config.category_modules=02 - Modules
+config.category_ores=03 - Ores
+config.category_plants=04 - Plants
+config.category_diving_values=05 - Diving Values
+config.category_diving_gear=06 - Diving Gear
+config.category_client_settings=07 - Client Settings
+config.category_entity_settings=08 - Entity Settings
+config.limestone=Limestone
+config.sandstone=Sandstone
+config.sand_layer=Sand Layer
+config.acid_mushroom=Acid Mushroom
+config.creepvine=Creepvine
+config.seagrass=Seagrass
+config.diving_gear=Diving Gear
+config.improved_diving_gear=Improved Diving Gear
+config.reinforced_diving_gear=Reinforced Diving Gear
+config.gui_oxygen=Oxygen Gui
+config.gui_seamoth=Seamoth Gui
+config.fog_settings=Fog Settings
+config.peeper=Peeper
+config.bladderfish=Bladderfish
+config.garryfish=Garryfish
+config.holefish=Holefish
+config.boomerang=Boomerang
+
+#Gui
+gui.temperature=°C

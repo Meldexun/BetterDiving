@@ -1,0 +1,7 @@
+{
+    "parent": "block/tinted_cross",
+    "textures": {
+        "particle": "better_diving:blocks/creepvine",
+        "cross": "better_diving:blocks/creepvine"
+    }
+}

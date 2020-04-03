@@ -1,0 +1,18 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern":
+	[
+		"CC"
+	],
+	"key":
+	{
+		"C":
+		{
+			"item": "better_diving:creepvine"
+		}
+	},
+	"result":
+	{
+		"item": "better_diving:fiber_mesh"
+	}
+}

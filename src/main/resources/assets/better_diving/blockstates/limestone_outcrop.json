@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=south": {"model": "better_diving:limestone_outcrop"},
+        "facing=west": {"model": "better_diving:limestone_outcrop", "y": 90},
+        "facing=north": {"model": "better_diving:limestone_outcrop", "y": 180},
+        "facing=east": {"model": "better_diving:limestone_outcrop", "y": 270}
+    }
+}
