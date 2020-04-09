@@ -1,15 +1,17 @@
 package meldexun.better_diving.capability.diving;
 
 import meldexun.better_diving.BetterDiving;
-import meldexun.better_diving.capability.oxygen.CapabilityOxygenProvider;
-import meldexun.better_diving.capability.oxygen.ICapabilityOxygen;
+import meldexun.better_diving.capability.item.oxygen.CapabilityOxygenProvider;
+import meldexun.better_diving.capability.item.oxygen.ICapabilityOxygen;
 import meldexun.better_diving.entity.EntitySeamoth;
+import meldexun.better_diving.integration.MatterOverdrive;
+import meldexun.better_diving.integration.Metamorph;
 import meldexun.better_diving.integration.Vampirism;
 import meldexun.better_diving.item.AbstractItemDivingGear;
-import meldexun.better_diving.network.packet.SPacketSyncDivingCapability;
+import meldexun.better_diving.item.ItemSeaglide;
+import meldexun.better_diving.network.packet.CPacketSyncPlayerInput;
 import meldexun.better_diving.network.packet.SPacketSyncOxygen;
 import meldexun.better_diving.util.BetterDivingConfig;
-import meldexun.better_diving.util.BetterDivingConfigClient;
 import meldexun.better_diving.util.EntityHelper;
 import meldexun.better_diving.util.MovementHelper;
 import net.minecraft.block.material.Material;
@@ -23,84 +25,129 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class CapabilityDivingAttributes implements ICapabilityDivingAttributes {
 
+	private final EntityPlayer player;
+
 	private int oxygen = 0;
-	private int prevOxygen = 0;
-	private int oxygenCapacity = 0;
 
-	private double swimSpeedBase = 0.0D;
-	private double swimSpeedBonus = 0.0D;
+	private boolean isDiving = false;
+	private boolean prevIsDiving = false;
+	private float divingTick;
+	private float prevDivingTick;
+	private float divingTickHorizontal;
+	private float prevDivingTickHorizontal;
+	private float divingTickVertical;
+	private float prevDivingTickVertical;
 
-	private float breakSpeed = 0.0F;
-
-	@Override
-	public void changeEquip(EntityPlayer player) {
-		if (!player.world.isRemote) {
-			ItemStack helm = player.inventory.armorInventory.get(3);
-			ItemStack chest = player.inventory.armorInventory.get(2);
-			ItemStack legs = player.inventory.armorInventory.get(1);
-			ItemStack feet = player.inventory.armorInventory.get(0);
-			int respirationLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.RESPIRATION, helm);
-			int depthStriderLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.DEPTH_STRIDER, feet);
-			int aquaAffinityLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.AQUA_AFFINITY, helm);
-
-			int oxygenCapacity = BetterDivingConfig.DIVING_VALUES.airBase;
-			double swimBaseSpeed = BetterDivingConfig.DIVING_VALUES.swimSpeed;
-			double swimBonusSpeed = 0.0D;
-			float breakSpeed = (float) BetterDivingConfig.DIVING_VALUES.breakSpeed;
-
-			if (chest.getItem() instanceof AbstractItemDivingGear) {
-				swimBonusSpeed += ((AbstractItemDivingGear) chest.getItem()).swimSpeed;
-			}
-			if (legs.getItem() instanceof AbstractItemDivingGear) {
-				breakSpeed *= 1.0F + ((AbstractItemDivingGear) legs.getItem()).breakSpeed;
-			}
-			if (feet.getItem() instanceof AbstractItemDivingGear) {
-				swimBonusSpeed += ((AbstractItemDivingGear) feet.getItem()).swimSpeed;
-			}
-
-			if (respirationLevel > 0) {
-				oxygenCapacity += BetterDivingConfig.DIVING_VALUES.airPerRespirationLevel * respirationLevel;
-			}
-			if (depthStriderLevel > 0) {
-				swimBaseSpeed *= 1.0D + BetterDivingConfig.DIVING_VALUES.swimSpeedDepthStrider * depthStriderLevel;
-			}
-			if (aquaAffinityLevel == 0) {
-				breakSpeed *= 5.0F;
-			} else if (aquaAffinityLevel > 0) {
-				breakSpeed *= 1.0F + (float) BetterDivingConfig.DIVING_VALUES.breakSpeedAquaAffinity * aquaAffinityLevel;
-			}
-
-			this.oxygenCapacity = oxygenCapacity;
-			this.swimSpeedBase = swimBaseSpeed;
-			this.swimSpeedBonus = swimBonusSpeed;
-			this.breakSpeed = breakSpeed;
-
-			BetterDiving.CONNECTION.sendTo(new SPacketSyncDivingCapability(player), (EntityPlayerMP) player);
-		}
+	public CapabilityDivingAttributes() {
+		this(null);
 	}
 
-	@Override
-	public void tick(EntityPlayer player) {
-		if (player.world.isRemote) {
-			this.handleMovement(player);
-			if (!BetterDivingConfigClient.oxygenSyncPackets) {
-				this.handleOxygen(player);
+	public CapabilityDivingAttributes(EntityPlayer player) {
+		this.player = player;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void handleDiving() {
+		GameSettings settings = Minecraft.getMinecraft().gameSettings;
+
+		this.prevIsDiving = this.isDiving;
+		if (this.player.capabilities.isFlying || this.player.isElytraFlying()) {
+			this.isDiving = false;
+		} else if (this.prevIsDiving) {
+			if (this.player.isRiding()) {
+				this.isDiving = false;
+			} else if (this.player.isInsideOfMaterial(Material.WATER)) {
+				this.isDiving = settings.keyBindForward.isKeyDown() && !settings.keyBindBack.isKeyDown();
+			} else {
+				Vec3d vec = this.player.getPositionVector();
+				AxisAlignedBB aabb = new AxisAlignedBB(vec.x, vec.y, vec.z, vec.x + 0.6D, vec.y + 1.8D, vec.z + 0.6D);
+				this.isDiving = this.player.world.collidesWithAnyBlock(aabb);
 			}
 		} else {
-			this.handleOxygen(player);
-			if (BetterDivingConfigClient.oxygenSyncPackets) {
-				BetterDiving.CONNECTION.sendTo(new SPacketSyncOxygen(player), (EntityPlayerMP) player);
+			this.isDiving = !this.player.isRiding() && this.player.isInsideOfMaterial(Material.WATER) && settings.keyBindForward.isKeyDown() && !settings.keyBindBack.isKeyDown() && settings.keyBindSprint.isKeyDown();
+		}
+
+		this.prevDivingTick = this.divingTick;
+		this.prevDivingTickHorizontal = this.divingTickHorizontal;
+		this.prevDivingTickVertical = this.divingTickVertical;
+		if (this.isDiving) {
+			this.divingTick = Math.min(this.divingTick + 0.1F, 1.0F);
+
+			if (settings.keyBindLeft.isKeyDown() && !settings.keyBindRight.isKeyDown()) {
+				this.divingTickHorizontal = Math.min(this.divingTickHorizontal + 0.1F, 1.0F);
+			} else if (!settings.keyBindLeft.isKeyDown() && settings.keyBindRight.isKeyDown()) {
+				this.divingTickHorizontal = Math.max(this.divingTickHorizontal - 0.1F, -1.0F);
+			} else {
+				if (this.divingTickHorizontal < 0.0F) {
+					this.divingTickHorizontal = Math.min(this.divingTickHorizontal + 0.1F, 0.0F);
+				} else if (this.divingTickHorizontal > 0.0F) {
+					this.divingTickHorizontal = Math.max(this.divingTickHorizontal - 0.1F, 0.0F);
+				} else {
+					this.divingTickHorizontal = 0.0F;
+				}
+			}
+
+			if (settings.keyBindJump.isKeyDown() && !settings.keyBindSneak.isKeyDown()) {
+				this.divingTickVertical = Math.min(this.divingTickVertical + 0.1F, 1.0F);
+			} else if (!settings.keyBindJump.isKeyDown() && settings.keyBindSneak.isKeyDown()) {
+				this.divingTickVertical = Math.max(this.divingTickVertical - 0.1F, -1.0F);
+			} else {
+				if (this.divingTickVertical < 0.0F) {
+					this.divingTickVertical = Math.min(this.divingTickVertical + 0.1F, 0.0F);
+				} else if (this.divingTickVertical > 0.0F) {
+					this.divingTickVertical = Math.max(this.divingTickVertical - 0.1F, 0.0F);
+				} else {
+					this.divingTickVertical = 0.0F;
+				}
+			}
+		} else {
+			this.divingTick = Math.max(this.divingTick - 0.1F, 0.0F);
+			if (this.divingTickHorizontal < 0.0F) {
+				this.divingTickHorizontal = Math.min(this.divingTickHorizontal + 0.1F, 0.0F);
+			} else if (this.divingTickHorizontal > 0.0F) {
+				this.divingTickHorizontal = Math.max(this.divingTickHorizontal - 0.1F, 0.0F);
+			} else {
+				this.divingTickHorizontal = 0.0F;
+			}
+			if (this.divingTickVertical < 0.0F) {
+				this.divingTickVertical = Math.min(this.divingTickVertical + 0.1F, 0.0F);
+			} else if (this.divingTickVertical > 0.0F) {
+				this.divingTickVertical = Math.max(this.divingTickVertical - 0.1F, 0.0F);
+			} else {
+				this.divingTickVertical = 0.0F;
+			}
+		}
+
+		BetterDiving.network.sendToServer(new CPacketSyncPlayerInput(this.isDiving, this.divingTick, this.divingTickHorizontal, this.divingTickVertical));
+	}
+
+	@Override
+	public void tick() {
+		if (this.player.world.isRemote) {
+			this.handleDiving();
+			this.handleMovement();
+			if (!BetterDivingConfig.getInstance().general.oxygenSyncPackets) {
+				this.handleOxygen();
+			}
+		} else {
+			this.handleOxygen();
+			if (BetterDivingConfig.getInstance().general.oxygenSyncPackets) {
+				BetterDiving.network.sendTo(new SPacketSyncOxygen(this.player), (EntityPlayerMP) this.player);
 			}
 		}
 	}
 
-	protected void handleMovement(EntityPlayer player) {
-		if (BetterDivingConfigClient.divingMovement && player.isInWater() && !player.capabilities.isFlying) {
+	protected void handleMovement() {
+		if (BetterDivingConfig.getInstance().modules.divingMovement && this.player.isInWater() && !this.player.capabilities.isFlying && !this.player.isRiding()) {
 			GameSettings settings = Minecraft.getMinecraft().gameSettings;
 
 			boolean inputForward = settings.keyBindForward.isKeyDown();
@@ -110,15 +157,15 @@ public class CapabilityDivingAttributes implements ICapabilityDivingAttributes {
 			boolean inputUp = settings.keyBindJump.isKeyDown();
 			boolean inputDown = settings.keyBindSneak.isKeyDown();
 
-			float rotationPitch = player.rotationPitch;
-			float rotationYaw = player.rotationYaw;
+			float rotationPitch = this.player.rotationPitch;
+			float rotationYaw = this.player.rotationYaw;
 
-			double slow = this.calculateSlow(player);
-			double speed = this.calculateSpeed(player);
+			double slow = this.calculateSlow();
+			double speed = this.getSwimSpeedFromPlayer();
 
-			int strafe = 0;
-			int forward = 0;
-			int up = 0;
+			double strafe = 0.0D;
+			double forward = 0.0D;
+			double up = 0.0D;
 			if (inputForward) {
 				forward++;
 			}
@@ -138,19 +185,19 @@ public class CapabilityDivingAttributes implements ICapabilityDivingAttributes {
 				up--;
 			}
 
-			if (!BetterDivingConfigClient.vanillaDivingMovement) {
-				player.motionY += 0.02D;
+			if (!BetterDivingConfig.getInstance().general.vanillaDivingMovement) {
+				this.player.motionY += 0.02D;
 
 				if (inputDown) {
 					slow *= 0.3D;
 				}
 
 				if (inputUp) {
-					player.motionY -= 0.03999999910593033D;
+					this.player.motionY -= 0.03999999910593033D;
 				}
 
 				if (inputForward != inputBack || inputRight != inputLeft) {
-					MovementHelper.move2D(player, strafe, forward, -slow, rotationYaw);
+					MovementHelper.move2D(this.player, strafe, forward, -slow, rotationYaw);
 				}
 
 				if (inputForward != inputBack || inputRight != inputLeft || inputUp != inputDown) {
@@ -172,23 +219,27 @@ public class CapabilityDivingAttributes implements ICapabilityDivingAttributes {
 						}
 					}
 
-					this.move3D(player, strafe, up, forward, speed, rotationYaw, rotationPitch);
+					if (ItemSeaglide.canUseSeaglide(this.player) && !inputForward) {
+						speed *= 0.4D;
+					}
+
+					this.move3D(this.player, strafe, up, forward, speed, rotationYaw, rotationPitch);
 				}
 			} else {
-				player.motionY += 0.015D;
+				this.player.motionY += 0.015D;
 
-				if ((settings.keyBindSprint.isKeyDown() || player.isSprinting()) && inputForward && !inputBack) {
-					player.motionY += 0.005D;
+				if ((settings.keyBindSprint.isKeyDown() || this.player.isSprinting()) && inputForward && !inputBack) {
+					this.player.motionY += 0.005D;
 
 					if (inputDown) {
 						slow *= 0.3D;
 					}
 
 					if (inputUp) {
-						player.motionY -= 0.03999999910593033D;
+						this.player.motionY -= 0.03999999910593033D;
 					}
 
-					MovementHelper.move2D(player, strafe, forward, -slow, rotationYaw);
+					MovementHelper.move2D(this.player, strafe, forward, -slow, rotationYaw);
 
 					if (inputUp && !inputDown) {
 						rotationPitch = (rotationPitch - 90.0F) / 2.0F;
@@ -198,58 +249,33 @@ public class CapabilityDivingAttributes implements ICapabilityDivingAttributes {
 						up = 0;
 					}
 
-					this.move3D(player, strafe, up, forward, speed, rotationYaw, rotationPitch);
+					this.move3D(this.player, strafe, up, forward, speed, rotationYaw, rotationPitch);
 				} else if (inputDown) {
-					player.motionY -= 0.03999999910593033D;
+					this.player.motionY -= 0.03999999910593033D;
 					slow *= 0.7D;
 
-					MovementHelper.move2D(player, strafe, forward, slow, rotationYaw);
+					MovementHelper.move2D(this.player, strafe, forward, slow, rotationYaw);
 				}
 			}
 		}
 	}
 
-	protected double calculateSlow(EntityPlayer player) {
+	protected double calculateSlow() {
 		double slow = 0.02D;
-		ItemStack feet = player.inventory.armorInventory.get(0);
+		ItemStack feet = this.player.inventory.armorInventory.get(0);
 		double depthStrider = (double) EnchantmentHelper.getEnchantmentLevel(Enchantments.DEPTH_STRIDER, feet);
 
 		if (depthStrider > 0.0D) {
 			if (depthStrider > 3.0D) {
 				depthStrider = 3.0D;
 			}
-			if (!player.onGround) {
+			if (!this.player.onGround) {
 				depthStrider *= 0.5D;
 			}
-			slow += (player.getAIMoveSpeed() - slow) * depthStrider / 3.0D;
+			slow += (this.player.getAIMoveSpeed() - slow) * depthStrider / 3.0D;
 		}
 
 		return slow * 0.98D;
-	}
-
-	protected double calculateSpeed(EntityPlayer player) {
-		double baseSpeed = this.swimSpeedBase;
-		double bonusSpeed = this.swimSpeedBonus;
-
-		if (player.getHeldItemMainhand().isEmpty()) {
-			bonusSpeed += 0.05D;
-		}
-		if (player.getHeldItemOffhand().isEmpty()) {
-			bonusSpeed += 0.05D;
-		}
-		if (!player.isCreative()) {
-			double hunger = (double) player.getFoodStats().getFoodLevel() / 20.0D;
-			if (hunger < 0.2D) {
-				bonusSpeed -= 0.2D - hunger;
-			}
-		}
-		if (player.isInWater() && !player.isInsideOfMaterial(Material.WATER)) {
-			bonusSpeed *= 2.0D;
-		}
-
-		double min = baseSpeed * BetterDivingConfigClient.swimSpeedLimitLower;
-		double max = baseSpeed * BetterDivingConfigClient.swimSpeedLimitUpper;
-		return MathHelper.clamp(baseSpeed * (1.0D + bonusSpeed), min, max);
 	}
 
 	protected void move3D(EntityPlayer player, double strafe, double up, double forward, double speed, double yaw, double pitch) {
@@ -289,18 +315,16 @@ public class CapabilityDivingAttributes implements ICapabilityDivingAttributes {
 		}
 	}
 
-	protected void handleOxygen(EntityPlayer player) {
-		if (BetterDivingConfigClient.oxygenHandling) {
-			this.prevOxygen = this.getOxygenFromPlayer(player);
-
+	protected void handleOxygen() {
+		if (BetterDivingConfig.getInstance().modules.oxygenHandling) {
 			int airUsage = 0;
-			if (player.isInsideOfMaterial(Material.WATER) && !(player.getRidingEntity() instanceof EntitySeamoth) && !player.canBreatheUnderwater() && !player.isPotionActive(MobEffects.WATER_BREATHING) && !player.capabilities.disableDamage
-					&& (!Vampirism.loaded || !Vampirism.isVampire(player))) {
+			if (this.player.isInsideOfMaterial(Material.WATER) && !this.player.canBreatheUnderwater() && !this.player.isPotionActive(MobEffects.WATER_BREATHING) && !this.player.capabilities.disableDamage
+					&& !(this.player.getRidingEntity() instanceof EntitySeamoth) && !Metamorph.hasWaterBreathing(this.player) && !Vampirism.hasWaterBreathing(this.player) && !MatterOverdrive.hasWaterBreathing(this.player)) {
 				airUsage -= 1;
-				if (BetterDivingConfigClient.airEfficiency) {
-					ItemStack helm = player.inventory.armorInventory.get(3);
-					if (!(helm.getItem() instanceof AbstractItemDivingGear) || !((AbstractItemDivingGear) helm.getItem()).isImprovedGear) {
-						airUsage -= EntityHelper.blocksUnderWater(player) / BetterDivingConfigClient.airEfficiencyLimit;
+				if (BetterDivingConfig.getInstance().divingValues.airEfficiency) {
+					ItemStack helm = this.player.inventory.armorInventory.get(3);
+					if (!(helm.getItem() instanceof AbstractItemDivingGear) || !((AbstractItemDivingGear) helm.getItem()).isImproved()) {
+						airUsage -= EntityHelper.blocksUnderWater(this.player) / BetterDivingConfig.getInstance().divingValues.airEfficiencyLimit;
 					}
 				}
 			} else {
@@ -308,28 +332,26 @@ public class CapabilityDivingAttributes implements ICapabilityDivingAttributes {
 			}
 
 			if (airUsage < 0) {
-				this.extractOxygenFromPlayer(player, -airUsage);
+				this.extractOxygenFromPlayer(-airUsage);
 			} else if (airUsage > 0) {
-				this.receiveOxygenFromPlayer(player, airUsage);
+				this.receiveOxygenFromPlayer(airUsage);
 			}
 
-			player.setAir(this.getOxygenFromPlayer(player) > 0 ? (int) (this.getOxygenPercent(player) * 300.0D) : 0);
+			this.player.setAir(this.getOxygenFromPlayer() > 0 ? (int) (this.getOxygenFromPlayerInPercent() * 300.0D) : 0);
 
-			if (!player.world.isRemote) {
-				if (this.oxygen <= -20) {
-					this.oxygen = 0;
+			if (!this.player.world.isRemote && this.oxygen <= -20) {
+				this.oxygen = 0;
 
-					((WorldServer) player.world).spawnParticle(EnumParticleTypes.WATER_BUBBLE, player.posX, player.posY + player.height * 0.5D, player.posZ, 8, 0.25D, 0.25D, 0.25D, 0.0D);
+				((WorldServer) this.player.world).spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.player.posX, this.player.posY + this.player.height * 0.5D, this.player.posZ, 8, 0.25D, 0.25D, 0.25D, 0.0D);
 
-					player.attackEntityFrom(DamageSource.DROWN, 2.0F);
-				}
+				this.player.attackEntityFrom(DamageSource.DROWN, 2.0F);
 			}
 		}
 	}
 
 	@Override
-	public void setOxygen(int currentAir) {
-		this.oxygen = currentAir;
+	public void setOxygen(int oxygen) {
+		this.oxygen = oxygen;
 	}
 
 	@Override
@@ -338,10 +360,51 @@ public class CapabilityDivingAttributes implements ICapabilityDivingAttributes {
 	}
 
 	@Override
+	public int getOxygenFromPlayer() {
+		int oxygenFromPlayer = this.getOxygen();
+
+		ItemStack helm = this.player.inventory.armorInventory.get(3);
+		ItemStack chest = this.player.inventory.armorInventory.get(2);
+
+		if (helm.getItem() instanceof AbstractItemDivingGear && chest.getItem() instanceof AbstractItemDivingGear) {
+			ICapabilityOxygen ioxygen = chest.getCapability(CapabilityOxygenProvider.OXYGEN, null);
+			oxygenFromPlayer += ioxygen.getOxygen();
+		}
+
+		return oxygenFromPlayer;
+	}
+
+	@Override
+	public double getOxygenFromPlayerInPercent() {
+		return (double) this.getOxygenFromPlayer() / (double) this.getOxygenCapacityFromPlayer();
+	}
+
+	@Override
 	public int receiveOxygen(int amount) {
-		amount = MathHelper.clamp(amount, 0, this.oxygenCapacity - this.oxygen);
+		amount = MathHelper.clamp(amount, 0, this.getOxygenCapacity() - this.oxygen);
 		this.oxygen += amount;
 		return amount;
+	}
+
+	@Override
+	public int receiveOxygenFromPlayer(int amount) {
+		if (amount > 0) {
+			int amountReceived = this.receiveOxygen(amount);
+			int amountToReceive = amount - amountReceived;
+
+			if (amountToReceive > 0) {
+				ItemStack helm = this.player.inventory.armorInventory.get(3);
+				ItemStack chest = this.player.inventory.armorInventory.get(2);
+
+				if (helm.getItem() instanceof AbstractItemDivingGear && chest.getItem() instanceof AbstractItemDivingGear) {
+					ICapabilityOxygen ioxygen = chest.getCapability(CapabilityOxygenProvider.OXYGEN, null);
+					amountReceived += ioxygen.receiveOxygen(amountToReceive);
+				}
+			}
+
+			return amountReceived;
+		}
+		return 0;
 	}
 
 	@Override
@@ -352,116 +415,215 @@ public class CapabilityDivingAttributes implements ICapabilityDivingAttributes {
 	}
 
 	@Override
-	public void setPrevOxygen(int previousAir) {
-		this.prevOxygen = previousAir;
-	}
+	public int extractOxygenFromPlayer(int amount) {
+		if (amount > 0) {
+			int amountExtracted = 0;
 
-	@Override
-	public int getPrevOxygen() {
-		return this.prevOxygen;
-	}
+			ItemStack helm = this.player.inventory.armorInventory.get(3);
+			ItemStack chest = this.player.inventory.armorInventory.get(2);
 
-	@Override
-	public void setOxygenCapacity(int maxAir) {
-		this.oxygenCapacity = maxAir;
+			if (helm.getItem() instanceof AbstractItemDivingGear && chest.getItem() instanceof AbstractItemDivingGear) {
+				ICapabilityOxygen ioxygen = chest.getCapability(CapabilityOxygenProvider.OXYGEN, null);
+				amountExtracted += ioxygen.extractOxygen(amount);
+			}
+
+			int amountToExtract = amount - amountExtracted;
+
+			if (amountToExtract > 0) {
+				amountExtracted += this.extractOxygen(amountToExtract);
+			}
+
+			return amountExtracted;
+		}
+		return 0;
 	}
 
 	@Override
 	public int getOxygenCapacity() {
-		return this.oxygenCapacity;
+		return BetterDivingConfig.getInstance().divingValues.airBase;
 	}
 
 	@Override
-	public void setSwimSpeedBase(double siwmBaseSpeed) {
-		this.swimSpeedBase = siwmBaseSpeed;
+	public int getOxygenCapacityFromPlayer() {
+		int oxygenCapacity = this.getOxygenCapacity();
+
+		ItemStack helm = this.player.inventory.armorInventory.get(3);
+		ItemStack chest = this.player.inventory.armorInventory.get(2);
+
+		if (helm.getItem() instanceof AbstractItemDivingGear && chest.getItem() instanceof AbstractItemDivingGear) {
+			ICapabilityOxygen ioxygen = chest.getCapability(CapabilityOxygenProvider.OXYGEN, null);
+			oxygenCapacity += ioxygen.getOxygenCapacity();
+		}
+
+		int respirationLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.RESPIRATION, helm);
+		if (respirationLevel > 0) {
+			oxygenCapacity += BetterDivingConfig.getInstance().divingValues.airPerRespirationLevel * respirationLevel;
+		}
+
+		return oxygenCapacity;
 	}
 
 	@Override
-	public double getSwimSpeedBase() {
-		return this.swimSpeedBase;
+	public double getSwimSpeed() {
+		return BetterDivingConfig.getInstance().divingValues.swimSpeed;
 	}
 
 	@Override
-	public void setSwimSpeedBonus(double swimBonusSpeed) {
-		this.swimSpeedBonus = swimBonusSpeed;
-	}
+	public double getSwimSpeedFromPlayer() {
+		if (ItemSeaglide.canUseSeaglide(this.player)) {
+			return BetterDivingConfig.getInstance().divingValues.seaglideSpeed;
+		}
 
-	@Override
-	public double getSwimSpeedBonus() {
-		return this.swimSpeedBonus;
-	}
+		double swimSpeedBase = this.getSwimSpeed();
+		double swimSpeedBonus = 0.0D;
 
-	@Override
-	public void setBreakSpeed(float breakSpeed) {
-		this.breakSpeed = breakSpeed;
+		ItemStack chest = this.player.inventory.armorInventory.get(2);
+		ItemStack feet = this.player.inventory.armorInventory.get(0);
+
+		if (chest.getItem() instanceof AbstractItemDivingGear) {
+			swimSpeedBonus += ((AbstractItemDivingGear) chest.getItem()).getSwimSpeed();
+		}
+		if (feet.getItem() instanceof AbstractItemDivingGear) {
+			swimSpeedBonus += ((AbstractItemDivingGear) feet.getItem()).getSwimSpeed();
+		}
+		if (!this.player.getHeldItemMainhand().isEmpty()) {
+			swimSpeedBonus -= 0.08D;
+		}
+		if (!this.player.getHeldItemOffhand().isEmpty()) {
+			swimSpeedBonus -= 0.08D;
+		}
+		if (!this.player.isCreative()) {
+			double hunger = (double) this.player.getFoodStats().getFoodLevel() / 20.0D;
+			if (hunger < 0.2D) {
+				swimSpeedBonus += 2.5D * hunger - 0.5D;
+			}
+		}
+		if (!this.player.isInsideOfMaterial(Material.WATER)) {
+			swimSpeedBase *= 1.3D;
+		}
+
+		double min = swimSpeedBase * BetterDivingConfig.getInstance().divingValues.swimSpeedLimitLower;
+		double max = swimSpeedBase * BetterDivingConfig.getInstance().divingValues.swimSpeedLimitUpper;
+		double speed = MathHelper.clamp(swimSpeedBase * (1.0D + swimSpeedBonus), min, max);
+
+		int depthStriderLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.DEPTH_STRIDER, feet);
+		if (depthStriderLevel > 0) {
+			speed += swimSpeedBase * BetterDivingConfig.getInstance().divingValues.swimSpeedDepthStrider * depthStriderLevel;
+		}
+
+		return speed;
 	}
 
 	@Override
 	public float getBreakSpeed() {
-		return this.breakSpeed;
+		return (float) BetterDivingConfig.getInstance().divingValues.breakSpeed;
 	}
 
 	@Override
-	public int getOxygenFromPlayer(EntityPlayer player) {
-		ItemStack helm = player.inventory.armorInventory.get(3);
-		if (helm.getItem() instanceof AbstractItemDivingGear) {
-			ItemStack chest = player.inventory.armorInventory.get(2);
-			if (chest.getItem() instanceof AbstractItemDivingGear) {
-				ICapabilityOxygen ioxygen = chest.getCapability(CapabilityOxygenProvider.OXYGEN, null);
-				return this.oxygen + ioxygen.getOxygen();
+	public float getBreakSpeedFromPlayer() {
+		float breakSpeed = this.getBreakSpeed();
+
+		ItemStack helm = this.player.inventory.armorInventory.get(3);
+		ItemStack legs = this.player.inventory.armorInventory.get(1);
+
+		if (legs.getItem() instanceof AbstractItemDivingGear) {
+			breakSpeed *= 1.0F + ((AbstractItemDivingGear) legs.getItem()).getBreakSpeed();
+		}
+
+		if (this.player.isInsideOfMaterial(Material.WATER)) {
+			int aquaAffinityLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.AQUA_AFFINITY, helm);
+			if (aquaAffinityLevel > 0) {
+				breakSpeed *= 1.0F + (float) BetterDivingConfig.getInstance().divingValues.breakSpeedAquaAffinity * (float) aquaAffinityLevel;
+			} else {
+				breakSpeed *= 5.0F;
 			}
 		}
-		return this.oxygen;
-	}
 
-	@Override
-	public int getOxygenCapacityFromPlayer(EntityPlayer player) {
-		ItemStack helm = player.inventory.armorInventory.get(3);
-		if (helm.getItem() instanceof AbstractItemDivingGear) {
-			ItemStack chest = player.inventory.armorInventory.get(2);
-			if (chest.getItem() instanceof AbstractItemDivingGear) {
-				ICapabilityOxygen ioxygen = chest.getCapability(CapabilityOxygenProvider.OXYGEN, null);
-				return this.oxygenCapacity + ioxygen.getOxygenCapacity();
-			}
+		if (!this.player.onGround) {
+			breakSpeed *= 5.0F;
 		}
-		return this.oxygenCapacity;
+
+		return breakSpeed;
 	}
 
 	@Override
-	public int receiveOxygenFromPlayer(EntityPlayer player, int amount) {
-		if (amount > 0) {
-			amount -= this.receiveOxygen(amount);
-			ItemStack helm = player.inventory.armorInventory.get(3);
-			if (helm.getItem() instanceof AbstractItemDivingGear) {
-				ItemStack chest = player.inventory.armorInventory.get(2);
-				if (chest.getItem() instanceof AbstractItemDivingGear) {
-					ICapabilityOxygen ioxygen = chest.getCapability(CapabilityOxygenProvider.OXYGEN, null);
-					ioxygen.receiveOxygen(amount);
-				}
-			}
-		}
-		return 0;
+	public void setIsDiving(boolean isDiving) {
+		this.isDiving = isDiving;
 	}
 
 	@Override
-	public int extractOxygenFromPlayer(EntityPlayer player, int amount) {
-		if (amount > 0) {
-			ItemStack helm = player.inventory.armorInventory.get(3);
-			if (helm.getItem() instanceof AbstractItemDivingGear) {
-				ItemStack chest = player.inventory.armorInventory.get(2);
-				if (chest.getItem() instanceof AbstractItemDivingGear) {
-					ICapabilityOxygen ioxygen = chest.getCapability(CapabilityOxygenProvider.OXYGEN, null);
-					amount -= ioxygen.extractOxygen(amount);
-				}
-			}
-			this.extractOxygen(amount);
-		}
-		return 0;
+	public boolean isDiving() {
+		return this.isDiving;
 	}
 
 	@Override
-	public double getOxygenPercent(EntityPlayer player) {
-		return (double) this.getOxygenFromPlayer(player) / (double) this.getOxygenCapacityFromPlayer(player);
+	public void setPrevIsDiving(boolean prevIsDiving) {
+		this.prevIsDiving = prevIsDiving;
+	}
+
+	@Override
+	public boolean prevIsDiving() {
+		return this.prevIsDiving;
+	}
+
+	@Override
+	public void setDivingTick(float divingTick) {
+		this.divingTick = divingTick;
+	}
+
+	@Override
+	public float getDivingTick() {
+		return this.divingTick;
+	}
+
+	@Override
+	public void setPrevDivingTick(float prevDivingTick) {
+		this.prevDivingTick = prevDivingTick;
+	}
+
+	@Override
+	public float getPrevDivingTick() {
+		return this.prevDivingTick;
+	}
+
+	@Override
+	public void setDivingTickHorizontal(float divingTickHorizontal) {
+		this.divingTickHorizontal = divingTickHorizontal;
+	}
+
+	@Override
+	public float getDivingTickHorizontal() {
+		return this.divingTickHorizontal;
+	}
+
+	@Override
+	public void setPrevDivingTickHorizontal(float prevDivingTickHorizontal) {
+		this.prevDivingTickHorizontal = prevDivingTickHorizontal;
+	}
+
+	@Override
+	public float getPrevDivingTickHorizontal() {
+		return this.prevDivingTickHorizontal;
+	}
+
+	@Override
+	public void setDivingTickVertical(float divingTickVertical) {
+		this.divingTickVertical = divingTickVertical;
+	}
+
+	@Override
+	public float getDivingTickVertical() {
+		return this.divingTickVertical;
+	}
+
+	@Override
+	public void setPrevDivingTickVertical(float prevDivingTickVertical) {
+		this.prevDivingTickVertical = prevDivingTickVertical;
+	}
+
+	@Override
+	public float getPrevDivingTickVertical() {
+		return this.prevDivingTickVertical;
 	}
 
 }

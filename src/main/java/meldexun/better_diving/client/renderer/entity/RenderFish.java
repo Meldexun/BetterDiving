@@ -33,7 +33,7 @@ public class RenderFish<T extends AbstractEntityFish> extends Render<T> {
 		GlStateManager.translate(x, y + (0.5D * entity.height), z);
 		GlStateManager.rotate(180.0F - f1, 0.0F, 1.0F, 0.0F);
 		GlStateManager.rotate(f2, 1.0F, 0.0F, 0.0F);
-		GlStateManager.scale(-0.3D, -0.3D, 0.3D);
+		GlStateManager.scale(-0.4D, -0.4D, 0.4D);
 		this.bindEntityTexture(entity);
 
 		if (this.renderOutlines) {

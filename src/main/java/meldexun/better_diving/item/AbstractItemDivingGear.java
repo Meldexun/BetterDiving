@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import meldexun.better_diving.BetterDiving;
 import meldexun.better_diving.client.ArmorModels;
+import meldexun.better_diving.util.config.DivingGearConfig;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.resources.I18n;
@@ -22,19 +23,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class AbstractItemDivingGear extends ItemArmor {
 
-	public final int oxygenCapacity;
-	public final double swimSpeed;
-	public final float breakSpeed;
-	public final boolean isImprovedGear;
-	public final boolean isReinforcedGear;
+	protected final DivingGearConfig config;
 
-	public AbstractItemDivingGear(ArmorMaterial material, EntityEquipmentSlot slot, int oxygenCapacity, double swimSpeed, float breakSpeed, boolean isImprovedGear, boolean isReinforcedGear) {
+	public AbstractItemDivingGear(ArmorMaterial material, EntityEquipmentSlot slot, DivingGearConfig config) {
 		super(material, 0, slot);
-		this.oxygenCapacity = oxygenCapacity;
-		this.swimSpeed = swimSpeed;
-		this.breakSpeed = breakSpeed;
-		this.isImprovedGear = isImprovedGear;
-		this.isReinforcedGear = isReinforcedGear;
+		this.config = config;
 	}
 
 	@Override
@@ -60,9 +53,33 @@ public abstract class AbstractItemDivingGear extends ItemArmor {
 
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		if (this.isReinforcedGear) {
+		if (this.isReinforced()) {
 			tooltip.add(I18n.format("item.reinforced_gear.tooltip"));
 		}
+	}
+
+	public DivingGearConfig getConfig() {
+		return this.config;
+	}
+
+	public int getOxygenCapacity() {
+		return 0;
+	}
+
+	public double getSwimSpeed() {
+		return 0.0D;
+	}
+
+	public float getBreakSpeed() {
+		return 0.0F;
+	}
+
+	public boolean isImproved() {
+		return this.config.improvedGear;
+	}
+
+	public boolean isReinforced() {
+		return this.config.reinforcedGear;
 	}
 
 }

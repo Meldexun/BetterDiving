@@ -15,7 +15,7 @@ public class BlockHelper {
 
 	public static BlockPos getSeaBed(World world, BlockPos pos) {
 		int i = 0;
-		while (isWaterBlock(world.getBlockState(pos.down(i)))) {
+		while (BlockHelper.isWaterBlock(world.getBlockState(pos.down(i)))) {
 			i++;
 		}
 		return pos.down(i - 1);
@@ -35,12 +35,12 @@ public class BlockHelper {
 
 	public static boolean isWaterBlock(IBlockState state) {
 		Block block = state.getBlock();
-		return block == Blocks.WATER || block == Blocks.FLOWING_WATER || (TerraFirmaCraft.loaded && TerraFirmaCraft.isWater(state));
+		return block == Blocks.WATER || block == Blocks.FLOWING_WATER || TerraFirmaCraft.isWater(state);
 	}
 
 	public static boolean isWaterBlock(IBlockState state, int meta) {
 		Block block = state.getBlock();
-		return block == Blocks.WATER || (block == Blocks.FLOWING_WATER && block.getMetaFromState(state) <= meta) || (TerraFirmaCraft.loaded && TerraFirmaCraft.isWater(state, meta));
+		return block == Blocks.WATER || (block == Blocks.FLOWING_WATER && block.getMetaFromState(state) <= meta) || TerraFirmaCraft.isWater(state, meta);
 	}
 
 }

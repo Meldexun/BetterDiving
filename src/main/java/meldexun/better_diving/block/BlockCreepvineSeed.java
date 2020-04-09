@@ -20,7 +20,7 @@ public class BlockCreepvineSeed extends BlockCreepvine {
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (playerIn.addItemStackToInventory(new ItemStack(ModItems.CREEPVINE_SEED_CLUSTER))) {
 			TileEntityCreepvine tileEntity = (TileEntityCreepvine) worldIn.getTileEntity(pos);
-			ModBlocks.CREEPVINE.setCreepvine(worldIn, pos, 3, tileEntity.maxHeight, tileEntity.generateSeeds);
+			ModBlocks.CREEPVINE.setCreepvine(worldIn, pos, 3, tileEntity.getMaxHeight(), tileEntity.canGenerateSeeds());
 			return true;
 		}
 		return false;

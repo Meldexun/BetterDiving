@@ -1,6 +1,7 @@
 package meldexun.better_diving.block;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
@@ -26,11 +27,11 @@ public class BlockOutcrop extends BlockUnderwaterBlock {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	public static final AxisAlignedBB OUTCROP_AABB = new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.7D, 0.9D);
 
-	public int drop;
-	public HashMap<Item, Integer> dropList = new HashMap<Item, Integer>();
+	private int drop;
+	private Map<Item, Integer> dropList = new HashMap<>();
 
 	public BlockOutcrop() {
-		this.setDefaultState(this.blockState.getBaseState().withProperty(BlockLiquid.LEVEL, 0).withProperty(FACING, EnumFacing.SOUTH));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(BlockLiquid.LEVEL, 0).withProperty(BlockOutcrop.FACING, EnumFacing.SOUTH));
 		this.setHardness(0.4F);
 		this.setResistance(10.0F);
 		this.setSoundType(SoundType.STONE);
@@ -38,17 +39,17 @@ public class BlockOutcrop extends BlockUnderwaterBlock {
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, BlockLiquid.LEVEL, FACING);
+		return new BlockStateContainer(this, BlockLiquid.LEVEL, BlockOutcrop.FACING);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(FACING).getHorizontalIndex();
+		return state.getValue(BlockOutcrop.FACING).getHorizontalIndex();
 	}
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta));
+		return this.getDefaultState().withProperty(BlockOutcrop.FACING, EnumFacing.getHorizontal(meta));
 	}
 
 	@Override
@@ -58,7 +59,7 @@ public class BlockOutcrop extends BlockUnderwaterBlock {
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return OUTCROP_AABB;
+		return BlockOutcrop.OUTCROP_AABB;
 	}
 
 	@Override

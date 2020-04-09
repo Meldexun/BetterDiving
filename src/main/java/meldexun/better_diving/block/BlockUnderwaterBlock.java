@@ -163,7 +163,7 @@ public class BlockUnderwaterBlock extends Block {
 	@Override
 	@Nullable
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
-		return NULL_AABB;
+		return Block.NULL_AABB;
 	}
 
 	@Override

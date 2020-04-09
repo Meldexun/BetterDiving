@@ -1,13 +1,14 @@
 package meldexun.better_diving.capability.diving;
 
 import meldexun.better_diving.BetterDiving;
-import meldexun.better_diving.capability.BasicCapabilityProvider;
+import meldexun.better_diving.capability.BasicCapabilityProviderSerializable;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 
-public class CapabilityDivingAttributesProvider extends BasicCapabilityProvider<ICapabilityDivingAttributes> {
+public class CapabilityDivingAttributesProvider extends BasicCapabilityProviderSerializable<ICapabilityDivingAttributes> {
 
 	public static final ResourceLocation LOCATION_DIVING_ATTRIBUTES = new ResourceLocation(BetterDiving.MOD_ID, "diving_attributes");
 
@@ -22,8 +23,8 @@ public class CapabilityDivingAttributesProvider extends BasicCapabilityProvider<
 		CapabilityManager.INSTANCE.register(ICapabilityDivingAttributes.class, new CapabilityDivingAttributesStorage(), CapabilityDivingAttributes::new);
 	}
 
-	public static CapabilityDivingAttributesProvider createProvider() {
-		return new CapabilityDivingAttributesProvider(DIVING_ATTRIBUTES, new CapabilityDivingAttributes());
+	public static CapabilityDivingAttributesProvider createProvider(EntityPlayer player) {
+		return new CapabilityDivingAttributesProvider(CapabilityDivingAttributesProvider.DIVING_ATTRIBUTES, new CapabilityDivingAttributes(player));
 	}
 
 }

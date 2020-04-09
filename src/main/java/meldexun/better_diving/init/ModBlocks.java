@@ -9,15 +9,19 @@ import meldexun.better_diving.BetterDiving;
 import meldexun.better_diving.block.BlockCreepvine;
 import meldexun.better_diving.block.BlockCreepvineSeed;
 import meldexun.better_diving.block.BlockCreepvineTop;
+import meldexun.better_diving.block.BlockFabricator;
 import meldexun.better_diving.block.BlockOutcrop;
+import meldexun.better_diving.block.BlockSeabaseLadder;
 import meldexun.better_diving.block.BlockSeagrassTall;
 import meldexun.better_diving.block.BlockSolarPanel;
 import meldexun.better_diving.block.BlockStructure;
 import meldexun.better_diving.block.BlockUnderwaterBlock;
+import meldexun.better_diving.item.ItemBlockCreepvine;
 import meldexun.better_diving.item.ItemBlockTooltip;
-import meldexun.better_diving.tileentity.TileEntityBuilding;
 import meldexun.better_diving.tileentity.TileEntityCreepvine;
+import meldexun.better_diving.tileentity.TileEntityCreepvineTop;
 import meldexun.better_diving.tileentity.TileEntitySolarPanel;
+import meldexun.better_diving.tileentity.TileEntityStructure;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -46,42 +50,55 @@ public class ModBlocks {
 
 	public static final BlockStructure STRUCTURE_BLOCK = null;
 	public static final BlockSolarPanel SOLAR_PANEL = null;
+	public static final BlockFabricator FABRICATOR = null;
+
+	private ModBlocks() {
+
+	}
 
 	@EventBusSubscriber(modid = BetterDiving.MOD_ID)
 	public static class BlockRegistrationHandler {
 
-		public static final List<Block> BLOCKS = new ArrayList<Block>();
-		public static final List<ItemBlock> ITEM_BLOCKS = new ArrayList<ItemBlock>();
+		public static final List<Block> BLOCKS = new ArrayList<>();
+		public static final List<Block> REGISTERED_ITEM_BLOCKS = new ArrayList<>();
+		public static final List<ItemBlock> ITEM_BLOCKS = new ArrayList<>();
+
+		private BlockRegistrationHandler() {
+
+		}
 
 		@SubscribeEvent
 		public static void registerBlocks(RegistryEvent.Register<Block> event) {
 			final Block[] blocks = {
-					setBlockName(new BlockOutcrop(), "limestone_outcrop"),
-					setBlockName(new BlockOutcrop(), "sandstone_outcrop"),
-					setBlockName(new BlockCreepvine(), "creepvine"),
-					setBlockNameAndTab(new BlockCreepvineSeed(), "creepvine_seed", null),
-					setBlockNameAndTab(new BlockCreepvineTop(), "creepvine_top", null),
-					setBlockName(new BlockUnderwaterBlock(), "seagrass"),
-					setBlockName(new BlockSeagrassTall(), "seagrass_tall_bottom"),
-					setBlockNameAndTab(new BlockSeagrassTall(), "seagrass_tall_top", null),
-					setBlockName(new BlockUnderwaterBlock(), "acid_mushroom"),
-					setBlockName(new BlockStructure(), "structure_block"),
-					setBlockName(new BlockSolarPanel(), "solar_panel") };
+					BlockRegistrationHandler.setBlockName(new BlockOutcrop(), "limestone_outcrop"),
+					BlockRegistrationHandler.setBlockName(new BlockOutcrop(), "sandstone_outcrop"),
+					BlockRegistrationHandler.setBlockName(new BlockCreepvine(), "creepvine"),
+					BlockRegistrationHandler.setBlockNameAndTab(new BlockCreepvineSeed(), "creepvine_seed", null),
+					BlockRegistrationHandler.setBlockNameAndTab(new BlockCreepvineTop(), "creepvine_top", null),
+					BlockRegistrationHandler.setBlockName(new BlockUnderwaterBlock(), "seagrass"),
+					BlockRegistrationHandler.setBlockName(new BlockSeagrassTall(), "seagrass_tall_bottom"),
+					BlockRegistrationHandler.setBlockNameAndTab(new BlockSeagrassTall(), "seagrass_tall_top", null),
+					BlockRegistrationHandler.setBlockName(new BlockUnderwaterBlock(), "acid_mushroom"),
+					BlockRegistrationHandler.setBlockName(new BlockStructure(), "structure_block"),
+					BlockRegistrationHandler.setBlockName(new BlockSolarPanel(), "solar_panel"),
+					BlockRegistrationHandler.setBlockName(new BlockFabricator(), "fabricator"),
+					BlockRegistrationHandler.setBlockName(new BlockSeabaseLadder(), "seabase_ladder") };
 
 			IForgeRegistry<Block> registry = event.getRegistry();
 
 			for (Block block : blocks) {
 				registry.register(block);
-				BLOCKS.add(block);
+				BlockRegistrationHandler.BLOCKS.add(block);
 			}
 
-			GameRegistry.registerTileEntity(TileEntityBuilding.class, new ResourceLocation(BetterDiving.MOD_ID, "tile_entity_building"));
+			GameRegistry.registerTileEntity(TileEntityStructure.class, new ResourceLocation(BetterDiving.MOD_ID, "tile_entity_building"));
 			GameRegistry.registerTileEntity(TileEntityCreepvine.class, new ResourceLocation(BetterDiving.MOD_ID, "tile_entity_creepvine"));
+			GameRegistry.registerTileEntity(TileEntityCreepvineTop.class, new ResourceLocation(BetterDiving.MOD_ID, "tile_entity_creepvine_top"));
 			GameRegistry.registerTileEntity(TileEntitySolarPanel.class, new ResourceLocation(BetterDiving.MOD_ID, "tile_entity_solar_panel"));
 		}
 
 		private static Block setBlockName(Block block, String name) {
-			return setBlockNameAndTab(block, name, BetterDiving.TAB_BETTER_DIVING);
+			return BlockRegistrationHandler.setBlockNameAndTab(block, name, BetterDiving.TAB_BETTER_DIVING);
 		}
 
 		private static Block setBlockNameAndTab(Block block, String name, @Nullable CreativeTabs tab) {
@@ -92,10 +109,18 @@ public class ModBlocks {
 		public static void registerItemBlocks(RegistryEvent.Register<Item> event) {
 			IForgeRegistry<Item> registry = event.getRegistry();
 
-			for (Block block : BLOCKS) {
-				ItemBlock itemBlock = createItemBlock(block);
-				registry.register(itemBlock);
-				ITEM_BLOCKS.add(itemBlock);
+			ItemBlock creepvine = new ItemBlockCreepvine();
+			registry.register(creepvine);
+			BlockRegistrationHandler.REGISTERED_ITEM_BLOCKS.add(ModBlocks.CREEPVINE);
+			BlockRegistrationHandler.ITEM_BLOCKS.add(creepvine);
+
+			for (Block block : BlockRegistrationHandler.BLOCKS) {
+				if (!BlockRegistrationHandler.REGISTERED_ITEM_BLOCKS.contains(block)) {
+					ItemBlock itemBlock = BlockRegistrationHandler.createItemBlock(block);
+					registry.register(itemBlock);
+					BlockRegistrationHandler.REGISTERED_ITEM_BLOCKS.add(block);
+					BlockRegistrationHandler.ITEM_BLOCKS.add(itemBlock);
+				}
 			}
 		}
 

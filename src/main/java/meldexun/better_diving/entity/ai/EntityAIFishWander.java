@@ -13,10 +13,10 @@ import net.minecraft.util.math.Vec3d;
 
 public class EntityAIFishWander extends EntityAIBase {
 
-	protected final AbstractEntityFish entity;
-	public Vec3d pos;
-	public int tick;
 	protected final Random rand = new Random();
+	protected final AbstractEntityFish entity;
+	private Vec3d pos;
+	private int tick;
 
 	public EntityAIFishWander(AbstractEntityFish entity) {
 		this.entity = entity;
@@ -29,6 +29,11 @@ public class EntityAIFishWander extends EntityAIBase {
 	}
 
 	@Override
+	public boolean shouldContinueExecuting() {
+		return this.entity.isInWater() && this.entity.getDistance(this.pos.x, this.pos.y, this.pos.z) > 0.1D && this.tick < 120 && !this.checkStuck();
+	}
+
+	@Override
 	public void startExecuting() {
 		this.tick = 0;
 
@@ -37,10 +42,13 @@ public class EntityAIFishWander extends EntityAIBase {
 		double z = this.entity.posZ - 8.0D + this.rand.nextDouble() * 16.0D;
 
 		for (int i = 1; i <= 10 && this.entity.world.getBlockState(new BlockPos(x, y, z)).getMaterial() != Material.WATER; i++) {
-			double d = 1.0D - 0.025D * (double) i;
-			x = this.entity.posX - (8.0D * d) + this.rand.nextDouble() * (16.0D * d);
-			y = this.entity.posY - (4.0D * d) + this.rand.nextDouble() * (8.0D * d);
-			z = this.entity.posZ - (8.0D * d) + this.rand.nextDouble() * (16.0D * d);
+			double d0 = 1.0D - 0.025D * (double) i;
+			double d1 = 4.0D * d0;
+			double d2 = 8.0D * d0;
+			double d3 = 16.0D * d0;
+			x = this.entity.posX - d2 + this.rand.nextDouble() * d3;
+			y = this.entity.posY - d1 + this.rand.nextDouble() * d2;
+			z = this.entity.posZ - d2 + this.rand.nextDouble() * d3;
 		}
 
 		if (EntityHelper.blocksToSeafloor(this.entity.world, new BlockPos(x, y, z)) > 16.0D) {
@@ -49,11 +57,6 @@ public class EntityAIFishWander extends EntityAIBase {
 
 		y = MathHelper.clamp(y, MathHelper.floor(this.entity.posY - EntityHelper.blocksToSeafloor(this.entity)), MathHelper.floor(this.entity.posY + EntityHelper.blocksUnderWater(this.entity)));
 		this.pos = new Vec3d(x, y, z);
-	}
-
-	@Override
-	public boolean shouldContinueExecuting() {
-		return this.entity.isInWater() && this.entity.getDistance(this.pos.x, this.pos.y, this.pos.z) > 0.2D && this.tick < 200 && !this.checkStuck();
 	}
 
 	@Override

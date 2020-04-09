@@ -1,5 +1,6 @@
 package meldexun.better_diving.client.model.armor;
 
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
@@ -16,6 +17,8 @@ public class ModelCustomArmor extends ModelBiped {
 
 	@Override
 	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
+		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
+
 		if (entityIn instanceof EntityArmorStand) {
 			EntityArmorStand entityarmorstand = (EntityArmorStand) entityIn;
 			this.bipedHead.rotateAngleX = 0.017453292F * entityarmorstand.getHeadRotation().getX();
@@ -39,9 +42,7 @@ public class ModelCustomArmor extends ModelBiped {
 			this.bipedRightLeg.rotateAngleY = 0.017453292F * entityarmorstand.getRightLegRotation().getY();
 			this.bipedRightLeg.rotateAngleZ = 0.017453292F * entityarmorstand.getRightLegRotation().getZ();
 			this.bipedRightLeg.setRotationPoint(-1.9F, 11.0F, 0.0F);
-			copyModelAngles(this.bipedHead, this.bipedHeadwear);
-		} else {
-			super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
+			ModelBase.copyModelAngles(this.bipedHead, this.bipedHeadwear);
 		}
 	}
 

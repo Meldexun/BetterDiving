@@ -2,6 +2,7 @@ package meldexun.better_diving.block;
 
 import java.util.Random;
 
+import meldexun.better_diving.BetterDiving;
 import meldexun.better_diving.init.ModBlocks;
 import meldexun.better_diving.tileentity.TileEntityCreepvine;
 import net.minecraft.block.state.IBlockState;
@@ -23,22 +24,22 @@ public abstract class AbstractBlockCreepvine extends BlockUnderwaterBlock {
 
 	@Override
 	public TileEntity createTileEntity(World world, IBlockState state) {
-		return new TileEntityCreepvine(MAX_HEIGHT, false);
+		return new TileEntityCreepvine(AbstractBlockCreepvine.MAX_HEIGHT, false);
 	}
 
 	public boolean setCreepvine(World world, BlockPos pos, int flags, int maxHeight, boolean generateSeeds) {
-		if (world.setBlockState(pos, this.getDefaultState(), flags)) {
-			TileEntity tileEntity = world.getTileEntity(pos);
-			if (tileEntity instanceof TileEntityCreepvine) {
-				((TileEntityCreepvine) tileEntity).maxHeight = maxHeight;
-				((TileEntityCreepvine) tileEntity).generateSeeds = generateSeeds;
-			} else {
-				System.err.println("Failed to properly place creepvine block at " + pos);
-			}
-			return true;
+		world.setBlockState(pos, this.getDefaultState(), flags);
+
+		TileEntity tileEntity = world.getTileEntity(pos);
+
+		if (tileEntity instanceof TileEntityCreepvine) {
+			((TileEntityCreepvine) tileEntity).setMaxHeight(maxHeight);
+			((TileEntityCreepvine) tileEntity).setCanGenerateSeeds(generateSeeds);
+		} else {
+			BetterDiving.logger.error("Failed to properly place creepvine block at {}", pos);
 		}
 
-		return false;
+		return true;
 	}
 
 	@Override
@@ -48,20 +49,22 @@ public abstract class AbstractBlockCreepvine extends BlockUnderwaterBlock {
 
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+		TileEntityCreepvine tileEntity = (TileEntityCreepvine) worldIn.getTileEntity(pos);
+
 		if (worldIn.getTileEntity(pos.down()) instanceof TileEntityCreepvine) {
-			TileEntityCreepvine tileEntity1 = (TileEntityCreepvine) worldIn.getTileEntity(pos.down());
-			TileEntityCreepvine tileEntity2 = (TileEntityCreepvine) worldIn.getTileEntity(pos);
-			tileEntity2.maxHeight = tileEntity1.maxHeight;
-			tileEntity2.generateSeeds = tileEntity1.generateSeeds;
+			TileEntityCreepvine otherTileEntity = (TileEntityCreepvine) worldIn.getTileEntity(pos.down());
+
+			tileEntity.setMaxHeight(otherTileEntity.getMaxHeight());
+			tileEntity.setCanGenerateSeeds(otherTileEntity.canGenerateSeeds());
+		} else {
+			tileEntity.setMaxHeight(AbstractBlockCreepvine.MAX_HEIGHT - worldIn.rand.nextInt(5));
+			tileEntity.setCanGenerateSeeds(false);
 		}
 	}
 
 	@Override
 	public boolean checkBottom(World world, BlockPos pos) {
-		if (super.checkBottom(world, pos)) {
-			return true;
-		}
-		return world.getBlockState(pos.down()).getBlock() instanceof AbstractBlockCreepvine;
+		return super.checkBottom(world, pos) || world.getBlockState(pos.down()).getBlock() instanceof AbstractBlockCreepvine;
 	}
 
 }

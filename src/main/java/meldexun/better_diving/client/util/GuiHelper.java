@@ -1,41 +1,23 @@
 package meldexun.better_diving.client.util;
 
-import java.awt.Toolkit;
+import org.lwjgl.opengl.GL11;
 
-import meldexun.better_diving.util.BetterDivingConfig;
 import meldexun.better_diving.util.config.GuiConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.gui.inventory.GuiInventory;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiHelper {
 
-	public static final double TWO_PI = 2.0D * Math.PI;
+	private GuiHelper() {
 
-	public static ResourceLocation getTexture(ResourceLocation texture1080, ResourceLocation texture1440, ResourceLocation texture2160) {
-		int config = BetterDivingConfig.CLIENT_SETTINGS.autoResolution;
-
-		if (config == 0) {
-			int height = Toolkit.getDefaultToolkit().getScreenSize().height;
-
-			if (height == 1080) {
-				return texture1080;
-			} else if (height == 1440) {
-				return texture1440;
-			} else {
-				return texture2160;
-			}
-		} else if (config == 1) {
-			return texture1080;
-		} else if (config == 2) {
-			return texture1440;
-		} else {
-			return texture2160;
-		}
 	}
+
+	public static final double TWO_PI = 2.0D * Math.PI;
 
 	public static int getAnchorX(int width, GuiConfig config) {
 		ScaledResolution scaled = new ScaledResolution(Minecraft.getMinecraft());
@@ -60,6 +42,26 @@ public class GuiHelper {
 		}
 
 		return config.offsetY;
+	}
+
+	public static void drawTexture(double x, double y, double u, double v, double width, double height, double texWidth, double texHeight) {
+		GL11.glBegin(GL11.GL_QUADS);
+		GL11.glTexCoord2d(u, v + texHeight);
+		GL11.glVertex2d(x, y + height);
+
+		GL11.glTexCoord2d(u + texWidth, v + texHeight);
+		GL11.glVertex2d(x + width, y + height);
+
+		GL11.glTexCoord2d(u + texWidth, v);
+		GL11.glVertex2d(x + width, y);
+
+		GL11.glTexCoord2d(u, v);
+		GL11.glVertex2d(x, y);
+		GL11.glEnd();
+	}
+
+	public static void drawEntity(EntityLivingBase entity, int x, int y, int scale, float mouseX, float mouseY) {
+		GuiInventory.drawEntityOnScreen(x, y, scale, (float) x - mouseX, (float) y - (float) scale * entity.getEyeHeight() - mouseY, entity);
 	}
 
 }

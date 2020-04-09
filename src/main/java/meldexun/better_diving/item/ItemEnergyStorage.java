@@ -2,23 +2,19 @@ package meldexun.better_diving.item;
 
 import java.util.List;
 
-import meldexun.better_diving.capability.energy.CapabilityEnergyStorage;
-import meldexun.better_diving.capability.energy.CapabilityEnergyStorageProvider;
+import meldexun.better_diving.capability.energy.IEnergyStorageExtended;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class ItemEnergyStorage extends Item {
+public abstract class ItemEnergyStorage extends ItemTooltip {
 
 	protected int capacity;
 	protected int maxReceive;
@@ -36,14 +32,9 @@ public abstract class ItemEnergyStorage extends Item {
 		if (this.isInCreativeTab(tab)) {
 			items.add(new ItemStack(this));
 			ItemStack stack = new ItemStack(this);
-			((CapabilityEnergyStorage) stack.getCapability(CapabilityEnergy.ENERGY, null)).setEnergy(0);
+			((IEnergyStorageExtended) stack.getCapability(CapabilityEnergy.ENERGY, null)).setEnergy(0);
 			items.add(stack);
 		}
-	}
-
-	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
-		return CapabilityEnergyStorageProvider.createProvider(this.capacity, this.maxReceive, this.maxExtract, this.capacity);
 	}
 
 	@Override
@@ -60,12 +51,8 @@ public abstract class ItemEnergyStorage extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		IEnergyStorage ienergy = stack.getCapability(CapabilityEnergy.ENERGY, null);
-		int percent = (int) (100.0D * (double) ienergy.getEnergyStored() / (double) ienergy.getMaxEnergyStored());
-		int energy = (int) ((double) ienergy.getEnergyStored() / 100.0D);
-		int capacity = (int) ((double) ienergy.getMaxEnergyStored() / 100.0D);
-		tooltip.add("Energy: " + percent + " % (" + energy + "/" + capacity + ")");
-		tooltip.add(I18n.format(this.getUnlocalizedName() + ".tooltip"));
+		tooltip.add(I18n.format("tooltip.energy", ItemEnergyStorage.getEnergyPercent(stack), ItemEnergyStorage.getEnergy(stack), this.capacity));
+		super.addInformation(stack, worldIn, tooltip, flagIn);
 	}
 
 	public static boolean hasEnergy(ItemStack stack) {
@@ -82,11 +69,19 @@ public abstract class ItemEnergyStorage extends Item {
 
 	public static boolean setEnergy(ItemStack stack, int energy) {
 		if (stack.getItem() instanceof ItemEnergyStorage) {
-			CapabilityEnergyStorage ienergy = (CapabilityEnergyStorage) stack.getCapability(CapabilityEnergy.ENERGY, null);
-			ienergy.setEnergy(energy);
+			IEnergyStorage ienergy = stack.getCapability(CapabilityEnergy.ENERGY, null);
+			((IEnergyStorageExtended) ienergy).setEnergy(energy);
 			return true;
 		}
 		return false;
+	}
+
+	public static int getEnergyPercent(ItemStack stack) {
+		if (stack.getItem() instanceof ItemEnergyStorage) {
+			IEnergyStorage ienergy = stack.getCapability(CapabilityEnergy.ENERGY, null);
+			return ((IEnergyStorageExtended) ienergy).getEnergyPercent();
+		}
+		return 0;
 	}
 
 	public static int getEnergyCapacity(ItemStack stack) {
@@ -98,30 +93,31 @@ public abstract class ItemEnergyStorage extends Item {
 	}
 
 	public static int receiveEnergy(ItemStack stack, int amount) {
-		if (amount > 0) {
-			if (stack.getItem() instanceof ItemEnergyStorage) {
-				IEnergyStorage ienergy = stack.getCapability(CapabilityEnergy.ENERGY, null);
-				return ienergy.receiveEnergy(amount, false);
-			}
+		if (stack.getItem() instanceof ItemEnergyStorage && amount > 0) {
+			IEnergyStorage ienergy = stack.getCapability(CapabilityEnergy.ENERGY, null);
+			return ienergy.receiveEnergy(amount, false);
 		}
 		return 0;
 	}
 
 	public static int extractEnergy(ItemStack stack, int amount) {
-		if (amount > 0) {
-			if (stack.getItem() instanceof ItemEnergyStorage) {
-				IEnergyStorage ienergy = stack.getCapability(CapabilityEnergy.ENERGY, null);
-				return ienergy.extractEnergy(amount, false);
-			}
+		if (stack.getItem() instanceof ItemEnergyStorage && amount > 0) {
+			IEnergyStorage ienergy = stack.getCapability(CapabilityEnergy.ENERGY, null);
+			return ienergy.extractEnergy(amount, false);
 		}
 		return 0;
 	}
 
-	@Override
-	public NBTTagCompound getNBTShareTag(ItemStack stack) {
-		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setInteger("energy", ItemEnergyStorage.getEnergy(stack));
-		return nbt;
+	public int getCapacity() {
+		return this.capacity;
+	}
+
+	public int getMaxReceive() {
+		return this.maxReceive;
+	}
+
+	public int getMaxExtract() {
+		return this.maxExtract;
 	}
 
 }

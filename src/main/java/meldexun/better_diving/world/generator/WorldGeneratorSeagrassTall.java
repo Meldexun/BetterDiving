@@ -10,7 +10,7 @@ import net.minecraft.world.World;
 public class WorldGeneratorSeagrassTall extends WorldGeneratorOcean {
 
 	public WorldGeneratorSeagrassTall() {
-		super(ModBlocks.SEAGRASS_TALL_BOTTOM.getDefaultState(), BetterDivingConfig.PLANTS.seagrassTall);
+		super(ModBlocks.SEAGRASS_TALL_BOTTOM.getDefaultState(), BetterDivingConfig.getInstance().plants.seagrassTall);
 	}
 
 	@Override

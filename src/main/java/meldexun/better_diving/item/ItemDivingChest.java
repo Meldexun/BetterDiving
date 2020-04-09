@@ -2,32 +2,21 @@ package meldexun.better_diving.item;
 
 import java.util.List;
 
-import meldexun.better_diving.capability.oxygen.CapabilityOxygenProvider;
-import meldexun.better_diving.capability.oxygen.ICapabilityOxygen;
+import meldexun.better_diving.capability.item.oxygen.CapabilityOxygenProvider;
+import meldexun.better_diving.capability.item.oxygen.ICapabilityOxygen;
 import meldexun.better_diving.util.config.DivingGearConfig;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemDivingChest extends AbstractItemDivingGear {
 
 	public ItemDivingChest(ArmorMaterial material, DivingGearConfig config) {
-		this(material, config.tankAirStorage, config.tankMovespeed, config.improvedGear, config.reinforcedGear);
-	}
-
-	public ItemDivingChest(ArmorMaterial material, int oxygenCapacity, double swimSpeed, boolean isImprovedGear, boolean isReinforcedGear) {
-		super(material, EntityEquipmentSlot.CHEST, oxygenCapacity, swimSpeed, 0.0F, isImprovedGear, isReinforcedGear);
-	}
-
-	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
-		return CapabilityOxygenProvider.createProvider(this.oxygenCapacity, 0);
+		super(material, EntityEquipmentSlot.CHEST, config);
 	}
 
 	@Override
@@ -36,12 +25,22 @@ public class ItemDivingChest extends AbstractItemDivingGear {
 		ICapabilityOxygen ioxygen = stack.getCapability(CapabilityOxygenProvider.OXYGEN, null);
 		if (ioxygen.getOxygen() > 0) {
 			int oxygen = (int) Math.round(ioxygen.getOxygen() / 20.0D / 3.0D) * 3;
-			tooltip.add(oxygen + "s of oxygen");
+			tooltip.add(I18n.format("tooltip.oxygen", oxygen));
 		} else {
-			tooltip.add("empty");
+			tooltip.add(I18n.format("tooltip.oxygen_empty"));
 		}
-		tooltip.add(I18n.format("item.tank.tooltip", (int) ((double) this.oxygenCapacity / 20.0D)));
+		tooltip.add(I18n.format("item.tank.tooltip", (int) ((double) this.getOxygenCapacity() / 20.0D)));
 		super.addInformation(stack, worldIn, tooltip, flagIn);
+	}
+
+	@Override
+	public int getOxygenCapacity() {
+		return this.config.tankAirStorage;
+	}
+
+	@Override
+	public double getSwimSpeed() {
+		return this.config.tankMovespeed;
 	}
 
 }
