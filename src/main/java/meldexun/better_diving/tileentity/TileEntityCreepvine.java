@@ -1,19 +1,13 @@
 package meldexun.better_diving.tileentity;
 
-import java.util.Random;
-
 import meldexun.better_diving.block.AbstractBlockCreepvine;
-import meldexun.better_diving.init.ModBlocks;
-import meldexun.better_diving.util.BetterDivingConfig;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ITickable;
 
-public class TileEntityCreepvine extends TileEntity implements ITickable {
+public class TileEntityCreepvine extends TileEntity {
 
-	public int maxHeight;
-	public boolean generateSeeds;
-	public Random rand = new Random();
+	private int maxHeight;
+	private boolean canGenerateSeeds;
 
 	public TileEntityCreepvine() {
 		this(AbstractBlockCreepvine.MAX_HEIGHT, false);
@@ -21,14 +15,14 @@ public class TileEntityCreepvine extends TileEntity implements ITickable {
 
 	public TileEntityCreepvine(int maxHeight, boolean generateSeeds) {
 		this.maxHeight = maxHeight;
-		this.generateSeeds = generateSeeds;
+		this.canGenerateSeeds = generateSeeds;
 	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		super.writeToNBT(compound);
+		compound = super.writeToNBT(compound);
 		compound.setInteger("maxHeight", this.maxHeight);
-		compound.setBoolean("canGenerateSeeds", this.generateSeeds);
+		compound.setBoolean("canGenerateSeeds", this.canGenerateSeeds);
 		return compound;
 	}
 
@@ -36,26 +30,7 @@ public class TileEntityCreepvine extends TileEntity implements ITickable {
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
 		this.maxHeight = compound.getInteger("maxHeight");
-		this.generateSeeds = compound.getBoolean("canGenerateSeeds");
-	}
-
-	@Override
-	public void update() {
-		if (!this.world.isRemote) {
-			if (this.world.getBlockState(this.pos).getBlock() == ModBlocks.CREEPVINE_TOP) {
-				if (this.rand.nextInt(1800) == 0) {
-					int height = this.getCreepvineHeight();
-					if (height < this.maxHeight) {
-						if (ModBlocks.CREEPVINE_TOP.canPlaceBlockAt(this.world, this.pos.up())) {
-							ModBlocks.CREEPVINE.setCreepvine(this.world, this.pos, 3, this.maxHeight, this.generateSeeds);
-							ModBlocks.CREEPVINE_TOP.setCreepvine(this.world, this.pos.up(), 3, this.maxHeight, this.generateSeeds);
-						}
-					} else if (BetterDivingConfig.PLANTS.shouldGenerateCreepvineSeedCluster && this.generateSeeds && this.rand.nextBoolean()) {
-						ModBlocks.CREEPVINE_SEED.setCreepvine(this.world, this.pos.down(height / 2), 3, this.maxHeight, this.generateSeeds);
-					}
-				}
-			}
-		}
+		this.canGenerateSeeds = compound.getBoolean("canGenerateSeeds");
 	}
 
 	public int getCreepvineHeight() {
@@ -64,6 +39,22 @@ public class TileEntityCreepvine extends TileEntity implements ITickable {
 			i++;
 		}
 		return i;
+	}
+
+	public void setMaxHeight(int maxHeight) {
+		this.maxHeight = maxHeight;
+	}
+
+	public int getMaxHeight() {
+		return this.maxHeight;
+	}
+
+	public void setCanGenerateSeeds(boolean canGenerateSeeds) {
+		this.canGenerateSeeds = canGenerateSeeds;
+	}
+
+	public boolean canGenerateSeeds() {
+		return this.canGenerateSeeds;
 	}
 
 }

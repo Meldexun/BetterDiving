@@ -2,14 +2,14 @@ package meldexun.better_diving.item;
 
 import java.util.List;
 
-import meldexun.better_diving.capability.inventory.CapabilityItemHandlerProvider;
 import meldexun.better_diving.init.ModItems;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.relauncher.Side;
@@ -25,8 +25,13 @@ public class ItemTool extends ItemTooltip {
 	}
 
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
-		return CapabilityItemHandlerProvider.createProvider(1);
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+		if (this.isInCreativeTab(tab)) {
+			items.add(new ItemStack(this));
+			ItemStack stack = new ItemStack(this);
+			((ItemStackHandler) stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)).setStackInSlot(0, new ItemStack(ModItems.BATTERY));
+			items.add(stack);
+		}
 	}
 
 	@Override
@@ -38,9 +43,9 @@ public class ItemTool extends ItemTooltip {
 			int percent = (int) (100.0D * (double) ienergy.getEnergyStored() / (double) ienergy.getMaxEnergyStored());
 			int energy = (int) ((double) ienergy.getEnergyStored() / 100.0D);
 			int capacity = (int) ((double) ienergy.getMaxEnergyStored() / 100.0D);
-			tooltip.add("Energy: " + percent + " % (" + energy + "/" + capacity + ")");
+			tooltip.add(I18n.format("tooltip.energy", percent, energy, capacity));
 		} else {
-			tooltip.add("No battery");
+			tooltip.add(I18n.format("tooltip.no_battery"));
 		}
 		super.addInformation(stack, worldIn, tooltip, flagIn);
 	}
@@ -69,6 +74,14 @@ public class ItemTool extends ItemTooltip {
 		return false;
 	}
 
+	public static int getEnergyPercent(ItemStack stack) {
+		ItemStack battery = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).getStackInSlot(0);
+		if (battery.getItem() instanceof ItemEnergyStorage) {
+			return ItemEnergyStorage.getEnergyPercent(stack);
+		}
+		return 0;
+	}
+
 	public static int getEnergyCapacity(ItemStack stack) {
 		ItemStack battery = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).getStackInSlot(0);
 		if (battery.getItem() instanceof ItemBattery) {
@@ -95,17 +108,6 @@ public class ItemTool extends ItemTooltip {
 			}
 		}
 		return 0;
-	}
-
-	@Override
-	public NBTTagCompound getNBTShareTag(ItemStack stack) {
-		NBTTagCompound nbt = new NBTTagCompound();
-		IItemHandler iitemhandler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-		ItemStack battery = iitemhandler.getStackInSlot(0);
-		if (!battery.isEmpty()) {
-			nbt.setTag("battery", battery.writeToNBT(new NBTTagCompound()));
-		}
-		return nbt;
 	}
 
 	@Override

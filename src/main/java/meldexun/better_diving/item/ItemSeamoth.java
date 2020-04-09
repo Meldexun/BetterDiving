@@ -3,7 +3,6 @@ package meldexun.better_diving.item;
 import java.util.List;
 
 import meldexun.better_diving.BetterDiving;
-import meldexun.better_diving.capability.inventory.CapabilityItemHandlerProvider;
 import meldexun.better_diving.entity.EntitySeamoth;
 import meldexun.better_diving.init.ModItems;
 import meldexun.better_diving.init.ModSounds;
@@ -13,9 +12,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
@@ -25,7 +22,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.relauncher.Side;
@@ -34,7 +30,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class ItemSeamoth extends Item {
+public class ItemSeamoth extends ItemTooltip {
 
 	public ItemSeamoth() {
 		this.setMaxStackSize(1);
@@ -43,8 +39,8 @@ public class ItemSeamoth extends Item {
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
 		if (this.isInCreativeTab(tab)) {
-			items.add(new ItemStack(ModItems.SEAMOTH));
-			ItemStack stack = new ItemStack(ModItems.SEAMOTH);
+			items.add(new ItemStack(this));
+			ItemStack stack = new ItemStack(this);
 			((ItemStackHandler) stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)).setStackInSlot(0, new ItemStack(ModItems.POWER_CELL));
 			items.add(stack);
 		}
@@ -54,7 +50,7 @@ public class ItemSeamoth extends Item {
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		if (!worldIn.isRemote) {
 			if (playerIn.isSneaking()) {
-				playerIn.openGui(BetterDiving.MOD_ID, GuiHandler.GUI_SEAMOTH_ITEM, worldIn, handIn.ordinal(), 0, 0);
+				playerIn.openGui(BetterDiving.instance, GuiHandler.GUI_SEAMOTH_ITEM, worldIn, handIn.ordinal(), 0, 0);
 			} else {
 				EntitySeamoth seamoth = new EntitySeamoth(worldIn);
 				ItemStack battery = playerIn.getHeldItem(handIn).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).getStackInSlot(0).copy();
@@ -77,12 +73,7 @@ public class ItemSeamoth extends Item {
 				}
 			}
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
-	}
-
-	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
-		return CapabilityItemHandlerProvider.createProvider(1);
+		return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 	}
 
 	@Override
@@ -94,22 +85,11 @@ public class ItemSeamoth extends Item {
 			int percent = (int) (100.0D * (double) ienergy.getEnergyStored() / (double) ienergy.getMaxEnergyStored());
 			int energy = (int) ((double) ienergy.getEnergyStored() / 100.0D);
 			int capacity = (int) ((double) ienergy.getMaxEnergyStored() / 100.0D);
-			tooltip.add("Energy: " + percent + " % (" + energy + "/" + capacity + ")");
+			tooltip.add(I18n.format("tooltip.energy", percent, energy, capacity));
 		} else {
-			tooltip.add("No power cell");
+			tooltip.add(I18n.format("tooltip.no_power_cell"));
 		}
-		tooltip.add(I18n.format(this.getUnlocalizedName() + ".tooltip"));
-	}
-
-	@Override
-	public NBTTagCompound getNBTShareTag(ItemStack stack) {
-		NBTTagCompound nbt = new NBTTagCompound();
-		IItemHandler iitemhandler = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-		ItemStack powerCell = iitemhandler.getStackInSlot(0);
-		if (!powerCell.isEmpty()) {
-			nbt.setTag("powerCell", powerCell.writeToNBT(new NBTTagCompound()));
-		}
-		return nbt;
+		super.addInformation(stack, worldIn, tooltip, flagIn);
 	}
 
 	@Override

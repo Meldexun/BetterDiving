@@ -1,48 +1,85 @@
 package meldexun.better_diving.registry;
 
-import java.lang.reflect.Method;
-import java.util.List;
+import java.util.Set;
 
-import meldexun.better_diving.util.BiomeHelper;
+import javax.annotation.Nullable;
+
 import meldexun.better_diving.util.config.EntityConfig;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
-public class EntitySpawnEntry {
+public class EntitySpawnEntry extends IForgeRegistryEntry.Impl<EntitySpawnEntry> {
 
-	public final Class<? extends EntityLiving> entityClass;
-	public boolean enabled;
-	public int weight;
-	public List<Biome> biomes;
-	public List<Integer> dimensions;
+	public static final IForgeRegistry<EntitySpawnEntry> REGISTRY = GameRegistry.findRegistry(EntitySpawnEntry.class);
+
+	private final Class<? extends EntityLiving> entityClass;
+	private final EntityConfig config;
 
 	public EntitySpawnEntry(Class<? extends EntityLiving> entityClass, EntityConfig config) {
-		this(entityClass, config.enabled, config.weight, BiomeHelper.getBiomes(config.biomes), BiomeHelper.getDimensions(config.dimensions));
-	}
-
-	public EntitySpawnEntry(Class<? extends EntityLiving> entityClass, boolean enabled, int weight, List<Biome> biomes, List<Integer> dimensions) {
 		this.entityClass = entityClass;
-		this.enabled = enabled;
-		this.weight = weight;
-		this.biomes = biomes;
-		this.dimensions = dimensions;
-		if (this.biomes.isEmpty() || this.dimensions.isEmpty()) {
-			this.enabled = false;
-		}
+		this.config = config;
 	}
 
 	public boolean canSpawnAt(World world, BlockPos pos) {
-		try {
-			Method canEntitySpawnAt = this.entityClass.getMethod("canSpawnAt", World.class, BlockPos.class);
-			if (!(boolean) canEntitySpawnAt.invoke(null, world, pos)) {
-				return false;
+		return this.canSpawnInDimension(world.provider.getDimension()) && this.canSpawnInBiome(world.getBiome(pos));
+	}
+
+	public boolean canSpawnInDimension(int dimension) {
+		for (int dim : this.config.dimensions) {
+			if (dim == dimension) {
+				return true;
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
-		return this.dimensions.contains(world.provider.getDimension()) && this.biomes.contains(world.getBiome(pos));
+		return false;
+	}
+
+	public boolean canSpawnInBiome(Biome biome) {
+		if (this.config.biomeOverride) {
+			return true;
+		}
+		Set<BiomeDictionary.Type> biomeTypeSet = BiomeDictionary.getTypes(biome);
+		for (String biomeTypeName : this.config.biomeTypes) {
+			BiomeDictionary.Type biomeType = this.getBiomeTypeByName(biomeTypeName);
+			if (biomeType != null && biomeTypeSet.contains(biomeType)) {
+				return true;
+			}
+		}
+		ResourceLocation biomeRegistryName = biome.getRegistryName();
+		for (ResourceLocation biomeName : this.config.getBiomes()) {
+			if (biomeName.equals(biomeRegistryName)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Nullable
+	private BiomeDictionary.Type getBiomeTypeByName(String biomeTypeName) {
+		for (BiomeDictionary.Type biomeType : BiomeDictionary.Type.getAll()) {
+			if (biomeType.getName().equals(biomeTypeName)) {
+				return biomeType;
+			}
+		}
+		return null;
+	}
+
+	public Class<? extends EntityLiving> getEntityClass() {
+		return this.entityClass;
+	}
+
+	public boolean isEnabled() {
+		return this.config.isEnabled();
+	}
+
+	public int getWeight() {
+		return this.config.weight;
 	}
 
 }

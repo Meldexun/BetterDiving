@@ -1,5 +1,7 @@
 package meldexun.better_diving.client.gui;
 
+import org.lwjgl.opengl.GL11;
+
 import meldexun.better_diving.BetterDiving;
 import meldexun.better_diving.client.util.GuiHelper;
 import meldexun.better_diving.entity.EntitySeamoth;
@@ -11,30 +13,34 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiSeamoth extends Gui {
 
-	private static final ResourceLocation GUI_SEAMOTH_1080 = new ResourceLocation(BetterDiving.MOD_ID, "textures/gui/gui_seamoth_1080.png");
-	private static final ResourceLocation GUI_SEAMOTH_1440 = new ResourceLocation(BetterDiving.MOD_ID, "textures/gui/gui_seamoth_1440.png");
-	private static final ResourceLocation GUI_SEAMOTH_2160 = new ResourceLocation(BetterDiving.MOD_ID, "textures/gui/gui_seamoth_2160.png");
-
 	public void render() {
 		Minecraft mc = Minecraft.getMinecraft();
 		ScaledResolution scaled = new ScaledResolution(mc);
 		FontRenderer fontRenderer = mc.fontRenderer;
-
+		BetterDivingConfig config = BetterDivingConfig.getInstance();
 		EntitySeamoth seamoth = ((EntitySeamoth) mc.player.getRidingEntity());
 
-		int width = 90;
-		int height = 45;
-		int offsetX = GuiHelper.getAnchorX(width, BetterDivingConfig.CLIENT_SETTINGS.guiSeamothConfig);
-		int offsetY = GuiHelper.getAnchorY(height, BetterDivingConfig.CLIENT_SETTINGS.guiSeamothConfig);
+		boolean blend = GL11.glGetBoolean(GL11.GL_BLEND);
+		GL11.glPushMatrix();
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GL11.glAlphaFunc(GL11.GL_GREATER, 0.003921569F);
 
-		mc.getTextureManager().bindTexture(GuiHelper.getTexture(GUI_SEAMOTH_1080, GUI_SEAMOTH_1440, GUI_SEAMOTH_2160));
-		drawScaledCustomSizeModalRect(offsetX, offsetY, 0.0F, 0.0F, 1, 1, width, height, 1.0F, 1.0F);
+		int i = MathHelper.clamp(scaled.getScaleFactor(), 1, 9);
+		int width = 86;
+		int height = 36;
+		int offsetX = GuiHelper.getAnchorX(width, config.client.guiSeamothConfig);
+		int offsetY = GuiHelper.getAnchorY(height, config.client.guiSeamothConfig);
+
+		mc.getTextureManager().bindTexture(new ResourceLocation(BetterDiving.MOD_ID, "textures/gui/seamoth_background_" + i + ".png"));
+		GuiHelper.drawTexture(offsetX, offsetY, 0.0D, 0.0D, width, height, 1.0D, 1.0D);
 
 		int energy = Math.round((float) seamoth.getEnergy() / (float) seamoth.getEnergyCapacity() * 100);
 		int health = 100;
@@ -54,6 +60,10 @@ public class GuiSeamoth extends Gui {
 		this.drawCenteredString(fontRenderer, I18n.format("gui.temperature"), Math.round((float) (offsetX + 67) / scale2), Math.round((float) (offsetY + 26) / scale2), Integer.parseInt("F6DC47", 16));
 		GlStateManager.popMatrix();
 
+		if (!blend) {
+			GL11.glDisable(GL11.GL_BLEND);
+		}
+		GL11.glPopMatrix();
 	}
 
 }

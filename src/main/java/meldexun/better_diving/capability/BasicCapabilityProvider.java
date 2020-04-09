@@ -1,11 +1,10 @@
 package meldexun.better_diving.capability;
 
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
-public abstract class BasicCapabilityProvider<C> implements ICapabilitySerializable<NBTBase> {
+public abstract class BasicCapabilityProvider<C> implements ICapabilityProvider {
 
 	public final Capability<C> capability;
 	public final C instance;
@@ -23,16 +22,6 @@ public abstract class BasicCapabilityProvider<C> implements ICapabilitySerializa
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		return capability == this.capability ? this.capability.<T>cast(this.instance) : null;
-	}
-
-	@Override
-	public NBTBase serializeNBT() {
-		return this.capability.getStorage().writeNBT(this.capability, this.instance, null);
-	}
-
-	@Override
-	public void deserializeNBT(NBTBase nbt) {
-		this.capability.getStorage().readNBT(this.capability, this.instance, null, nbt);
 	}
 
 }

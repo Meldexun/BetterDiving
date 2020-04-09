@@ -1,14 +1,12 @@
 package meldexun.better_diving.entity;
 
 import meldexun.better_diving.entity.ai.EntityAIFishWander;
-import meldexun.better_diving.util.EntityHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.passive.EntityWaterMob;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public abstract class AbstractEntityFish extends EntityWaterMob {
@@ -37,8 +35,8 @@ public abstract class AbstractEntityFish extends EntityWaterMob {
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(1.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.036D);
-		this.getEntityAttribute(SWIM_SPEED).setBaseValue(0.036D);
+		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.032D);
+		this.getEntityAttribute(EntityLivingBase.SWIM_SPEED).setBaseValue(0.032D);
 	}
 
 	@Override
@@ -74,19 +72,14 @@ public abstract class AbstractEntityFish extends EntityWaterMob {
 	}
 
 	public double getSwimSpeed() {
-		double speed = this.getEntityAttribute(SWIM_SPEED).getAttributeValue();
-		EntityPlayer player = this.world.getClosestPlayerToEntity(this, 4.0D);
-		if (player != null) {
+		double speed = this.getEntityAttribute(EntityLivingBase.SWIM_SPEED).getAttributeValue();
+		if (this.world.getClosestPlayerToEntity(this, 4.0D) != null) {
 			speed *= 1.1D;
 		}
 		if (!this.world.isDaytime()) {
-			speed *= 0.8D;
+			speed *= 0.75D;
 		}
 		return speed;
-	}
-
-	public static boolean canSpawnAt(World world, BlockPos pos) {
-		return pos.getY() > 5 && pos.getY() < world.getSeaLevel() && EntityHelper.blocksToSeafloor(world, pos) < 32;
 	}
 
 }

@@ -5,6 +5,10 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ModWorldGenerators {
 
+	private ModWorldGenerators() {
+
+	}
+
 	public static void registerWorldGenerators() {
 		GameRegistry.registerWorldGenerator(new WorldGenOcean(), 0);
 	}

@@ -10,6 +10,7 @@ import meldexun.better_diving.world.generator.WorldGeneratorCreepvine;
 import meldexun.better_diving.world.generator.WorldGeneratorOcean;
 import meldexun.better_diving.world.generator.WorldGeneratorSandLayer;
 import meldexun.better_diving.world.generator.WorldGeneratorSeagrassTall;
+import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
@@ -17,28 +18,34 @@ import net.minecraftforge.fml.common.IWorldGenerator;
 
 public class WorldGenOcean implements IWorldGenerator {
 
-	public static List<WorldGeneratorOcean> oreGenerators = new ArrayList<WorldGeneratorOcean>();
-	public static List<WorldGeneratorOcean> plantGenerators = new ArrayList<WorldGeneratorOcean>();
+	private static WorldGeneratorSandLayer sandLayerGenerator;
+	private static List<WorldGeneratorOcean> oreGenerators = new ArrayList<>();
+	private static List<WorldGeneratorOcean> plantGenerators = new ArrayList<>();
 
 	static {
-		oreGenerators.add(new WorldGeneratorSandLayer(BetterDivingConfig.ORES.sandLayer));
-		oreGenerators.add(new WorldGeneratorOcean(ModBlocks.LIMESTONE_OUTCROP.getDefaultState(), BetterDivingConfig.ORES.limestone));
-		oreGenerators.add(new WorldGeneratorOcean(ModBlocks.SANDSTONE_OUTCROP.getDefaultState(), BetterDivingConfig.ORES.sandstone));
-		plantGenerators.add(new WorldGeneratorCreepvine());
-		plantGenerators.add(new WorldGeneratorOcean(ModBlocks.ACID_MUSHROOM.getDefaultState(), BetterDivingConfig.PLANTS.acidMushroom));
-		plantGenerators.add(new WorldGeneratorSeagrassTall());
-		plantGenerators.add(new WorldGeneratorOcean(ModBlocks.SEAGRASS.getDefaultState(), BetterDivingConfig.PLANTS.seagrass));
+		WorldGenOcean.sandLayerGenerator = new WorldGeneratorSandLayer(Blocks.SAND.getDefaultState(), BetterDivingConfig.getInstance().ores.sandLayer);
+
+		WorldGenOcean.oreGenerators.add(new WorldGeneratorOcean(ModBlocks.LIMESTONE_OUTCROP.getDefaultState(), BetterDivingConfig.getInstance().ores.limestone));
+		WorldGenOcean.oreGenerators.add(new WorldGeneratorOcean(ModBlocks.SANDSTONE_OUTCROP.getDefaultState(), BetterDivingConfig.getInstance().ores.sandstone));
+
+		WorldGenOcean.plantGenerators.add(new WorldGeneratorCreepvine());
+		WorldGenOcean.plantGenerators.add(new WorldGeneratorOcean(ModBlocks.ACID_MUSHROOM.getDefaultState(), BetterDivingConfig.getInstance().plants.acidMushroom));
+		WorldGenOcean.plantGenerators.add(new WorldGeneratorSeagrassTall());
+		WorldGenOcean.plantGenerators.add(new WorldGeneratorOcean(ModBlocks.SEAGRASS.getDefaultState(), BetterDivingConfig.getInstance().plants.seagrass));
 	}
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
-		if (BetterDivingConfig.MODULES.oreGeneration) {
-			for (WorldGeneratorOcean generator : oreGenerators) {
+		WorldGenOcean.sandLayerGenerator.generate(world, random, chunkX, chunkZ);
+
+		if (BetterDivingConfig.getInstance().modules.oreGeneration) {
+			for (WorldGeneratorOcean generator : WorldGenOcean.oreGenerators) {
 				generator.generate(world, random, chunkX, chunkZ);
 			}
 		}
-		if (BetterDivingConfig.MODULES.plantGeneration) {
-			for (WorldGeneratorOcean generator : plantGenerators) {
+
+		if (BetterDivingConfig.getInstance().modules.plantGeneration) {
+			for (WorldGeneratorOcean generator : WorldGenOcean.plantGenerators) {
 				generator.generate(world, random, chunkX, chunkZ);
 			}
 		}

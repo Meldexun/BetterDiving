@@ -14,18 +14,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemDivingHelm extends AbstractItemDivingGear {
 
 	public ItemDivingHelm(ArmorMaterial material, DivingGearConfig config) {
-		this(material, config.improvedGear, config.reinforcedGear);
-	}
-
-	public ItemDivingHelm(ArmorMaterial material, boolean isImprovedGear, boolean isReinforcedGear) {
-		super(material, EntityEquipmentSlot.HEAD, 0, 0.0D, 0.0F, isImprovedGear, isReinforcedGear);
+		super(material, EntityEquipmentSlot.HEAD, config);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		tooltip.add(I18n.format("item.mask.tooltip"));
-		if (this.isImprovedGear) {
+		if (this.isImproved()) {
 			tooltip.add(I18n.format("item.improved_mask.tooltip"));
 		}
 		super.addInformation(stack, worldIn, tooltip, flagIn);

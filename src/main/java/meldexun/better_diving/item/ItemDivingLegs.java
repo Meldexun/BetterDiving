@@ -14,18 +14,19 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemDivingLegs extends AbstractItemDivingGear {
 
 	public ItemDivingLegs(ArmorMaterial material, DivingGearConfig config) {
-		this(material, (float) config.legsBreakspeed, config.improvedGear, config.reinforcedGear);
-	}
-
-	public ItemDivingLegs(ArmorMaterial material, float breakSpeed, boolean isImprovedGear, boolean isReinforcedGear) {
-		super(material, EntityEquipmentSlot.LEGS, 0, 0.0D, breakSpeed, isImprovedGear, isReinforcedGear);
+		super(material, EntityEquipmentSlot.LEGS, config);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(I18n.format("item.wetsuit_leggings.tooltip", (int) ((double) this.breakSpeed * 100.0D)));
+		tooltip.add(I18n.format("item.wetsuit_leggings.tooltip", (int) ((double) this.getBreakSpeed() * 100.0D)));
 		super.addInformation(stack, worldIn, tooltip, flagIn);
+	}
+
+	@Override
+	public float getBreakSpeed() {
+		return (float) this.config.legsBreakspeed;
 	}
 
 }

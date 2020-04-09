@@ -5,9 +5,9 @@ public class ArmorConfig {
 	public int durability;
 	public int enchantability;
 	public int[] protection;
-	public double toughness;
+	public float toughness;
 
-	public ArmorConfig(int durability, int enchantability, int[] protection, double toughness) {
+	public ArmorConfig(int durability, int enchantability, int[] protection, float toughness) {
 		this.durability = durability;
 		this.enchantability = enchantability;
 		this.protection = protection;

@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 public class WorldGeneratorCreepvine extends WorldGeneratorOcean {
 
 	public WorldGeneratorCreepvine() {
-		super(ModBlocks.CREEPVINE.getDefaultState(), BetterDivingConfig.PLANTS.creepvine);
+		super(ModBlocks.CREEPVINE.getDefaultState(), BetterDivingConfig.getInstance().plants.creepvine);
 	}
 
 	@Override
@@ -24,14 +24,16 @@ public class WorldGeneratorCreepvine extends WorldGeneratorOcean {
 			int maxHeight = AbstractBlockCreepvine.MAX_HEIGHT - rand.nextInt(6);
 			boolean generateSeeds = rand.nextInt(1000) < 250;
 
-			for (int i = 0; i < maxHeight && ModBlocks.CREEPVINE.canPlaceBlockAt(worldIn, position.up(i)); i++) {
+			int i = 0;
+			while (i < maxHeight && ModBlocks.CREEPVINE.canPlaceBlockAt(worldIn, position.up(i))) {
 				ModBlocks.CREEPVINE.setCreepvine(worldIn, position.up(i), 2, maxHeight, generateSeeds);
+				i++;
 			}
 
-			ModBlocks.CREEPVINE_TOP.setCreepvine(worldIn, position.up(maxHeight), 2, maxHeight, generateSeeds);
+			ModBlocks.CREEPVINE_TOP.setCreepvine(worldIn, position.up(i), 2, maxHeight, generateSeeds);
 
-			if (BetterDivingConfig.PLANTS.shouldGenerateCreepvineSeedCluster && generateSeeds) {
-				ModBlocks.CREEPVINE_SEED.setCreepvine(worldIn, position.up(maxHeight / 2), 2, maxHeight, generateSeeds);
+			if (BetterDivingConfig.getInstance().plants.shouldGenerateCreepvineSeedCluster && generateSeeds) {
+				ModBlocks.CREEPVINE_SEED.setCreepvine(worldIn, position.up((int) (maxHeight * 0.5D + 0.5D)), 2, maxHeight, generateSeeds);
 			}
 
 			return true;

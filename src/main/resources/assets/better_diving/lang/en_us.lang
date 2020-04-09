@@ -52,19 +52,19 @@ item.boomerang_cured.name=Cured Boomerang
 
 #Item tooltips
 item.mask.tooltip=Needed for diving with an O₂ Tank.
-item.tank.tooltip=Allows you to dive about %d seconds longer.
+item.tank.tooltip=O₂ mix. Compressed breathable air.
 item.wetsuit_leggings.tooltip=Increase breakspeed underwater by around %d%%.
-item.fins.tooltip=Enhance swim speed by approximately %d%%.
+item.fins.tooltip=Translate vertical limb movements underwater into forward thrust.
 
-item.rebreather.tooltip=Needed for diving with an O₂ Tank.%sConserves oxygen when diving deeper. Absorbs and recycles CO₂ into breathable air.
-item.high_capacity_o2_tank.tooltip=Allows you to dive about %d seconds longer.
+item.rebreather.tooltip=Needed for diving with an O₂ Tank.
+item.high_capacity_o2_tank.tooltip=O₂ mix. Highly Compressed breathable air.
 item.improved_wetsuit_leggings.tooltip=Increase breakspeed underwater by around %d%%.
-item.ultra_glide_fins.tooltip=Enhance swim speed by approximately %d%%.
+item.ultra_glide_fins.tooltip=Streamline construction enhances swim speed considerably by comparison to regular fins.
 
-item.reinforced_diving_mask.tooltip=Needed for diving with an O₂ Tank.%sGrants more Protection than regular Diving Gear.
-item.reinforced_o2_tank.tooltip=Allows you to dive about %d seconds longer.%sGrants more Protection than regular Diving Gear.
-item.reinforced_wetsuit_leggings.tooltip=Increase breakspeed underwater by around %d%%.%sGrant more Protection than regular Diving Gear.
-item.reinforced_fins.tooltip=Enhance swim speed by approximately %d%%.%sGrant more Protection than regular Diving Gear.
+item.reinforced_diving_mask.tooltip=Needed for diving with an O₂ Tank.
+item.reinforced_o2_tank.tooltip=O₂ mix. Compressed breathable air.
+item.reinforced_wetsuit_leggings.tooltip=Increase breakspeed underwater by around %d%%.
+item.reinforced_fins.tooltip=Translate vertical limb movements underwater into forward thrust.
 
 item.improved_mask.tooltip=Conserves oxygen when diving deeper. Absorbs and recycles CO₂ into breathable air.
 item.reinforced_gear.tooltip=Grants more protection than regular Diving Gear.
@@ -141,6 +141,7 @@ entity.holefish.name=Holefish
 entity.boomerang.name=Boomerang
 
 #Config
+config.better_diving=Better Diving
 config.category_general=01 - General
 config.category_modules=02 - Modules
 config.category_ores=03 - Ores
@@ -170,3 +171,10 @@ config.boomerang=Boomerang
 
 #Gui
 gui.temperature=°C
+
+#Tooltips
+tooltip.oxygen=%ds of oxygen
+tooltip.oxygen_empty=empty
+tooltip.energy=Energy: %d %% (%d/%d)
+tooltip.no_battery=No battery
+tooltip.no_power_cell=No power cell

@@ -15,7 +15,10 @@ public class ItemCreepvineSeedCluster extends ItemTooltip {
 	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		BlockPos position = pos.offset(facing);
 		if (!(worldIn.getBlockState(position.down()).getBlock() instanceof AbstractBlockCreepvine) && ModBlocks.CREEPVINE_TOP.canPlaceBlockAt(worldIn, position)) {
-			ModBlocks.CREEPVINE_TOP.setCreepvine(worldIn, position, 3, AbstractBlockCreepvine.MAX_HEIGHT, true);
+			ModBlocks.CREEPVINE_TOP.setCreepvine(worldIn, position, 3, AbstractBlockCreepvine.MAX_HEIGHT - 4 + worldIn.rand.nextInt(5), true);
+			if (!player.isCreative()) {
+				player.getHeldItem(hand).shrink(1);
+			}
 			return EnumActionResult.SUCCESS;
 		}
 		return EnumActionResult.FAIL;

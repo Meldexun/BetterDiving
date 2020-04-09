@@ -1,13 +1,15 @@
 package meldexun.better_diving.client.renderer.entity;
 
+import org.lwjgl.opengl.GL11;
+
 import meldexun.better_diving.BetterDiving;
 import meldexun.better_diving.client.model.entity.ModelSeamoth;
 import meldexun.better_diving.entity.EntitySeamoth;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -20,7 +22,6 @@ public class RenderSeamoth extends Render<EntitySeamoth> {
 	private static final ResourceLocation TEXTURE = new ResourceLocation(BetterDiving.MOD_ID, "textures/entity/seamoth.png");
 
 	protected ModelBase model = new ModelSeamoth(0.0F);
-	protected ModelBase modelFirstPerson = new ModelSeamoth(7.32F);
 
 	public RenderSeamoth(RenderManager renderManagerIn) {
 		super(renderManagerIn);
@@ -29,58 +30,44 @@ public class RenderSeamoth extends Render<EntitySeamoth> {
 
 	@Override
 	public void doRender(EntitySeamoth entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		GlStateManager.pushMatrix();
-		if (entity.getControllingPassenger() == Minecraft.getMinecraft().player && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0) {
-			this.setupTranslation(x, y + 0.8125F + 0.4575F, z);
+		Minecraft mc = Minecraft.getMinecraft();
+		EntityPlayer player = mc.player;
+
+		GL11.glPushMatrix();
+		GL11.glTranslated(x, y, z);
+
+		if (player == entity.getControllingPassenger() && mc.gameSettings.thirdPersonView == 0) {
+			GL11.glTranslated(0.0D, (double) player.eyeHeight, 0.0D);
+			this.setupRotation(entity, partialTicks);
+			GL11.glTranslated(0.0D, 0.8125D - (double) player.eyeHeight, -0.32D);
 		} else {
-			this.setupTranslation(x, y + 0.8125F, z);
+			GL11.glTranslated(0.0D, 0.8125D, 0.0D);
+			this.setupRotation(entity, partialTicks);
 		}
-		this.setupRotation(entity, entityYaw, partialTicks);
+
+		GL11.glScaled(-1.0D, -1.0D, 1.0D);
+
 		this.bindEntityTexture(entity);
+		this.model.render(entity, partialTicks, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
+		GL11.glPopMatrix();
 
-		if (this.renderOutlines) {
-			GlStateManager.enableColorMaterial();
-			GlStateManager.enableOutlineMode(this.getTeamColor(entity));
-		}
-
-		if (entity.getControllingPassenger() == Minecraft.getMinecraft().player && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0) {
-			this.modelFirstPerson.render(entity, partialTicks, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
-		} else {
-			this.model.render(entity, partialTicks, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
-		}
-
-		if (this.renderOutlines) {
-			GlStateManager.disableOutlineMode();
-			GlStateManager.disableColorMaterial();
-		}
-
-		GlStateManager.popMatrix();
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 	}
 
-	public void setupTranslation(double x, double y, double z) {
-		GlStateManager.translate((float) x, (float) y, (float) z);
-	}
-
-	public void setupRotation(EntitySeamoth entity, float entityYaw, float partialTicks) {
-		if (entity.getControllingPassenger() instanceof EntityPlayer) {
-			EntityPlayer p = (EntityPlayer) entity.getControllingPassenger();
-			GlStateManager.rotate(p.rotationPitch, MathHelper.cos(p.rotationYaw * 0.017453292F), 0.0F, MathHelper.sin(p.rotationYaw * 0.017453292F));
-			GlStateManager.rotate(180.0F - p.rotationYaw, 0.0F, 1.0F, 0.0F);
-		} else {
-			GlStateManager.rotate(entity.rotationPitch, MathHelper.cos(entity.rotationYaw * 0.017453292F), 0.0F, MathHelper.sin(entity.rotationYaw * 0.017453292F));
-			GlStateManager.rotate(180.0F - entity.rotationYaw, 0.0F, 1.0F, 0.0F);
-		}
-
-		GlStateManager.scale(-1.0F, -1.0F, 1.0F);
+	protected void setupRotation(Entity entity, float partialTicks) {
+		double yaw = this.interpolateRotation((double) entity.prevRotationYaw, (double) entity.rotationYaw, (double) partialTicks);
+		double pitch = this.interpolateRotation((double) entity.prevRotationPitch, (double) entity.rotationPitch, (double) partialTicks);
+		// interpolated yaw and pitch does NOT work
+		GL11.glRotated(entity.rotationPitch, Math.cos(Math.toRadians(entity.rotationYaw)), 0.0D, Math.sin(Math.toRadians(entity.rotationYaw)));
+		GL11.glRotated(180.0D - entity.rotationYaw, 0.0D, 1.0D, 0.0D);
 	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntitySeamoth entity) {
-		return TEXTURE;
+		return RenderSeamoth.TEXTURE;
 	}
 
-	protected float interpolateRotation(float prevRotation, float rotation, float partialTicks) {
+	protected double interpolateRotation(double prevRotation, double rotation, double partialTicks) {
 		return prevRotation + MathHelper.wrapDegrees(rotation - prevRotation) * partialTicks;
 	}
 

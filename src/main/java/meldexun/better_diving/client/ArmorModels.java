@@ -8,9 +8,15 @@ import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 @EventBusSubscriber(modid = BetterDiving.MOD_ID, value = Side.CLIENT)
 public class ArmorModels {
+
+	private ArmorModels() {
+
+	}
 
 	public static ModelCustomArmor divingGearModel;
 	public static ModelCustomArmor divingGearModelSlim;
@@ -18,9 +24,9 @@ public class ArmorModels {
 
 	@SubscribeEvent
 	public static void registerRenders(ModelRegistryEvent event) {
-		divingGearModel = new ModelDivingGear(0.0F, false);
-		divingGearModelSlim = new ModelDivingGear(0.0F, true);
-		divingGearModelLegs = new ModelDivingGearLegs(0.0F);
+		ArmorModels.divingGearModel = new ModelDivingGear(0.0F, false);
+		ArmorModels.divingGearModelSlim = new ModelDivingGear(0.0F, true);
+		ArmorModels.divingGearModelLegs = new ModelDivingGearLegs(0.0F);
 	}
 
 }

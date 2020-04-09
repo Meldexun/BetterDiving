@@ -16,31 +16,39 @@ public class SeamothEngineLoopSound extends MovingSound {
 
 	public SeamothEngineLoopSound(EntitySeamoth seamoth) {
 		super(ModSounds.SEAMOTH_ENGINE_LOOP, SoundCategory.NEUTRAL);
+		this.seamoth = seamoth;
 		this.repeat = true;
 		this.repeatDelay = 0;
 		this.volume = 1.0F;
 		this.pitch = 1.0F;
-		this.seamoth = seamoth;
 	}
 
 	@Override
 	public void update() {
-		if (this.seamoth.isDead) {
+		if (this.seamoth.isDead || this.tick < 0) {
 			this.donePlaying = true;
 		} else {
 			this.xPosF = (float) this.seamoth.posX;
 			this.yPosF = (float) this.seamoth.posY;
 			this.zPosF = (float) this.seamoth.posZ;
 
-			if (this.seamoth.isPlayerSteering() && this.seamoth.getEnergy() > 0) {
+			if (this.seamoth.isPlayerSteering() && this.seamoth.hasEnergy()) {
 				this.tick = Math.min(this.tick + 1, 60);
 			} else {
-				this.tick = Math.max(this.tick - 1, 0);
+				this.tick--;
 			}
 
 			this.pitch = 0.4F + MathHelper.clamp((float) this.tick / 60.0F * 0.6F, 0.0F, 0.6F);
-			this.volume = 0.16F * MathHelper.clamp((float) this.tick / 60.0F, 0.0F, 1.0F);
+			this.volume = 0.15F * MathHelper.clamp((float) this.tick / 60.0F, 0.0F, 1.0F);
 		}
+	}
+
+	public int getTick() {
+		return this.tick;
+	}
+
+	public void setTick(int tick) {
+		this.tick = tick;
 	}
 
 }

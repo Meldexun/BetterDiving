@@ -1,14 +1,14 @@
 package meldexun.better_diving.capability.inventory;
 
 import meldexun.better_diving.BetterDiving;
-import meldexun.better_diving.capability.BasicCapabilityProvider;
+import meldexun.better_diving.capability.BasicCapabilityProviderSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class CapabilityItemHandlerProvider extends BasicCapabilityProvider<IItemHandler> {
+public class CapabilityItemHandlerProvider extends BasicCapabilityProviderSerializable<IItemHandler> {
 
 	public static final ResourceLocation LOCATION_ITEM_STACK_HANDLER = new ResourceLocation(BetterDiving.MOD_ID, "item_stack_handler");
 

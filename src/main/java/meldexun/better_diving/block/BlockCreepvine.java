@@ -17,7 +17,7 @@ public class BlockCreepvine extends AbstractBlockCreepvine {
 		super.neighborChanged(state, worldIn, pos, blockIn, fromPos);
 		if (worldIn.getBlockState(pos).getBlock() instanceof AbstractBlockCreepvine && !(worldIn.getBlockState(pos.up()).getBlock() instanceof AbstractBlockCreepvine)) {
 			TileEntityCreepvine tileEntity = (TileEntityCreepvine) worldIn.getTileEntity(pos);
-			ModBlocks.CREEPVINE_TOP.setCreepvine(worldIn, pos, 3, tileEntity.maxHeight, tileEntity.generateSeeds);
+			ModBlocks.CREEPVINE_TOP.setCreepvine(worldIn, pos, 3, tileEntity.getMaxHeight(), tileEntity.canGenerateSeeds());
 		}
 	}
 
@@ -27,18 +27,18 @@ public class BlockCreepvine extends AbstractBlockCreepvine {
 
 	public BlockCreepvine() {
 		if (!(this instanceof BlockCreepvineSeed)) {
-			this.setDefaultState(this.blockState.getBaseState().withProperty(BlockLiquid.LEVEL, 0).withProperty(SEED, 0));
+			this.setDefaultState(this.blockState.getBaseState().withProperty(BlockLiquid.LEVEL, 0).withProperty(BlockCreepvine.SEED, 0));
 		}
 	}
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, BlockLiquid.LEVEL, SEED);
+		return new BlockStateContainer(this, BlockLiquid.LEVEL, BlockCreepvine.SEED);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(SEED);
+		return state.getPropertyKeys().contains(BlockCreepvine.SEED) ? state.getValue(BlockCreepvine.SEED) : 0;
 	}
 
 	@Override

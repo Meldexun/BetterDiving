@@ -15,6 +15,7 @@ import meldexun.better_diving.item.ItemDivingLegs;
 import meldexun.better_diving.item.ItemFish;
 import meldexun.better_diving.item.ItemHabitatBuilder;
 import meldexun.better_diving.item.ItemPowerCell;
+import meldexun.better_diving.item.ItemSeaglide;
 import meldexun.better_diving.item.ItemSeamoth;
 import meldexun.better_diving.item.ItemTooltip;
 import meldexun.better_diving.util.BetterDivingConfig;
@@ -84,77 +85,87 @@ public class ModItems {
 	public static final ItemFish BOOMERANG_CURED = null;
 
 	public static final ItemHabitatBuilder HABITAT_BUILDER = null;
+	public static final ItemSeaglide SEAGLIDE = null;
+
+	private ModItems() {
+
+	}
 
 	@EventBusSubscriber(modid = BetterDiving.MOD_ID)
 	public static class ItemRegistrationHandler {
 
-		public static final List<Item> ITEMS = new ArrayList<Item>();
+		public static final List<Item> ITEMS = new ArrayList<>();
+
+		private ItemRegistrationHandler() {
+
+		}
 
 		@SubscribeEvent
 		public static void registerItems(RegistryEvent.Register<Item> event) {
 			final Item[] items = {
-					setItemName(new ItemTooltip(), "titanium"),
-					setItemName(new ItemTooltip(), "copper_ore"),
-					setItemName(new ItemTooltip(), "silver_ore"),
-					setItemName(new ItemTooltip(), "lead"),
-					setItemName(new ItemTooltip(), "gold"),
+					ItemRegistrationHandler.setItemName(new ItemTooltip(), "titanium"),
+					ItemRegistrationHandler.setItemName(new ItemTooltip(), "copper_ore"),
+					ItemRegistrationHandler.setItemName(new ItemTooltip(), "silver_ore"),
+					ItemRegistrationHandler.setItemName(new ItemTooltip(), "lead"),
+					ItemRegistrationHandler.setItemName(new ItemTooltip(), "gold"),
 
-					setItemName(new ItemTooltip(), "titanium_ingot"),
-					setItemName(new ItemTooltip(), "wiring_kit"),
-					setItemName(new ItemBattery(10000, 100, 100), "battery"),
-					setItemName(new ItemPowerCell(20000, 200, 200), "power_cell"),
+					ItemRegistrationHandler.setItemName(new ItemTooltip(), "titanium_ingot"),
+					ItemRegistrationHandler.setItemName(new ItemTooltip(), "wiring_kit"),
+					ItemRegistrationHandler.setItemName(new ItemBattery(1000000, 125, 1000), "battery"),
+					ItemRegistrationHandler.setItemName(new ItemPowerCell(2000000, 125, 1000), "power_cell"),
 
-					setItemName(new ItemCreepvineSeedCluster(), "creepvine_seed_cluster"),
+					ItemRegistrationHandler.setItemName(new ItemCreepvineSeedCluster(), "creepvine_seed_cluster"),
 
-					setItemName(new ItemTooltip(), "lubricant"),
-					setItemName(new ItemTooltip(), "silicone_rubber"),
-					setItemName(new ItemTooltip(), "fiber_mesh"),
+					ItemRegistrationHandler.setItemName(new ItemTooltip(), "lubricant"),
+					ItemRegistrationHandler.setItemName(new ItemTooltip(), "silicone_rubber"),
+					ItemRegistrationHandler.setItemName(new ItemTooltip(), "fiber_mesh"),
 
-					setItemName(new ItemDivingHelm(ModMaterials.DIVING_GEAR_ARMOR_MATERIAL, BetterDivingConfig.DIVING_GEAR.basicDivingGear), "diving_mask"),
-					setItemName(new ItemDivingChest(ModMaterials.DIVING_GEAR_ARMOR_MATERIAL, BetterDivingConfig.DIVING_GEAR.basicDivingGear), "standard_o2_tank"),
-					setItemName(new ItemDivingLegs(ModMaterials.DIVING_GEAR_ARMOR_MATERIAL, BetterDivingConfig.DIVING_GEAR.basicDivingGear), "wetsuit_leggings"),
-					setItemName(new ItemDivingFeet(ModMaterials.DIVING_GEAR_ARMOR_MATERIAL, BetterDivingConfig.DIVING_GEAR.basicDivingGear), "fins"),
+					ItemRegistrationHandler.setItemName(new ItemDivingHelm(ModMaterials.DIVING_GEAR_ARMOR_MATERIAL, BetterDivingConfig.getInstance().divingGear.basicDivingGear), "diving_mask"),
+					ItemRegistrationHandler.setItemName(new ItemDivingChest(ModMaterials.DIVING_GEAR_ARMOR_MATERIAL, BetterDivingConfig.getInstance().divingGear.basicDivingGear), "standard_o2_tank"),
+					ItemRegistrationHandler.setItemName(new ItemDivingLegs(ModMaterials.DIVING_GEAR_ARMOR_MATERIAL, BetterDivingConfig.getInstance().divingGear.basicDivingGear), "wetsuit_leggings"),
+					ItemRegistrationHandler.setItemName(new ItemDivingFeet(ModMaterials.DIVING_GEAR_ARMOR_MATERIAL, BetterDivingConfig.getInstance().divingGear.basicDivingGear), "fins"),
 
-					setItemName(new ItemDivingHelm(ModMaterials.IMPROVED_DIVING_GEAR_ARMOR_MATERIAL, BetterDivingConfig.DIVING_GEAR.improvedDivingGear), "rebreather"),
-					setItemName(new ItemDivingChest(ModMaterials.IMPROVED_DIVING_GEAR_ARMOR_MATERIAL, BetterDivingConfig.DIVING_GEAR.improvedDivingGear), "high_capacity_o2_tank"),
-					setItemName(new ItemDivingLegs(ModMaterials.IMPROVED_DIVING_GEAR_ARMOR_MATERIAL, BetterDivingConfig.DIVING_GEAR.improvedDivingGear), "improved_wetsuit_leggings"),
-					setItemName(new ItemDivingFeet(ModMaterials.IMPROVED_DIVING_GEAR_ARMOR_MATERIAL, BetterDivingConfig.DIVING_GEAR.improvedDivingGear), "ultra_glide_fins"),
+					ItemRegistrationHandler.setItemName(new ItemDivingHelm(ModMaterials.IMPROVED_DIVING_GEAR_ARMOR_MATERIAL, BetterDivingConfig.getInstance().divingGear.improvedDivingGear), "rebreather"),
+					ItemRegistrationHandler.setItemName(new ItemDivingChest(ModMaterials.IMPROVED_DIVING_GEAR_ARMOR_MATERIAL, BetterDivingConfig.getInstance().divingGear.improvedDivingGear), "high_capacity_o2_tank"),
+					ItemRegistrationHandler.setItemName(new ItemDivingLegs(ModMaterials.IMPROVED_DIVING_GEAR_ARMOR_MATERIAL, BetterDivingConfig.getInstance().divingGear.improvedDivingGear), "improved_wetsuit_leggings"),
+					ItemRegistrationHandler.setItemName(new ItemDivingFeet(ModMaterials.IMPROVED_DIVING_GEAR_ARMOR_MATERIAL, BetterDivingConfig.getInstance().divingGear.improvedDivingGear), "ultra_glide_fins"),
 
-					setItemName(new ItemDivingHelm(ModMaterials.REINFORCED_DIVING_GEAR_ARMOR_MATERIAL, BetterDivingConfig.DIVING_GEAR.reinforcedDivingGear), "reinforced_diving_mask"),
-					setItemName(new ItemDivingChest(ModMaterials.REINFORCED_DIVING_GEAR_ARMOR_MATERIAL, BetterDivingConfig.DIVING_GEAR.reinforcedDivingGear), "reinforced_o2_tank"),
-					setItemName(new ItemDivingLegs(ModMaterials.REINFORCED_DIVING_GEAR_ARMOR_MATERIAL, BetterDivingConfig.DIVING_GEAR.reinforcedDivingGear), "reinforced_wetsuit_leggings"),
-					setItemName(new ItemDivingFeet(ModMaterials.REINFORCED_DIVING_GEAR_ARMOR_MATERIAL, BetterDivingConfig.DIVING_GEAR.reinforcedDivingGear), "reinforced_fins"),
+					ItemRegistrationHandler.setItemName(new ItemDivingHelm(ModMaterials.REINFORCED_DIVING_GEAR_ARMOR_MATERIAL, BetterDivingConfig.getInstance().divingGear.reinforcedDivingGear), "reinforced_diving_mask"),
+					ItemRegistrationHandler.setItemName(new ItemDivingChest(ModMaterials.REINFORCED_DIVING_GEAR_ARMOR_MATERIAL, BetterDivingConfig.getInstance().divingGear.reinforcedDivingGear), "reinforced_o2_tank"),
+					ItemRegistrationHandler.setItemName(new ItemDivingLegs(ModMaterials.REINFORCED_DIVING_GEAR_ARMOR_MATERIAL, BetterDivingConfig.getInstance().divingGear.reinforcedDivingGear), "reinforced_wetsuit_leggings"),
+					ItemRegistrationHandler.setItemName(new ItemDivingFeet(ModMaterials.REINFORCED_DIVING_GEAR_ARMOR_MATERIAL, BetterDivingConfig.getInstance().divingGear.reinforcedDivingGear), "reinforced_fins"),
 
-					setItemName(new ItemSeamoth(), "seamoth"),
+					ItemRegistrationHandler.setItemName(new ItemSeamoth(), "seamoth"),
 
-					setItemName(new ItemFish(1, 0.5F), "peeper"),
-					setItemName(new ItemFish(3, 0.5F), "peeper_cooked"),
-					setItemName(new ItemFish(4, 0.5F), "peeper_cured"),
-					setItemName(new ItemFish(1, 0.5F), "bladderfish"),
-					setItemName(new ItemFish(3, 0.5F), "bladderfish_cooked"),
-					setItemName(new ItemFish(4, 0.5F), "bladderfish_cured"),
-					setItemName(new ItemFish(1, 0.5F), "garryfish"),
-					setItemName(new ItemFish(3, 0.5F), "garryfish_cooked"),
-					setItemName(new ItemFish(4, 0.5F), "garryfish_cured"),
-					setItemName(new ItemFish(1, 0.5F), "holefish"),
-					setItemName(new ItemFish(3, 0.5F), "holefish_cooked"),
-					setItemName(new ItemFish(4, 0.5F), "holefish_cured"),
-					setItemName(new ItemFish(1, 0.5F), "boomerang"),
-					setItemName(new ItemFish(3, 0.5F), "boomerang_cooked"),
-					setItemName(new ItemFish(4, 0.5F), "boomerang_cured"),
+					ItemRegistrationHandler.setItemName(new ItemFish(1, 0.5F), "peeper"),
+					ItemRegistrationHandler.setItemName(new ItemFish(3, 0.5F), "peeper_cooked"),
+					ItemRegistrationHandler.setItemName(new ItemFish(4, 0.5F), "peeper_cured"),
+					ItemRegistrationHandler.setItemName(new ItemFish(1, 0.5F), "bladderfish"),
+					ItemRegistrationHandler.setItemName(new ItemFish(3, 0.5F), "bladderfish_cooked"),
+					ItemRegistrationHandler.setItemName(new ItemFish(4, 0.5F), "bladderfish_cured"),
+					ItemRegistrationHandler.setItemName(new ItemFish(1, 0.5F), "garryfish"),
+					ItemRegistrationHandler.setItemName(new ItemFish(3, 0.5F), "garryfish_cooked"),
+					ItemRegistrationHandler.setItemName(new ItemFish(4, 0.5F), "garryfish_cured"),
+					ItemRegistrationHandler.setItemName(new ItemFish(1, 0.5F), "holefish"),
+					ItemRegistrationHandler.setItemName(new ItemFish(3, 0.5F), "holefish_cooked"),
+					ItemRegistrationHandler.setItemName(new ItemFish(4, 0.5F), "holefish_cured"),
+					ItemRegistrationHandler.setItemName(new ItemFish(1, 0.5F), "boomerang"),
+					ItemRegistrationHandler.setItemName(new ItemFish(3, 0.5F), "boomerang_cooked"),
+					ItemRegistrationHandler.setItemName(new ItemFish(4, 0.5F), "boomerang_cured"),
 
-					setItemName(new ItemHabitatBuilder(), "habitat_builder") };
+					ItemRegistrationHandler.setItemName(new ItemHabitatBuilder(), "habitat_builder"),
+					ItemRegistrationHandler.setItemName(new ItemSeaglide(), "seaglide") };
 
 			IForgeRegistry<Item> registry = event.getRegistry();
 
 			for (Item item : items) {
 				registry.register(item);
-				ITEMS.add(item);
+				ItemRegistrationHandler.ITEMS.add(item);
 			}
 		}
 
 		private static Item setItemName(Item item, String name) {
-			return setItemNameAndTab(item, name, BetterDiving.TAB_BETTER_DIVING);
+			return ItemRegistrationHandler.setItemNameAndTab(item, name, BetterDiving.TAB_BETTER_DIVING);
 		}
 
 		private static Item setItemNameAndTab(Item item, String name, @Nullable CreativeTabs tab) {

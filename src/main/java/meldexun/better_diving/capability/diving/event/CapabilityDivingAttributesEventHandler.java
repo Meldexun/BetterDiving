@@ -2,15 +2,13 @@ package meldexun.better_diving.capability.diving.event;
 
 import meldexun.better_diving.BetterDiving;
 import meldexun.better_diving.capability.diving.CapabilityDivingAttributesProvider;
+import meldexun.better_diving.capability.diving.ICapabilityDivingAttributes;
 import meldexun.better_diving.integration.IndustrialCraft;
-import meldexun.better_diving.network.packet.SPacketSyncConfigHelper;
 import meldexun.better_diving.network.packet.SPacketSyncOxygen;
-import meldexun.better_diving.util.BetterDivingConfigClient;
-import net.minecraft.block.material.Material;
+import meldexun.better_diving.util.BetterDivingConfig;
+import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -24,33 +22,18 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 @EventBusSubscriber(modid = BetterDiving.MOD_ID)
 public class CapabilityDivingAttributesEventHandler {
 
-	@SubscribeEvent
-	public static void onPlayerEquipmentChangeEvent(LivingEquipmentChangeEvent event) {
-		if (event.getEntity() instanceof EntityPlayer && (event.getSlot() == EntityEquipmentSlot.HEAD || event.getSlot() == EntityEquipmentSlot.CHEST || event.getSlot() == EntityEquipmentSlot.LEGS || event.getSlot() == EntityEquipmentSlot.FEET)) {
-			EntityPlayer player = (EntityPlayer) event.getEntity();
+	private CapabilityDivingAttributesEventHandler() {
 
-			player.getCapability(CapabilityDivingAttributesProvider.DIVING_ATTRIBUTES, null).changeEquip(player);
-		}
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOW)
-	public static void onPlayerHarvestEvent(BreakSpeed event) {
-		if (BetterDivingConfigClient.blockBreaking) {
-			EntityPlayer player = event.getEntityPlayer();
+	public static void onPlayerBreakSpeedEvent(BreakSpeed event) {
+		EntityPlayer player = event.getEntityPlayer();
 
-			if (player.isInWater() && (!IndustrialCraft.loaded || !IndustrialCraft.isPlayerDrilling(player))) {
-				float harvestSpeed = event.getNewSpeed();
+		if (BetterDivingConfig.getInstance().modules.blockBreaking && player.isInWater() && !IndustrialCraft.isDrilling(player)) {
+			ICapabilityDivingAttributes idiving = player.getCapability(CapabilityDivingAttributesProvider.DIVING_ATTRIBUTES, null);
 
-				if (player.isInsideOfMaterial(Material.WATER)) {
-					harvestSpeed *= player.getCapability(CapabilityDivingAttributesProvider.DIVING_ATTRIBUTES, null).getBreakSpeed();
-				}
-
-				if (!player.onGround) {
-					harvestSpeed *= 5.0F;
-				}
-
-				event.setNewSpeed(harvestSpeed);
-			}
+			event.setNewSpeed(event.getNewSpeed() * idiving.getBreakSpeedFromPlayer());
 		}
 	}
 
@@ -59,9 +42,7 @@ public class CapabilityDivingAttributesEventHandler {
 		if (!event.player.world.isRemote) {
 			EntityPlayer player = event.player;
 
-			player.getCapability(CapabilityDivingAttributesProvider.DIVING_ATTRIBUTES, null).changeEquip(player);
-			BetterDiving.CONNECTION.sendTo(new SPacketSyncConfigHelper(), (EntityPlayerMP) player);
-			BetterDiving.CONNECTION.sendTo(new SPacketSyncOxygen(player), (EntityPlayerMP) player);
+			BetterDiving.network.sendTo(new SPacketSyncOxygen(player), (EntityPlayerMP) player);
 		}
 	}
 
@@ -70,27 +51,27 @@ public class CapabilityDivingAttributesEventHandler {
 		if (!event.player.world.isRemote) {
 			EntityPlayer player = event.player;
 
-			player.getCapability(CapabilityDivingAttributesProvider.DIVING_ATTRIBUTES, null).changeEquip(player);
-			BetterDiving.CONNECTION.sendTo(new SPacketSyncOxygen(player), (EntityPlayerMP) player);
+			BetterDiving.network.sendTo(new SPacketSyncOxygen(player), (EntityPlayerMP) player);
 		}
 	}
 
 	@SubscribeEvent
-	public static void onPlayerChangeDimensionEvent(PlayerChangedDimensionEvent event) {
+	public static void onPlayerChangedDimensionEvent(PlayerChangedDimensionEvent event) {
 		if (!event.player.world.isRemote) {
 			EntityPlayer player = event.player;
 
-			player.getCapability(CapabilityDivingAttributesProvider.DIVING_ATTRIBUTES, null).changeEquip(player);
-			BetterDiving.CONNECTION.sendTo(new SPacketSyncOxygen(player), (EntityPlayerMP) player);
+			BetterDiving.network.sendTo(new SPacketSyncOxygen(player), (EntityPlayerMP) player);
 		}
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event) {
 		if (event.phase == Phase.START) {
 			EntityPlayer player = event.player;
 
-			player.getCapability(CapabilityDivingAttributesProvider.DIVING_ATTRIBUTES, null).tick(player);
+			if (!player.world.isRemote || !(player instanceof EntityOtherPlayerMP)) {
+				player.getCapability(CapabilityDivingAttributesProvider.DIVING_ATTRIBUTES, null).tick();
+			}
 		}
 	}
 
