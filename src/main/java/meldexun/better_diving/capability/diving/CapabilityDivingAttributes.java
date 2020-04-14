@@ -4,6 +4,7 @@ import meldexun.better_diving.BetterDiving;
 import meldexun.better_diving.capability.item.oxygen.CapabilityOxygenProvider;
 import meldexun.better_diving.capability.item.oxygen.ICapabilityOxygen;
 import meldexun.better_diving.entity.EntitySeamoth;
+import meldexun.better_diving.event.EventHandler;
 import meldexun.better_diving.integration.MatterOverdrive;
 import meldexun.better_diving.integration.Metamorph;
 import meldexun.better_diving.integration.Vampirism;
@@ -46,6 +47,9 @@ public class CapabilityDivingAttributes implements ICapabilityDivingAttributes {
 	private float prevDivingTickHorizontal;
 	private float divingTickVertical;
 	private float prevDivingTickVertical;
+
+	private boolean isInSeamoth;
+	private boolean isPrevInSeamoth;
 
 	public CapabilityDivingAttributes() {
 		this(null);
@@ -132,6 +136,9 @@ public class CapabilityDivingAttributes implements ICapabilityDivingAttributes {
 
 	@Override
 	public void tick() {
+		this.isPrevInSeamoth = this.isInSeamoth;
+		this.isInSeamoth = this.player.getRidingEntity() instanceof EntitySeamoth;
+
 		if (this.player.world.isRemote) {
 			this.handleDiving();
 			this.handleMovement();
@@ -143,6 +150,20 @@ public class CapabilityDivingAttributes implements ICapabilityDivingAttributes {
 			if (BetterDivingConfig.getInstance().general.oxygenSyncPackets) {
 				BetterDiving.network.sendTo(new SPacketSyncOxygen(this.player), (EntityPlayerMP) this.player);
 			}
+		}
+
+		if (this.isInSeamoth) {
+			EntityHelper.updatePlayerSize(player, 1.53F, 0.6F, 1.164375F);
+		} else if (this.isPrevInSeamoth) {
+			EntityHelper.resetPlayerSize(player);
+		}
+
+		if (this.isDiving) {
+			player.setSprinting(false);
+			player.setSneaking(false);
+			EntityHelper.updatePlayerSize(player, 0.6F, 0.6F, 0.4F);
+		} else if (this.prevIsDiving) {
+			EntityHelper.resetPlayerSize(player);
 		}
 	}
 
