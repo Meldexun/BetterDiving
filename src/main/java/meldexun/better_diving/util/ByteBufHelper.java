@@ -4,6 +4,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
@@ -163,9 +164,14 @@ public class ByteBufHelper {
 				Class fieldClass = field.getType();
 
 				try {
-					if (fieldClass.equals(Boolean.TYPE) || fieldClass.equals(Byte.TYPE) || fieldClass.equals(Short.TYPE) || fieldClass.equals(Integer.TYPE) || fieldClass.equals(Long.TYPE) || fieldClass.equals(Float.TYPE)
-							|| fieldClass.equals(Double.TYPE)) {
+					if (fieldClass.isPrimitive() || fieldClass.equals(String.class)) {
 						field.set(target, field.get(source));
+					} else if (fieldClass.isArray() && (fieldClass.getComponentType().isPrimitive() || fieldClass.getComponentType().equals(String.class))) {
+						Object array1 = field.get(source);
+						int length = Array.getLength(array1);
+						Object array2 = Array.newInstance(fieldClass.getComponentType(), length);
+						System.arraycopy(array1, 0, array2, 0, length);
+						field.set(target, array2);
 					} else if (fieldClass.getSuperclass().equals(Object.class)) {
 						Object source2 = field.get(source);
 						Object target2 = field.get(target);
