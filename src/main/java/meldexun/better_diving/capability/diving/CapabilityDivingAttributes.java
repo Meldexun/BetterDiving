@@ -19,7 +19,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Enchantments;
@@ -35,9 +34,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class CapabilityDivingAttributes implements ICapabilityDivingAttributes {
-
-	private static final AttributeModifier HEIGHT_MODIFIER_SEAMOTH = new AttributeModifier("heightModifierSeamoth", -0.15D, 1).setSaved(false);
-	private static final AttributeModifier HEIGHT_MODIFIER_DIVING = new AttributeModifier("heightModifierDiving", -0.6667D, 1).setSaved(false);
 
 	private final EntityPlayer player;
 
