@@ -4,6 +4,8 @@ public interface ICapabilityDivingAttributes {
 
 	public void tick();
 
+	public void updateSize();
+
 	/**
 	 * Only used when reading the capability from NBT or when receiving oxygen sync
 	 * packets.

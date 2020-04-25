@@ -4,7 +4,7 @@ import meldexun.better_diving.BetterDiving;
 import meldexun.better_diving.capability.item.oxygen.CapabilityOxygenProvider;
 import meldexun.better_diving.capability.item.oxygen.ICapabilityOxygen;
 import meldexun.better_diving.entity.EntitySeamoth;
-import meldexun.better_diving.event.EventHandler;
+import meldexun.better_diving.integration.ArtemisLib;
 import meldexun.better_diving.integration.MatterOverdrive;
 import meldexun.better_diving.integration.Metamorph;
 import meldexun.better_diving.integration.Vampirism;
@@ -19,6 +19,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Enchantments;
@@ -34,6 +35,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class CapabilityDivingAttributes implements ICapabilityDivingAttributes {
+
+	private static final AttributeModifier HEIGHT_MODIFIER_SEAMOTH = new AttributeModifier("heightModifierSeamoth", -0.15D, 1).setSaved(false);
+	private static final AttributeModifier HEIGHT_MODIFIER_DIVING = new AttributeModifier("heightModifierDiving", -0.6667D, 1).setSaved(false);
 
 	private final EntityPlayer player;
 
@@ -151,19 +155,36 @@ public class CapabilityDivingAttributes implements ICapabilityDivingAttributes {
 				BetterDiving.network.sendTo(new SPacketSyncOxygen(this.player), (EntityPlayerMP) this.player);
 			}
 		}
+	}
 
-		if (this.isInSeamoth) {
-			EntityHelper.updatePlayerSize(player, 1.53F, 0.6F, 1.164375F);
-		} else if (this.isPrevInSeamoth) {
-			EntityHelper.resetPlayerSize(player);
-		}
+	@Override
+	public void updateSize() {
+		if (BetterDivingConfig.getInstance().general.playerResizing) {
+			if (ArtemisLib.loaded && BetterDivingConfig.getInstance().general.artemisLibCompatibility) {
+				if (this.isInSeamoth) {
+					EntityHelper.updatePlayerSize(this.player, this.player.height * 0.85F, this.player.width, this.player.height * 0.646875F);
+				} else if (this.isPrevInSeamoth) {
+					this.player.eyeHeight = this.player.getDefaultEyeHeight();
+				}
 
-		if (this.isDiving) {
-			player.setSprinting(false);
-			player.setSneaking(false);
-			EntityHelper.updatePlayerSize(player, 0.6F, 0.6F, 0.4F);
-		} else if (this.prevIsDiving) {
-			EntityHelper.resetPlayerSize(player);
+				if (this.isDiving) {
+					EntityHelper.updatePlayerSize(this.player, this.player.height * 0.333333F, this.player.width, this.player.height * 0.222222F);
+				} else if (this.prevIsDiving) {
+					this.player.eyeHeight = this.player.getDefaultEyeHeight();
+				}
+			} else {
+				if (this.isInSeamoth) {
+					EntityHelper.updatePlayerSize(this.player, 1.53F, 0.6F, 1.164375F);
+				} else if (this.isPrevInSeamoth) {
+					EntityHelper.resetPlayerSize(this.player);
+				}
+
+				if (this.isDiving) {
+					EntityHelper.updatePlayerSize(this.player, 0.6F, 0.6F, 0.4F);
+				} else if (this.prevIsDiving) {
+					EntityHelper.resetPlayerSize(this.player);
+				}
+			}
 		}
 	}
 
