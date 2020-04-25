@@ -64,15 +64,15 @@ public class CapabilityDivingAttributesEventHandler {
 		}
 	}
 
-	@SubscribeEvent(priority = EventPriority.HIGH)
+	@SubscribeEvent(priority = EventPriority.LOW)
 	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event) {
-		if (event.phase == Phase.START) {
-			EntityPlayer player = event.player;
+		ICapabilityDivingAttributes idiving = event.player.getCapability(CapabilityDivingAttributesProvider.DIVING_ATTRIBUTES, null);
 
-			if (!player.world.isRemote || !(player instanceof EntityOtherPlayerMP)) {
-				player.getCapability(CapabilityDivingAttributesProvider.DIVING_ATTRIBUTES, null).tick();
-			}
+		if (event.phase == Phase.END && (!event.player.world.isRemote || !(event.player instanceof EntityOtherPlayerMP))) {
+			idiving.tick();
 		}
+
+		idiving.updateSize();
 	}
 
 }
