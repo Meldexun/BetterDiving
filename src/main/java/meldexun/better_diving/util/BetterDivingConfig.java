@@ -91,6 +91,13 @@ public class BetterDivingConfig {
 		@ByteBufHelper.Sync
 		@Config.Comment("When 'divingMovement' module is enabled the movemet will be altered to be similar to MC 1.13.")
 		public boolean vanillaDivingMovement = false;
+
+		@ByteBufHelper.Sync
+		@Config.Comment("Enable/Disable resizing of the player when sprint diving or in a seamoth.")
+		public boolean playerResizing = true;
+		@ByteBufHelper.Sync
+		@Config.Comment("When 'playerResizing' is enabled and ArtemisLib is loaded the player will be resized using ArtemisLib. Might cause visual and/or eye height glitches.")
+		public boolean artemisLibCompatibility = true;
 	}
 
 	public static class Modules {
@@ -271,7 +278,7 @@ public class BetterDivingConfig {
 		@Config.Comment("")
 		public Fog fogSettings = new Fog();
 
-		@Config.Comment("Enable/Disable the custom player model when diving.")
+		@Config.Comment("Currently unused. Enable/Disable the custom player model when diving.")
 		public boolean customPlayerModel = true;
 		@Config.Comment("0: oxygen gui always enabled, 1: oxygen gui enabled while in water, 2: oxygen gui enabled while under water, 3: oxygen gui enabled while underwater or when oxygen is not full")
 		@Config.RangeInt(min = 0, max = 3)
