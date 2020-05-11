@@ -155,7 +155,7 @@ public class CapabilityDivingAttributes implements ICapabilityDivingAttributes {
 
 	@Override
 	public void updateSize() {
-		if (BetterDivingConfig.getInstance().general.playerResizing) {
+		if (BetterDivingConfig.getInstance().modules.divingMovement && BetterDivingConfig.getInstance().general.playerResizing) {
 			if (ArtemisLib.loaded && BetterDivingConfig.getInstance().general.artemisLibCompatibility) {
 				if (this.isInSeamoth) {
 					EntityHelper.updatePlayerSize(this.player, this.player.height * 0.85F, this.player.width, this.player.height * 0.646875F);
