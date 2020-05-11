@@ -151,6 +151,9 @@ public class ClientEventHandler {
 
 	@SubscribeEvent
 	public static void onRenderPlayerEventPre(RenderPlayerEvent.Pre event) {
+		if (!BetterDivingConfig.getInstance().modules.visionUnderWater || !BetterDivingConfig.getInstance().client.customPlayerModel) {
+			return;
+		}
 		double x = event.getX();
 		double y = event.getY();
 		double z = event.getZ();
@@ -237,6 +240,9 @@ public class ClientEventHandler {
 
 	@SubscribeEvent
 	public static void onRenderPlayerEventPost(RenderPlayerEvent.Post event) {
+		if (!BetterDivingConfig.getInstance().modules.visionUnderWater || !BetterDivingConfig.getInstance().client.customPlayerModel) {
+			return;
+		}
 		EntityPlayer player = event.getEntityPlayer();
 		ICapabilityDivingAttributes idiving = player.getCapability(CapabilityDivingAttributesProvider.DIVING_ATTRIBUTES, null);
 
@@ -254,6 +260,9 @@ public class ClientEventHandler {
 
 	@SubscribeEvent
 	public static void onPlayerTickEvent(PlayerTickEvent event) {
+		if (!BetterDivingConfig.getInstance().modules.visionUnderWater || !BetterDivingConfig.getInstance().client.customPlayerModel) {
+			return;
+		}
 		if (event.phase == Phase.END && event.player.isInWater() && !event.player.isRiding()) {
 			double d1 = event.player.posX - event.player.prevPosX;
 			double d2 = event.player.posZ - event.player.prevPosZ;
