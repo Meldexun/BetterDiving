@@ -41,7 +41,7 @@ public class EntitySpawnRegistry {
 	}
 
 	@SubscribeEvent
-	public void onWorldTickEvent(WorldTickEvent event) {
+	public static void onWorldTickEvent(WorldTickEvent event) {
 		if (event.world.isRemote || !BetterDivingConfig.getInstance().modules.entitySpawning || EntitySpawnEntry.REGISTRY.getValuesCollection().isEmpty() || !event.world.getGameRules().getBoolean("doMobSpawning")) {
 			return;
 		}
@@ -78,10 +78,10 @@ public class EntitySpawnRegistry {
 						BlockPos pos2 = pos.add(range, range, range);
 
 						if (world.getEntitiesWithinAABB(AbstractEntityFish.class, new AxisAlignedBB(pos1, pos2)).size() < BetterDivingConfig.getInstance().entities.limit) {
-							List<EntitySpawnEntry> possibleEntityEntryList = this.getPossibleEntitySpawnEntryList(world, pos);
+							List<EntitySpawnEntry> possibleEntityEntryList = getPossibleEntitySpawnEntryList(world, pos);
 
 							if (!possibleEntityEntryList.isEmpty()) {
-								EntitySpawnEntry entitySpawnEntry = this.getRandomEntitySpawnEntryFromList(possibleEntityEntryList);
+								EntitySpawnEntry entitySpawnEntry = getRandomEntitySpawnEntryFromList(possibleEntityEntryList);
 
 								try {
 									EntityLiving entity = entitySpawnEntry.getEntityClass().getConstructor(World.class).newInstance(world);
@@ -98,7 +98,7 @@ public class EntitySpawnRegistry {
 		}
 	}
 
-	protected List<EntitySpawnEntry> getPossibleEntitySpawnEntryList(World world, BlockPos pos) {
+	protected static List<EntitySpawnEntry> getPossibleEntitySpawnEntryList(World world, BlockPos pos) {
 		List<EntitySpawnEntry> possibleEntityEntryList = new ArrayList<>();
 
 		for (EntitySpawnEntry entitySpawnEntry : EntitySpawnEntry.REGISTRY.getValuesCollection()) {
@@ -111,7 +111,7 @@ public class EntitySpawnRegistry {
 	}
 
 	@Nullable
-	protected EntitySpawnEntry getRandomEntitySpawnEntryFromList(List<EntitySpawnEntry> entitySpawnEntryList) {
+	protected static EntitySpawnEntry getRandomEntitySpawnEntryFromList(List<EntitySpawnEntry> entitySpawnEntryList) {
 		if (!entitySpawnEntryList.isEmpty()) {
 			int i = 0;
 			for (EntitySpawnEntry entry : entitySpawnEntryList) {
