@@ -11,7 +11,6 @@ import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -76,8 +75,8 @@ public class BlockUnderwaterBlock extends Block {
 
 	public boolean checkBottom(World world, BlockPos pos) {
 		BlockPos position = pos.down();
-		Block block = world.getBlockState(position).getBlock();
-		return block == Blocks.GRAVEL || block == Blocks.DIRT || block == Blocks.SAND || block == Blocks.STONE || BlockHelper.isOreDictionaried(new String[] { "gravel", "dirt", "sand", "stone" }, new ItemStack(block));
+		Material material = world.getBlockState(position).getMaterial();
+		return material == Material.CLAY || material == Material.GROUND || material == Material.ROCK || material == Material.SAND;
 	}
 
 	public boolean checkTop(World world, BlockPos pos) {
