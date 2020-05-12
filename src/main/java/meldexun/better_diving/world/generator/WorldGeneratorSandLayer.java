@@ -32,7 +32,7 @@ public class WorldGeneratorSandLayer extends WorldGenerator {
 			for (int x = 0; x < 16; x++) {
 				for (int z = 0; z < 16; z++) {
 					int seaLevel = Math.max(world.getSeaLevel() - 1, 1);
-					BlockPos pos = new BlockPos(chunkX * 16 + 1 + x, seaLevel, chunkZ * 16 + 1 + z);
+					BlockPos pos = new BlockPos(chunkX * 16 + 8 + x, seaLevel, chunkZ * 16 + 8 + z);
 					Biome biome = world.getBiomeProvider().getBiome(pos);
 
 					if (this.canGenerateInBiome(biome)) {
@@ -58,7 +58,7 @@ public class WorldGeneratorSandLayer extends WorldGenerator {
 	public boolean generate(World worldIn, Random rand, BlockPos position) {
 		Block block = worldIn.getBlockState(position).getBlock();
 		if (block == Blocks.GRAVEL || block == Blocks.DIRT || block == Blocks.STONE || BlockHelper.isOreDictionaried(new String[] { "gravel", "dirt", "stone" }, new ItemStack(block))) {
-			return worldIn.setBlockState(position, this.blockToSpawn, 2);
+			return worldIn.setBlockState(position, this.blockToSpawn, 18);
 		}
 		return false;
 	}

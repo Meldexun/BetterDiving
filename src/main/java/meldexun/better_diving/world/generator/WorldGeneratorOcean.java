@@ -27,7 +27,7 @@ public class WorldGeneratorOcean extends WorldGenerator {
 		if (this.config.isEnabled() && this.canGenerateInDimension(world.provider.getDimension()) && rand.nextInt(this.config.chance) == 0) {
 			for (int i = 0; i < this.config.amount; i++) {
 				int seaLevel = Math.max(world.getSeaLevel() - 1, 1);
-				BlockPos pos = new BlockPos(rand.nextInt(16) + chunkX * 16 + 1, seaLevel, rand.nextInt(16) + chunkZ * 16 + 1);
+				BlockPos pos = new BlockPos(rand.nextInt(16) + chunkX * 16 + 8, seaLevel, rand.nextInt(16) + chunkZ * 16 + 8);
 				Biome biome = world.getBiomeProvider().getBiome(pos);
 
 				if (this.canGenerateInBiome(biome)) {
@@ -51,7 +51,7 @@ public class WorldGeneratorOcean extends WorldGenerator {
 	@Override
 	public boolean generate(World worldIn, Random rand, BlockPos position) {
 		if (this.blockToSpawn.getBlock().canPlaceBlockAt(worldIn, position)) {
-			worldIn.setBlockState(position, this.blockToSpawn, 2);
+			worldIn.setBlockState(position, this.blockToSpawn, 18);
 			return true;
 		}
 		return false;
