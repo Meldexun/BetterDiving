@@ -25,12 +25,12 @@ public class EntityAIFishWander extends EntityAIBase {
 
 	@Override
 	public boolean shouldExecute() {
-		return this.entity.isInWater();
+		return this.entity.isInsideOfMaterial(Material.WATER);
 	}
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		return this.entity.isInWater() && this.entity.getDistance(this.pos.x, this.pos.y, this.pos.z) > 0.1D && this.tick < 120 && !this.checkStuck();
+		return this.entity.isInsideOfMaterial(Material.WATER) && this.entity.getDistance(this.pos.x, this.pos.y, this.pos.z) > 0.1D && this.tick < 120 && !this.checkStuck();
 	}
 
 	@Override

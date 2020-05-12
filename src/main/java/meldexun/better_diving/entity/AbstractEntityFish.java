@@ -1,6 +1,7 @@
 package meldexun.better_diving.entity;
 
 import meldexun.better_diving.entity.ai.EntityAIFishWander;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -18,7 +19,7 @@ public abstract class AbstractEntityFish extends EntityWaterMob {
 
 	@Override
 	public void onUpdate() {
-		if (!this.inWater) {
+		if (!this.isInsideOfMaterial(Material.WATER)) {
 			this.motionY -= 0.02D;
 		}
 
