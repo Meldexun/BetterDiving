@@ -16,8 +16,8 @@ public class WorldGeneratorSeagrassTall extends WorldGeneratorOcean {
 	@Override
 	public boolean generate(World worldIn, Random rand, BlockPos position) {
 		if (ModBlocks.SEAGRASS_TALL_BOTTOM.canPlaceBlockAt(worldIn, position)) {
-			worldIn.setBlockState(position, ModBlocks.SEAGRASS_TALL_BOTTOM.getDefaultState(), 2);
-			worldIn.setBlockState(position.up(), ModBlocks.SEAGRASS_TALL_TOP.getDefaultState(), 2);
+			worldIn.setBlockState(position, ModBlocks.SEAGRASS_TALL_BOTTOM.getDefaultState(), 18);
+			worldIn.setBlockState(position.up(), ModBlocks.SEAGRASS_TALL_TOP.getDefaultState(), 18);
 			return true;
 		}
 		return false;
