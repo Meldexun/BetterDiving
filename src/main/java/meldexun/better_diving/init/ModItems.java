@@ -175,6 +175,7 @@ public class ModItems {
 
 	public static void registerOreDictionaryEntries() {
 		OreDictionary.registerOre("oreTitanium", new ItemStack(ModItems.TITANIUM));
+		OreDictionary.registerOre("ingotTitaniun", new ItemStack(ModItems.TITANIUM_INGOT));
 		OreDictionary.registerOre("oreCopper", new ItemStack(ModItems.COPPER_ORE));
 		OreDictionary.registerOre("oreSilver", new ItemStack(ModItems.SILVER_ORE));
 		OreDictionary.registerOre("oreLead", new ItemStack(ModItems.LEAD));
