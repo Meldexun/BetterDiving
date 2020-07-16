@@ -46,7 +46,7 @@ public class BlockSeagrassTall extends BlockUnderwaterBlock {
 			return false;
 		}
 		for (int i = 0; i < 4; i++) {
-			if (!this.isFullCubeOrWater(worldIn.getBlockState(pos.offset(EnumFacing.getHorizontal(i))))) {
+			if (!this.isFullCubeOrWater(worldIn.getBlockState(pos.offset(EnumFacing.byHorizontalIndex(i))))) {
 				return false;
 			}
 		}
@@ -58,7 +58,7 @@ public class BlockSeagrassTall extends BlockUnderwaterBlock {
 			return false;
 		}
 		for (int i = 0; i < 4; i++) {
-			if (!this.isFullCubeOrWater(worldIn.getBlockState(pos.offset(EnumFacing.getHorizontal(i))))) {
+			if (!this.isFullCubeOrWater(worldIn.getBlockState(pos.offset(EnumFacing.byHorizontalIndex(i))))) {
 				return false;
 			}
 		}

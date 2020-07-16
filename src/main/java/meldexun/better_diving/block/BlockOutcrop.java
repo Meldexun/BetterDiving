@@ -49,7 +49,7 @@ public class BlockOutcrop extends BlockUnderwaterBlock {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(BlockOutcrop.FACING, EnumFacing.getHorizontal(meta));
+		return this.getDefaultState().withProperty(BlockOutcrop.FACING, EnumFacing.byHorizontalIndex(meta));
 	}
 
 	@Override

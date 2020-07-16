@@ -20,7 +20,7 @@ public class ItemBlockTooltip extends ItemBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		String s = I18n.format(this.getUnlocalizedName() + ".tooltip");
+		String s = I18n.format(this.getTranslationKey() + ".tooltip");
 		if (!s.isEmpty()) {
 			tooltip.add(s);
 		}

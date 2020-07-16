@@ -102,7 +102,7 @@ public class ModBlocks {
 		}
 
 		private static Block setBlockNameAndTab(Block block, String name, @Nullable CreativeTabs tab) {
-			return block.setUnlocalizedName(name).setRegistryName(BetterDiving.MOD_ID, name).setCreativeTab(tab);
+			return block.setRegistryName(BetterDiving.MOD_ID, name).setTranslationKey(name).setCreativeTab(tab);
 		}
 
 		@SubscribeEvent
@@ -125,7 +125,7 @@ public class ModBlocks {
 		}
 
 		private static ItemBlock createItemBlock(Block block) {
-			return (ItemBlock) new ItemBlockTooltip(block).setUnlocalizedName(block.getLocalizedName()).setRegistryName(block.getRegistryName());
+			return (ItemBlock) new ItemBlockTooltip(block).setRegistryName(block.getRegistryName()).setTranslationKey(block.getLocalizedName());
 		}
 	}
 

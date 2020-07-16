@@ -95,12 +95,12 @@ public class BlockSeabaseLadder extends BlockHorizontal {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.getHorizontal(meta % 4)).withProperty(BlockSeabaseLadder.PART, meta / 4);
+		return this.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.byHorizontalIndex(meta % 4)).withProperty(BlockSeabaseLadder.PART, meta / 4);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 

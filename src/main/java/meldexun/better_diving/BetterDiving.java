@@ -42,7 +42,7 @@ public class BetterDiving {
 
 	public static final CreativeTabs TAB_BETTER_DIVING = new CreativeTabs("tab_better_diving") {
 		@Override
-		public ItemStack getTabIconItem() {
+		public ItemStack createIcon() {
 			return new ItemStack(ModItems.DIVING_MASK);
 		}
 	};

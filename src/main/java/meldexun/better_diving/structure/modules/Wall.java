@@ -54,7 +54,7 @@ public class Wall {
 	public void readFromNBT(NBTTagCompound compound) {
 		this.startPos = NBTUtil.getPosFromTag(compound.getCompoundTag("start"));
 		this.endPos = NBTUtil.getPosFromTag(compound.getCompoundTag("end"));
-		this.facing = EnumFacing.getFront(compound.getInteger("face"));
+		this.facing = EnumFacing.byIndex(compound.getInteger("face"));
 		this.block = (BlockStructure) ForgeRegistries.BLOCKS.getValue(new ResourceLocation(compound.getString("block")));
 	}
 

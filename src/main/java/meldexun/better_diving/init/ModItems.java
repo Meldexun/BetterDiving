@@ -169,7 +169,7 @@ public class ModItems {
 		}
 
 		private static Item setItemNameAndTab(Item item, String name, @Nullable CreativeTabs tab) {
-			return item.setUnlocalizedName(name).setRegistryName(BetterDiving.MOD_ID, name).setCreativeTab(tab);
+			return item.setRegistryName(BetterDiving.MOD_ID, name).setTranslationKey(name).setCreativeTab(tab);
 		}
 	}
 

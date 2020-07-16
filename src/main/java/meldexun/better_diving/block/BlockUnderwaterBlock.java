@@ -51,7 +51,7 @@ public class BlockUnderwaterBlock extends Block {
 			return false;
 		}
 		for (int i = 0; i < 4; i++) {
-			if (!this.isFullCubeOrWater(worldIn.getBlockState(pos.offset(EnumFacing.getHorizontal(i))))) {
+			if (!this.isFullCubeOrWater(worldIn.getBlockState(pos.offset(EnumFacing.byHorizontalIndex(i))))) {
 				return false;
 			}
 		}
@@ -66,7 +66,7 @@ public class BlockUnderwaterBlock extends Block {
 			return false;
 		}
 		for (int i = 0; i < 4; i++) {
-			if (!this.checkSide(world, pos, EnumFacing.getHorizontal(i))) {
+			if (!this.checkSide(world, pos, EnumFacing.byHorizontalIndex(i))) {
 				return false;
 			}
 		}
@@ -90,7 +90,7 @@ public class BlockUnderwaterBlock extends Block {
 				return true;
 			}
 			for (int i = 0; i < 4; i++) {
-				if (BlockHelper.isWaterBlock(world.getBlockState(position.offset(EnumFacing.getHorizontal(i))), 6)) {
+				if (BlockHelper.isWaterBlock(world.getBlockState(position.offset(EnumFacing.byHorizontalIndex(i))), 6)) {
 					return true;
 				}
 			}
@@ -135,7 +135,7 @@ public class BlockUnderwaterBlock extends Block {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 
@@ -166,12 +166,12 @@ public class BlockUnderwaterBlock extends Block {
 	}
 
 	@Override
-	public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state) {
+	public void onPlayerDestroy(World worldIn, BlockPos pos, IBlockState state) {
 		worldIn.setBlockState(pos, Blocks.WATER.getDefaultState(), 3);
 	}
 
 	@Override
-	public void onBlockDestroyedByExplosion(World worldIn, BlockPos pos, Explosion explosionIn) {
+	public void onExplosionDestroy(World worldIn, BlockPos pos, Explosion explosionIn) {
 		worldIn.setBlockState(pos, Blocks.WATER.getDefaultState(), 3);
 	}
 

@@ -19,7 +19,7 @@ public class ItemFish extends ItemFood {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(I18n.format(this.getUnlocalizedName() + ".tooltip"));
+		tooltip.add(I18n.format(this.getTranslationKey() + ".tooltip"));
 	}
 
 }

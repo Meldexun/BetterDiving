@@ -12,7 +12,7 @@ public class ItemBlockCreepvine extends ItemBlockTooltip {
 
 	public ItemBlockCreepvine() {
 		super(ModBlocks.CREEPVINE);
-		this.setUnlocalizedName(this.block.getUnlocalizedName());
+		this.setTranslationKey(this.block.getTranslationKey());
 		this.setRegistryName(this.block.getRegistryName());
 	}
 

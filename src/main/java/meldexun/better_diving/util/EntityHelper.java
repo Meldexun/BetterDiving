@@ -53,7 +53,7 @@ public class EntityHelper {
 			player.width = width;
 			double d = (double) width * 0.5D;
 			Vec3d vec1 = player.getPositionVector().subtract(d, 0.0D, d);
-			Vec3d vec2 = player.getPositionVector().addVector(d, height, d);
+			Vec3d vec2 = player.getPositionVector().add(d, height, d);
 			player.setEntityBoundingBox(new AxisAlignedBB(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z));
 		}
 	}
