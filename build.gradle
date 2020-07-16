@@ -79,6 +79,14 @@ dependencies {
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
+
+    // uncomment when building jar
+    // compile files("libs/ArtemisLib-1.12.2-v1.0.6.jar")
+    // compile files("libs/industrialcraft-2-2.8.170-ex112.jar")
+    // compile files("libs/MatterOverdrive-1.12.2-0.7.1.0-universal.jar")
+    // compile files("libs/mclib-2.0.1-1.12.2.jar")
+    // compile files("libs/metamorph-1.2.1-1.12.2.jar")
+    // compile files("libs/Vampirism-1.12.2-1.6.2.jar")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
