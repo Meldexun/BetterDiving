@@ -56,6 +56,11 @@ minecraft {
     }
 }
 
+repositories {
+    maven {
+        url = "https://www.cursemaven.com"
+    }
+}
 dependencies {
     // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
@@ -81,12 +86,12 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
     // uncomment when building jar
-    // compile files("libs/ArtemisLib-1.12.2-v1.0.6.jar")
-    // compile files("libs/industrialcraft-2-2.8.170-ex112.jar")
-    // compile files("libs/MatterOverdrive-1.12.2-0.7.1.0-universal.jar")
-    // compile files("libs/mclib-2.0.1-1.12.2.jar")
-    // compile files("libs/metamorph-1.2.1-1.12.2.jar")
-    // compile files("libs/Vampirism-1.12.2-1.6.2.jar")
+    // compile 'curse.maven:ArtemisLib:2741812'
+    // compile 'curse.maven:IndustrialCraft:2980904'
+    // compile 'curse.maven:MatterOverdrive:2699215'
+    // compile 'curse.maven:McLib:3000300'
+    // compile 'curse.maven:Metamorph:3000304'
+    // compile 'curse.maven:Vampirism:2890062'
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
