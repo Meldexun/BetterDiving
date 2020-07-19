@@ -4,6 +4,7 @@ import meldexun.better_diving.entity.ai.EntityAIFishWander;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.item.ItemStack;
@@ -81,6 +82,11 @@ public abstract class AbstractEntityFish extends EntityWaterMob {
 			speed *= 0.75D;
 		}
 		return speed;
+	}
+
+	@Override
+	public boolean isCreatureType(EnumCreatureType type, boolean forSpawnCount) {
+		return false;
 	}
 
 }
