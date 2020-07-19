@@ -30,6 +30,7 @@ import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
@@ -149,7 +150,7 @@ public class ClientEventHandler {
 		ClientEventHandler.playerRendererSlim = new RenderPlayerCustom(renderManager, true);
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void onRenderPlayerEventPre(RenderPlayerEvent.Pre event) {
 		if (!BetterDivingConfig.getInstance().modules.visionUnderWater || !BetterDivingConfig.getInstance().client.customPlayerModel) {
 			return;
@@ -238,7 +239,7 @@ public class ClientEventHandler {
 		return player.getSkinType().equals("slim") ? ClientEventHandler.playerRendererSlim : ClientEventHandler.playerRenderer;
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOW)
 	public static void onRenderPlayerEventPost(RenderPlayerEvent.Post event) {
 		if (!BetterDivingConfig.getInstance().modules.visionUnderWater || !BetterDivingConfig.getInstance().client.customPlayerModel) {
 			return;
