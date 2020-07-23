@@ -81,7 +81,7 @@ public class EntitySpawnRegistry {
 				double max = 1.0D;
 				double d = MathHelper.clamp(modalValue + EntitySpawnRegistry.RAND.nextGaussian() * standardDeviation, min, max);
 				pos = pos.down((int) Math.round(blocksToSeafloor * d));
-			} else {
+			} else if (blocksToSeafloor > 0) {
 				pos = pos.down(EntitySpawnRegistry.RAND.nextInt(blocksToSeafloor));
 			}
 			Vec3d vec = new Vec3d(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
