@@ -19,7 +19,7 @@ public class BlockHelper {
 			return pos;
 		}
 		BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos(pos.getX(), pos.getY() - 1, pos.getZ());
-		while (world.getBlockState(mutablePos).getMaterial() == Material.WATER) {
+		while (isWaterBlock(world.getBlockState(mutablePos))) {
 			mutablePos.setY(mutablePos.getY() - 1);
 		}
 		return mutablePos.toImmutable();
