@@ -1,27 +1,48 @@
 package meldexun.better_diving.util;
 
+import java.util.Arrays;
+
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 
 public class CraftingHelper {
 
-	public static boolean areItemStacksEqualIgnoreCount(ItemStack stack, ItemStack stack1) {
-		if (stack.isEmpty() && stack1.isEmpty()) {
+	public static boolean areItemStacksEqualIgnoreCount(ItemStack stack1, ItemStack stack2, boolean ignoreMeta, boolean ignoreTag) {
+		if (stack1.isEmpty() && stack2.isEmpty()) {
 			return true;
 		}
-		if (!ItemStack.areItemsEqual(stack, stack1)) {
+		if (stack1.isEmpty() != stack2.isEmpty()) {
 			return false;
 		}
-		return ItemStack.areItemStackTagsEqual(stack, stack1);
+		if (stack1.getItem() != stack2.getItem()) {
+			return false;
+		}
+		if (!ignoreMeta && stack1.getMetadata() != stack2.getMetadata()) {
+			return false;
+		}
+		if (!ignoreTag) {
+			if (stack1.getTagCompound() == null && stack2.getTagCompound() == null) {
+				return true;
+			}
+			if (stack1.hasTagCompound() != stack2.hasTagCompound()) {
+				return false;
+			}
+			if (!stack1.getTagCompound().equals(stack2.getTagCompound())) {
+				return false;
+			}
+			if (!stack1.areCapsCompatible(stack2)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
-	public static boolean remove(NonNullList<ItemStack> list, ItemStack stack, boolean simulate) {
+	public static boolean remove(Iterable<ItemStack> itemStacks, ItemStack stack, boolean simulate, boolean ignoreMeta, boolean ignoreTag) {
 		int i = stack.getCount();
-		for (ItemStack stack1 : list) {
+		for (ItemStack stack1 : itemStacks) {
 			if (i == 0) {
 				break;
 			}
-			if (CraftingHelper.areItemStacksEqualIgnoreCount(stack, stack1)) {
+			if (CraftingHelper.areItemStacksEqualIgnoreCount(stack, stack1, ignoreMeta, ignoreTag)) {
 				int j = Math.min(stack1.getCount(), i);
 				i -= j;
 				if (!simulate) {
@@ -30,6 +51,10 @@ public class CraftingHelper {
 			}
 		}
 		return i == 0;
+	}
+
+	public static boolean remove(ItemStack[] itemStacks, ItemStack stack, boolean simulate, boolean ignoreMeta, boolean ignoreTag) {
+		return remove(Arrays.asList(itemStacks), stack, simulate, ignoreMeta, ignoreTag);
 	}
 
 }

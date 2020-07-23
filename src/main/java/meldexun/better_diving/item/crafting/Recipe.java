@@ -51,7 +51,7 @@ public class Recipe extends IForgeRegistryEntry.Impl<Recipe> {
 					for (int j = 0; j < i; j++) {
 						ItemStack stack1 = this.input[j];
 
-						if (CraftingHelper.areItemStacksEqualIgnoreCount(stack, stack1)) {
+						if (CraftingHelper.areItemStacksEqualIgnoreCount(stack, stack1, false, false)) {
 							stack1.setCount(stack1.getCount() + stack.getCount());
 							this.input = ArrayUtils.remove(this.input, i--);
 							break;
@@ -68,7 +68,7 @@ public class Recipe extends IForgeRegistryEntry.Impl<Recipe> {
 		}
 		NonNullList<ItemStack> inventory = player.inventory.mainInventory;
 		for (ItemStack stack : this.input) {
-			if (!CraftingHelper.remove(inventory, stack, true)) {
+			if (!CraftingHelper.remove(inventory, stack, true, false, false)) {
 				return false;
 			}
 		}
@@ -85,7 +85,7 @@ public class Recipe extends IForgeRegistryEntry.Impl<Recipe> {
 			}
 			NonNullList<ItemStack> inventory = player.inventory.mainInventory;
 			for (ItemStack stack : this.input) {
-				CraftingHelper.remove(inventory, stack, false);
+				CraftingHelper.remove(inventory, stack, false, false, false);
 			}
 		}
 		ItemStack stack = this.output.copy();
