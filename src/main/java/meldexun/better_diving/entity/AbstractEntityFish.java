@@ -95,6 +95,11 @@ public abstract class AbstractEntityFish extends EntityWaterMob {
 	}
 
 	@Override
+	protected boolean canDespawn() {
+		return false;
+	}
+
+	@Override
 	public void travel(float strafe, float vertical, float forward) {
 		if (!this.world.isRemote) {
 			if (this.isInWater()) {
