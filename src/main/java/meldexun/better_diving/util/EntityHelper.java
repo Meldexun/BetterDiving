@@ -19,13 +19,16 @@ public class EntityHelper {
 	}
 
 	public static int blocksUnderWater(World world, BlockPos pos) {
-		int i = 0;
-		if (world.getBlockState(pos).getMaterial() == Material.WATER) {
-			while (world.getBlockState(pos.up(i)).getMaterial() != Material.AIR) {
-				i++;
-			}
+		if (world.getBlockState(pos).getMaterial() != Material.WATER) {
+			return 0;
 		}
-		return i;
+		int i = 0;
+		BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos(pos.getX(), pos.getY() + 1, pos.getZ());
+		while (world.getBlockState(mutablePos).getMaterial() != Material.AIR) {
+			mutablePos.setY(mutablePos.getY() - 1);
+			i++;
+		}
+		return i + 1;
 	}
 
 	public static int blocksToSeafloor(Entity entity) {
@@ -33,11 +36,16 @@ public class EntityHelper {
 	}
 
 	public static int blocksToSeafloor(World world, BlockPos pos) {
+		if (world.getBlockState(pos).getMaterial() != Material.WATER) {
+			return 0;
+		}
 		int i = 0;
-		while (world.getBlockState(pos.down(i)).getMaterial() == Material.WATER) {
+		BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos(pos.getX(), pos.getY() - 1, pos.getZ());
+		while (world.getBlockState(mutablePos).getMaterial() == Material.WATER) {
+			mutablePos.setY(mutablePos.getY() - 1);
 			i++;
 		}
-		return i - 1;
+		return i;
 	}
 
 	public static void resetPlayerSize(EntityPlayer player) {
