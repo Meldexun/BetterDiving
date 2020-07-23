@@ -23,7 +23,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.registries.RegistryBuilder;
 
 @EventBusSubscriber(modid = BetterDiving.MOD_ID)
@@ -41,8 +41,8 @@ public class EntitySpawnRegistry {
 	}
 
 	@SubscribeEvent
-	public static void onWorldTickEvent(WorldTickEvent event) {
-		if (event.world.isRemote || !BetterDivingConfig.getInstance().modules.entitySpawning || EntitySpawnEntry.REGISTRY.getValuesCollection().isEmpty() || !event.world.getGameRules().getBoolean("doMobSpawning")) {
+	public static void onWorldTickEvent(TickEvent.WorldTickEvent event) {
+		if (event.world.isRemote || event.phase == TickEvent.Phase.START || !BetterDivingConfig.getInstance().modules.entitySpawning || EntitySpawnEntry.REGISTRY.getValuesCollection().isEmpty() || !event.world.getGameRules().getBoolean("doMobSpawning")) {
 			return;
 		}
 		WorldServer world = (WorldServer) event.world;

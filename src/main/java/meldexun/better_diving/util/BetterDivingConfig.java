@@ -336,7 +336,7 @@ public class BetterDivingConfig {
 
 		@Config.Comment("For every chunk it chooses a random position every x ticks and then tries to spawn a random entity.")
 		@Config.RangeInt(min = 1, max = 1000000)
-		public int chance = 1200;
+		public int chance = 720;
 		@Config.Comment("Used to check how many fish are in range to determine whether to spawn more fish.")
 		@Config.RangeInt(min = 1, max = 100)
 		public int range = 16;
