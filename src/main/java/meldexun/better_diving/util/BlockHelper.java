@@ -4,6 +4,7 @@ import java.util.List;
 
 import meldexun.better_diving.integration.TerraFirmaCraft;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -14,11 +15,14 @@ import net.minecraftforge.oredict.OreDictionary;
 public class BlockHelper {
 
 	public static BlockPos getSeaBed(World world, BlockPos pos) {
-		int i = 0;
-		while (BlockHelper.isWaterBlock(world.getBlockState(pos.down(i)))) {
-			i++;
+		if (world.getBlockState(pos).getMaterial() != Material.WATER) {
+			return pos;
 		}
-		return pos.down(i - 1);
+		BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos(pos.getX(), pos.getY() - 1, pos.getZ());
+		while (world.getBlockState(mutablePos).getMaterial() == Material.WATER) {
+			mutablePos.setY(mutablePos.getY() - 1);
+		}
+		return mutablePos.toImmutable();
 	}
 
 	public static boolean isOreDictionaried(String[] names, ItemStack stack) {
