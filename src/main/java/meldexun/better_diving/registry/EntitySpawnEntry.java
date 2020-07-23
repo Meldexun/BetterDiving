@@ -21,10 +21,12 @@ public class EntitySpawnEntry extends IForgeRegistryEntry.Impl<EntitySpawnEntry>
 
 	private final Class<? extends EntityLiving> entityClass;
 	private final EntityConfig config;
+	private final IEntityProvider entityProvider;
 
-	public EntitySpawnEntry(Class<? extends EntityLiving> entityClass, EntityConfig config) {
+	public EntitySpawnEntry(Class<? extends EntityLiving> entityClass, EntityConfig config, IEntityProvider entityProvider) {
 		this.entityClass = entityClass;
 		this.config = config;
+		this.entityProvider = entityProvider;
 	}
 
 	public boolean canSpawnAt(World world, BlockPos pos) {
@@ -80,6 +82,14 @@ public class EntitySpawnEntry extends IForgeRegistryEntry.Impl<EntitySpawnEntry>
 
 	public int getWeight() {
 		return this.config.weight;
+	}
+
+	public EntityLiving createEntity(World world) {
+		return this.entityProvider.createEntity(world);
+	}
+
+	public static interface IEntityProvider {
+		EntityLiving createEntity(World world);
 	}
 
 }

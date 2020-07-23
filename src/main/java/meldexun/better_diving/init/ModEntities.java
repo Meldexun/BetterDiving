@@ -50,11 +50,11 @@ public class ModEntities {
 		@SubscribeEvent
 		public static void registerRecipes(RegistryEvent.Register<EntitySpawnEntry> event) {
 			final EntitySpawnEntry[] entitySpawnEntries = {
-					new EntitySpawnEntry(EntityPeeper.class, BetterDivingConfig.getInstance().entities.peeper).setRegistryName(BetterDiving.MOD_ID, "peeper"),
-					new EntitySpawnEntry(EntityBladderfish.class, BetterDivingConfig.getInstance().entities.bladderfish).setRegistryName(BetterDiving.MOD_ID, "bladderfish"),
-					new EntitySpawnEntry(EntityGarryfish.class, BetterDivingConfig.getInstance().entities.garryfish).setRegistryName(BetterDiving.MOD_ID, "garryfish"),
-					new EntitySpawnEntry(EntityHolefish.class, BetterDivingConfig.getInstance().entities.holefish).setRegistryName(BetterDiving.MOD_ID, "holefish"),
-					new EntitySpawnEntry(EntityBoomerang.class, BetterDivingConfig.getInstance().entities.boomerang).setRegistryName(BetterDiving.MOD_ID, "boomerang") };
+					new EntitySpawnEntry(EntityPeeper.class, BetterDivingConfig.getInstance().entities.peeper, EntityPeeper::new).setRegistryName(BetterDiving.MOD_ID, "peeper"),
+					new EntitySpawnEntry(EntityBladderfish.class, BetterDivingConfig.getInstance().entities.bladderfish, EntityBladderfish::new).setRegistryName(BetterDiving.MOD_ID, "bladderfish"),
+					new EntitySpawnEntry(EntityGarryfish.class, BetterDivingConfig.getInstance().entities.garryfish, EntityGarryfish::new).setRegistryName(BetterDiving.MOD_ID, "garryfish"),
+					new EntitySpawnEntry(EntityHolefish.class, BetterDivingConfig.getInstance().entities.holefish, EntityHolefish::new).setRegistryName(BetterDiving.MOD_ID, "holefish"),
+					new EntitySpawnEntry(EntityBoomerang.class, BetterDivingConfig.getInstance().entities.boomerang, EntityBoomerang::new).setRegistryName(BetterDiving.MOD_ID, "boomerang") };
 
 			event.getRegistry().registerAll(entitySpawnEntries);
 		}
