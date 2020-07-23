@@ -19,7 +19,7 @@ public class ModMaterials {
 	public static final ArmorMaterial REINFORCED_DIVING_GEAR_ARMOR_MATERIAL = ModMaterials.addArmorMaterial("reinforced_diving_gear", BetterDivingConfig.getInstance().divingGear.reinforcedDivingGear.armorValues, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC);
 
 	public static ArmorMaterial addArmorMaterial(String name, ArmorConfig config, SoundEvent soundOnEquip) {
-		return ModMaterials.addArmorMaterial(name, config.durability, config.protection, config.enchantability, soundOnEquip, (float) config.toughness);
+		return ModMaterials.addArmorMaterial(name, config.durability, config.protection, config.enchantability, soundOnEquip, config.toughness);
 	}
 
 	public static ArmorMaterial addArmorMaterial(String name, int durability, int[] reductionAmounts, int enchantability, SoundEvent soundOnEquip, float toughness) {

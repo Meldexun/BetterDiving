@@ -53,7 +53,7 @@ public class GuiSeamothContainer extends GuiContainer {
 		ItemStack powerCell = this.entity != null ? this.entity.getBattery() : this.stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).getStackInSlot(0);
 		if (powerCell.getItem() instanceof ItemPowerCell) {
 			IEnergyStorage ienergy = powerCell.getCapability(CapabilityEnergy.ENERGY, null);
-			int percent = (int) (100.0D * (double) ienergy.getEnergyStored() / (double) ienergy.getMaxEnergyStored());
+			int percent = (int) (100.0D * ienergy.getEnergyStored() / ienergy.getMaxEnergyStored());
 			this.fontRenderer.drawString("Energy: " + percent + "%", 8, 16, 4210752);
 		} else {
 			this.fontRenderer.drawString("No power cell", 8, 16, 4210752);
@@ -70,13 +70,13 @@ public class GuiSeamothContainer extends GuiContainer {
 	}
 
 	private void drawEntity(Entity entity, int x, int y, int scale, float mouseX, float mouseY) {
-		this.drawEntityOnScreen(x, y, scale, (float) x - mouseX, (float) y - (float) scale * entity.getEyeHeight() - mouseY, entity);
+		this.drawEntityOnScreen(x, y, scale, x - mouseX, y - scale * entity.getEyeHeight() - mouseY, entity);
 	}
 
 	private void drawEntityOnScreen(int posX, int posY, int scale, float mouseX, float mouseY, Entity entity) {
 		GlStateManager.pushMatrix();
-		GlStateManager.translate((float) posX, (float) posY, 50.0F);
-		GlStateManager.scale((float) (-scale), (float) scale, (float) scale);
+		GlStateManager.translate(posX, posY, 50.0F);
+		GlStateManager.scale((-scale), scale, scale);
 		GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
 		float f1 = entity.rotationYaw;
 		float f2 = entity.rotationPitch;

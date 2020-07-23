@@ -40,7 +40,7 @@ public class UnderwaterAmbientLoopSound extends MovingSound {
 				this.tick -= 2;
 			}
 
-			this.volume = MathHelper.clamp((float) this.tick / 40.0F, 0.0F, 1.0F);
+			this.volume = MathHelper.clamp(this.tick / 40.0F, 0.0F, 1.0F);
 			this.pitch = 1.0F;
 
 			if (this.player.getRidingEntity() instanceof EntitySeamoth) {

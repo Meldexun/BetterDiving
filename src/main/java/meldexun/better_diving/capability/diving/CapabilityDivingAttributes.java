@@ -313,7 +313,7 @@ public class CapabilityDivingAttributes implements ICapabilityDivingAttributes {
 	protected double calculateSlow() {
 		double slow = 0.02D;
 		ItemStack feet = this.player.inventory.armorInventory.get(0);
-		double depthStrider = (double) EnchantmentHelper.getEnchantmentLevel(Enchantments.DEPTH_STRIDER, feet);
+		double depthStrider = EnchantmentHelper.getEnchantmentLevel(Enchantments.DEPTH_STRIDER, feet);
 
 		if (depthStrider > 0.0D) {
 			if (depthStrider > 3.0D) {
@@ -365,8 +365,8 @@ public class CapabilityDivingAttributes implements ICapabilityDivingAttributes {
 	protected void handleOxygen() {
 		if (BetterDivingConfig.getInstance().modules.oxygenHandling) {
 			int airUsage = 0;
-			if (this.player.isInsideOfMaterial(Material.WATER) && !this.player.canBreatheUnderwater() && !this.player.isPotionActive(MobEffects.WATER_BREATHING) && !this.player.capabilities.disableDamage
-					&& !(this.player.getRidingEntity() instanceof EntitySeamoth) && !Metamorph.hasWaterBreathing(this.player) && !Vampirism.hasWaterBreathing(this.player) && !MatterOverdrive.hasWaterBreathing(this.player)) {
+			if (this.player.isInsideOfMaterial(Material.WATER) && !this.player.canBreatheUnderwater() && !this.player.isPotionActive(MobEffects.WATER_BREATHING) && !this.player.capabilities.disableDamage && !(this.player.getRidingEntity() instanceof EntitySeamoth) && !Metamorph.hasWaterBreathing(this.player)
+					&& !Vampirism.hasWaterBreathing(this.player) && !MatterOverdrive.hasWaterBreathing(this.player)) {
 				airUsage -= 1;
 				if (BetterDivingConfig.getInstance().divingValues.airEfficiency) {
 					ItemStack helm = this.player.inventory.armorInventory.get(3);
@@ -540,7 +540,7 @@ public class CapabilityDivingAttributes implements ICapabilityDivingAttributes {
 			swimSpeedBonus -= 0.08D;
 		}
 		if (!this.player.isCreative()) {
-			double hunger = (double) this.player.getFoodStats().getFoodLevel() / 20.0D;
+			double hunger = this.player.getFoodStats().getFoodLevel() / 20.0D;
 			if (hunger < 0.2D) {
 				swimSpeedBonus += 2.5D * hunger - 0.5D;
 			}
@@ -580,7 +580,7 @@ public class CapabilityDivingAttributes implements ICapabilityDivingAttributes {
 		if (this.player.isInsideOfMaterial(Material.WATER)) {
 			int aquaAffinityLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.AQUA_AFFINITY, helm);
 			if (aquaAffinityLevel > 0) {
-				breakSpeed *= 1.0F + (float) BetterDivingConfig.getInstance().divingValues.breakSpeedAquaAffinity * (float) aquaAffinityLevel;
+				breakSpeed *= 1.0F + (float) BetterDivingConfig.getInstance().divingValues.breakSpeedAquaAffinity * aquaAffinityLevel;
 			} else {
 				breakSpeed *= 5.0F;
 			}

@@ -84,13 +84,7 @@ public class ContainerFabricator extends Container {
 					return itemstack;
 				}
 			} else {
-				if (this.mergeItemStack(itemstack1, 36, 37, false)) {
-					return itemstack;
-				} else if (this.mergeItemStack(itemstack1, 37, 38, false)) {
-					return itemstack;
-				} else if (this.mergeItemStack(itemstack1, 38, 39, false)) {
-					return itemstack;
-				} else if (this.mergeItemStack(itemstack1, 39, 40, false)) {
+				if (this.mergeItemStack(itemstack1, 36, 37, false) || this.mergeItemStack(itemstack1, 37, 38, false) || this.mergeItemStack(itemstack1, 38, 39, false) || this.mergeItemStack(itemstack1, 39, 40, false)) {
 					return itemstack;
 				} else {
 					if (index > 26) {

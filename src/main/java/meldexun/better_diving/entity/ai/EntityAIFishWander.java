@@ -42,7 +42,7 @@ public class EntityAIFishWander extends EntityAIBase {
 		double z = this.entity.posZ - 8.0D + this.rand.nextDouble() * 16.0D;
 
 		for (int i = 1; i <= 10 && this.entity.world.getBlockState(new BlockPos(x, y, z)).getMaterial() != Material.WATER; i++) {
-			double d0 = 1.0D - 0.025D * (double) i;
+			double d0 = 1.0D - 0.025D * i;
 			double d1 = 4.0D * d0;
 			double d2 = 8.0D * d0;
 			double d3 = 16.0D * d0;
@@ -81,7 +81,7 @@ public class EntityAIFishWander extends EntityAIBase {
 		this.entity.rotationPitch = MathHelper.clamp(this.entity.rotationPitch, -90.0F, 90.0F);
 		this.entity.rotationYawHead = this.entity.rotationYaw;
 
-		MovementHelper.move3D(this.entity, 0.0D, 0.0D, 1.0D, this.entity.getSwimSpeed(), (double) this.entity.rotationYaw, (double) this.entity.rotationPitch);
+		MovementHelper.move3D(this.entity, 0.0D, 0.0D, 1.0D, this.entity.getSwimSpeed(), this.entity.rotationYaw, this.entity.rotationPitch);
 	}
 
 	public boolean checkStuck() {

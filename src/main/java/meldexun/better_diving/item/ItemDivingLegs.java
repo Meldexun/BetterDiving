@@ -20,7 +20,7 @@ public class ItemDivingLegs extends AbstractItemDivingGear {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(I18n.format("item.wetsuit_leggings.tooltip", (int) ((double) this.getBreakSpeed() * 100.0D)));
+		tooltip.add(I18n.format("item.wetsuit_leggings.tooltip", (int) (this.getBreakSpeed() * 100.0D)));
 		super.addInformation(stack, worldIn, tooltip, flagIn);
 	}
 

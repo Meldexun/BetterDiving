@@ -128,7 +128,7 @@ public class ModelPeeper extends ModelBase {
 
 	@Override
 	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
-		double tick = (double) (ageInTicks + Minecraft.getMinecraft().getRenderPartialTicks());
+		double tick = ageInTicks + Minecraft.getMinecraft().getRenderPartialTicks();
 
 		GlStateManager.rotate((float) (2.0D * Math.sin(tick * GuiHelper.TWO_PI / 10.0D)), 0.0F, 1.0F, 0.0F);
 

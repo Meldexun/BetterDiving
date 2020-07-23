@@ -192,7 +192,7 @@ public class ModelBladderfish extends ModelBase {
 
 	@Override
 	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
-		double tick = (double) (ageInTicks + Minecraft.getMinecraft().getRenderPartialTicks());
+		double tick = ageInTicks + Minecraft.getMinecraft().getRenderPartialTicks();
 
 		this.setRotationAngle(this.body, 0.0F, 0.0F, 0.0F);
 		this.setRotationAngle(this.eye, 0.0F, 0.0F, 0.0F);

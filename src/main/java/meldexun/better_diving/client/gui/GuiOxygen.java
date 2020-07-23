@@ -50,17 +50,17 @@ public class GuiOxygen extends Gui {
 			GuiHelper.drawTexture(x, y, 0.0D, 0.0D, 102, 21, 1.0D, 1.0D);
 
 			textureManager.bindTexture(GuiOxygen.BAR);
-			GuiHelper.drawTexture((double) x + 1.0D + 80.0D * (1.0D - percent), (double) y + 7.0D, (1.0D - percent), 0.0D, 80.0D * percent, 7.0D, percent, 1.0D);
+			GuiHelper.drawTexture(x + 1.0D + 80.0D * (1.0D - percent), y + 7.0D, (1.0D - percent), 0.0D, 80.0D * percent, 7.0D, percent, 1.0D);
 
 			textureManager.bindTexture(GuiOxygen.OXYGEN_BUBBLES);
-			offset = ((2.0D * (double) this.partialTicks) % 128) / 128.0D;
-			this.drawBubbles((double) x + 1.0D, (double) y + 7.0D, 0.0D, offset, percent);
-			offset = ((2.5D * (double) this.partialTicks) % 128) / 128.0D;
-			this.drawBubbles((double) x + 1.0D, (double) y + 7.0D, 20.0D, offset + 0.45D, percent);
-			offset = ((1.5D * (double) this.partialTicks) % 128) / 128.0D;
-			this.drawBubbles((double) x + 1.0D, (double) y + 7.0D, 35.0D, offset + 0.12D, percent);
-			offset = ((2.0D * (double) this.partialTicks) % 128) / 128.0D;
-			this.drawBubbles((double) x + 1.0D, (double) y + 7.0D, 55.0D, offset + 0.68D, percent);
+			offset = ((2.0D * this.partialTicks) % 128) / 128.0D;
+			this.drawBubbles(x + 1.0D, y + 7.0D, 0.0D, offset, percent);
+			offset = ((2.5D * this.partialTicks) % 128) / 128.0D;
+			this.drawBubbles(x + 1.0D, y + 7.0D, 20.0D, offset + 0.45D, percent);
+			offset = ((1.5D * this.partialTicks) % 128) / 128.0D;
+			this.drawBubbles(x + 1.0D, y + 7.0D, 35.0D, offset + 0.12D, percent);
+			offset = ((2.0D * this.partialTicks) % 128) / 128.0D;
+			this.drawBubbles(x + 1.0D, y + 7.0D, 55.0D, offset + 0.68D, percent);
 
 			textureManager.bindTexture(GuiOxygen.FRAME);
 			GuiHelper.drawTexture(x, y, 0.0D, 0.0D, 102, 21, 1.0D, 1.0D);
@@ -95,8 +95,8 @@ public class GuiOxygen extends Gui {
 
 			double percent = idiving.getOxygenFromPlayerInPercent();
 
-			double xm = (double) x + (double) size / 2.0D;
-			double ym = (double) y + (double) size / 2.0D;
+			double xm = x + size / 2.0D;
+			double ym = y + size / 2.0D;
 			double sinP = Math.sin(percent * GuiHelper.TWO_PI);
 			double cosP = Math.cos(percent * GuiHelper.TWO_PI);
 			double innerRadius = 10.4D;
@@ -130,7 +130,7 @@ public class GuiOxygen extends Gui {
 			GuiOxygen.drawSmoothCircle(xm, ym, outerRadius, 180, percent, 0.0D);
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 
-			double offset = ((4.0D * (double) this.partialTicks) % 128.0D) / 128.0D;
+			double offset = ((4.0D * this.partialTicks) % 128.0D) / 128.0D;
 			double d1 = innerRadius * 8.0D / 128.0D;
 			double d2 = outerRadius * 8.0D / 128.0D;
 			double d3 = (d2 + d1) / 2.0D;
@@ -185,7 +185,7 @@ public class GuiOxygen extends Gui {
 
 		GL11.glBegin(GL11.GL_QUAD_STRIP);
 
-		for (int i = 0; i < percent * (double) sides; i++) {
+		for (int i = 0; i < percent * sides; i++) {
 			rad = GuiHelper.TWO_PI * ((double) i / (double) sides + startAngle);
 			sin = Math.sin(rad);
 			cos = -Math.cos(rad);
@@ -219,7 +219,7 @@ public class GuiOxygen extends Gui {
 		GL11.glTexCoord2d(u, v);
 		GL11.glVertex2d(x, y);
 
-		for (int i = 0; i < percent * (double) sides; i++) {
+		for (int i = 0; i < percent * sides; i++) {
 			rad = GuiHelper.TWO_PI * ((double) i / (double) sides + startAngle);
 			sin = Math.sin(rad);
 			cos = Math.cos(rad);
@@ -253,7 +253,7 @@ public class GuiOxygen extends Gui {
 		GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
 		GL11.glBegin(GL11.GL_LINE_STRIP);
 
-		for (int i = 0; i < percent * (double) sides; i++) {
+		for (int i = 0; i < percent * sides; i++) {
 			rad = GuiHelper.TWO_PI * ((double) i / (double) sides + startAngle);
 			sin = Math.sin(rad);
 			cos = -Math.cos(rad);

@@ -37,9 +37,9 @@ public class RenderSeamoth extends Render<EntitySeamoth> {
 		GL11.glTranslated(x, y, z);
 
 		if (player == entity.getControllingPassenger() && mc.gameSettings.thirdPersonView == 0) {
-			GL11.glTranslated(0.0D, (double) player.eyeHeight, 0.0D);
+			GL11.glTranslated(0.0D, player.eyeHeight, 0.0D);
 			this.setupRotation(entity, partialTicks);
-			GL11.glTranslated(0.0D, 0.8125D - (double) player.eyeHeight, -0.32D);
+			GL11.glTranslated(0.0D, 0.8125D - player.eyeHeight, -0.32D);
 		} else {
 			GL11.glTranslated(0.0D, 0.8125D, 0.0D);
 			this.setupRotation(entity, partialTicks);
@@ -55,8 +55,8 @@ public class RenderSeamoth extends Render<EntitySeamoth> {
 	}
 
 	protected void setupRotation(Entity entity, float partialTicks) {
-		double yaw = this.interpolateRotation((double) entity.prevRotationYaw, (double) entity.rotationYaw, (double) partialTicks);
-		double pitch = this.interpolateRotation((double) entity.prevRotationPitch, (double) entity.rotationPitch, (double) partialTicks);
+		double yaw = this.interpolateRotation(entity.prevRotationYaw, entity.rotationYaw, partialTicks);
+		double pitch = this.interpolateRotation(entity.prevRotationPitch, entity.rotationPitch, partialTicks);
 		// interpolated yaw and pitch does NOT work
 		GL11.glRotated(entity.rotationPitch, Math.cos(Math.toRadians(entity.rotationYaw)), 0.0D, Math.sin(Math.toRadians(entity.rotationYaw)));
 		GL11.glRotated(180.0D - entity.rotationYaw, 0.0D, 1.0D, 0.0D);

@@ -29,7 +29,7 @@ public class ItemDivingChest extends AbstractItemDivingGear {
 		} else {
 			tooltip.add(I18n.format("tooltip.oxygen_empty"));
 		}
-		tooltip.add(I18n.format("item.tank.tooltip", (int) ((double) this.getOxygenCapacity() / 20.0D)));
+		tooltip.add(I18n.format("item.tank.tooltip", (int) (this.getOxygenCapacity() / 20.0D)));
 		super.addInformation(stack, worldIn, tooltip, flagIn);
 	}
 

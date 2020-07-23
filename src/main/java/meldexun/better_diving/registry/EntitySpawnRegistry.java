@@ -80,7 +80,7 @@ public class EntitySpawnRegistry {
 				double min = 0.0D;
 				double max = 1.0D;
 				double d = MathHelper.clamp(modalValue + EntitySpawnRegistry.RAND.nextGaussian() * standardDeviation, min, max);
-				pos = pos.down((int) Math.round((double) blocksToSeafloor * d));
+				pos = pos.down((int) Math.round(blocksToSeafloor * d));
 			} else {
 				pos = pos.down(EntitySpawnRegistry.RAND.nextInt(blocksToSeafloor));
 			}

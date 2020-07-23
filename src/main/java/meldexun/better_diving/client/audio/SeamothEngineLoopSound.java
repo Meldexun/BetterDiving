@@ -38,8 +38,8 @@ public class SeamothEngineLoopSound extends MovingSound {
 				this.tick--;
 			}
 
-			this.pitch = 0.4F + MathHelper.clamp((float) this.tick / 60.0F * 0.6F, 0.0F, 0.6F);
-			this.volume = 0.15F * MathHelper.clamp((float) this.tick / 60.0F, 0.0F, 1.0F);
+			this.pitch = 0.4F + MathHelper.clamp(this.tick / 60.0F * 0.6F, 0.0F, 0.6F);
+			this.volume = 0.15F * MathHelper.clamp(this.tick / 60.0F, 0.0F, 1.0F);
 		}
 	}
 

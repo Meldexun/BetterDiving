@@ -55,7 +55,7 @@ public class ItemSeamoth extends ItemTooltip {
 				EntitySeamoth seamoth = new EntitySeamoth(worldIn);
 				ItemStack battery = playerIn.getHeldItem(handIn).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).getStackInSlot(0).copy();
 				((ItemStackHandler) seamoth.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)).setStackInSlot(0, battery);
-				Vec3d start = new Vec3d(playerIn.posX, playerIn.posY + (double) playerIn.eyeHeight, playerIn.posZ);
+				Vec3d start = new Vec3d(playerIn.posX, playerIn.posY + playerIn.eyeHeight, playerIn.posZ);
 				Vec3d look = playerIn.getLookVec();
 				Vec3d end = new Vec3d(start.x + 5.0D * look.x, start.y + 5.0D * look.y, start.z + 5.0D * look.z);
 				RayTraceResult result = worldIn.rayTraceBlocks(start, end, false, true, false);
@@ -82,9 +82,9 @@ public class ItemSeamoth extends ItemTooltip {
 		ItemStack powerCell = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).getStackInSlot(0);
 		if (powerCell.getItem() instanceof ItemPowerCell) {
 			IEnergyStorage ienergy = powerCell.getCapability(CapabilityEnergy.ENERGY, null);
-			int percent = (int) (100.0D * (double) ienergy.getEnergyStored() / (double) ienergy.getMaxEnergyStored());
-			int energy = (int) ((double) ienergy.getEnergyStored() / 100.0D);
-			int capacity = (int) ((double) ienergy.getMaxEnergyStored() / 100.0D);
+			int percent = (int) (100.0D * ienergy.getEnergyStored() / ienergy.getMaxEnergyStored());
+			int energy = (int) (ienergy.getEnergyStored() / 100.0D);
+			int capacity = (int) (ienergy.getMaxEnergyStored() / 100.0D);
 			tooltip.add(I18n.format("tooltip.energy", percent, energy, capacity));
 		} else {
 			tooltip.add(I18n.format("tooltip.no_power_cell"));

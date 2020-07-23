@@ -6,14 +6,14 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public interface IProxy {
 
-	public void preInit();
+	void preInit();
 
-	public void init();
+	void init();
 
-	public void postInit();
+	void postInit();
 
-	public EntityPlayer getPlayer(MessageContext ctx);
+	EntityPlayer getPlayer(MessageContext ctx);
 
-	public World getWorld(MessageContext ctx);
+	World getWorld(MessageContext ctx);
 
 }

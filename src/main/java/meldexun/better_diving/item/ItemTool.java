@@ -40,9 +40,9 @@ public class ItemTool extends ItemTooltip {
 		ItemStack battery = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).getStackInSlot(0);
 		if (battery.getItem() instanceof ItemBattery) {
 			IEnergyStorage ienergy = battery.getCapability(CapabilityEnergy.ENERGY, null);
-			int percent = (int) (100.0D * (double) ienergy.getEnergyStored() / (double) ienergy.getMaxEnergyStored());
-			int energy = (int) ((double) ienergy.getEnergyStored() / 100.0D);
-			int capacity = (int) ((double) ienergy.getMaxEnergyStored() / 100.0D);
+			int percent = (int) (100.0D * ienergy.getEnergyStored() / ienergy.getMaxEnergyStored());
+			int energy = (int) (ienergy.getEnergyStored() / 100.0D);
+			int capacity = (int) (ienergy.getMaxEnergyStored() / 100.0D);
 			tooltip.add(I18n.format("tooltip.energy", percent, energy, capacity));
 		} else {
 			tooltip.add(I18n.format("tooltip.no_battery"));

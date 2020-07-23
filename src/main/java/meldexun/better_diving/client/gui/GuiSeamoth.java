@@ -49,15 +49,15 @@ public class GuiSeamoth extends Gui {
 		GlStateManager.pushMatrix();
 		float scale = 4.0F / 6.0F;
 		GlStateManager.scale(scale, scale, 1.0F);
-		this.drawCenteredString(fontRenderer, Integer.toString(energy), Math.round((float) (offsetX + 64) / scale), Math.round((float) (offsetY + 7) / scale), Integer.parseInt("FFFFFF", 16));
-		this.drawCenteredString(fontRenderer, Integer.toString(health), Math.round((float) (offsetX + 26) / scale), Math.round((float) (offsetY + 14) / scale), Integer.parseInt("FFFFFF", 16));
+		this.drawCenteredString(fontRenderer, Integer.toString(energy), Math.round((offsetX + 64) / scale), Math.round((offsetY + 7) / scale), Integer.parseInt("FFFFFF", 16));
+		this.drawCenteredString(fontRenderer, Integer.toString(health), Math.round((offsetX + 26) / scale), Math.round((offsetY + 14) / scale), Integer.parseInt("FFFFFF", 16));
 		GlStateManager.popMatrix();
 
 		GlStateManager.pushMatrix();
 		float scale2 = 3.0F / 6.0F;
 		GlStateManager.scale(scale2, scale2, 1.0F);
-		this.drawCenteredString(fontRenderer, Integer.toString(temperature), Math.round((float) (offsetX + 61) / scale2), Math.round((float) (offsetY + 26) / scale2), Integer.parseInt("FFFFFF", 16));
-		this.drawCenteredString(fontRenderer, I18n.format("gui.temperature"), Math.round((float) (offsetX + 67) / scale2), Math.round((float) (offsetY + 26) / scale2), Integer.parseInt("F6DC47", 16));
+		this.drawCenteredString(fontRenderer, Integer.toString(temperature), Math.round((offsetX + 61) / scale2), Math.round((offsetY + 26) / scale2), Integer.parseInt("FFFFFF", 16));
+		this.drawCenteredString(fontRenderer, I18n.format("gui.temperature"), Math.round((offsetX + 67) / scale2), Math.round((offsetY + 26) / scale2), Integer.parseInt("F6DC47", 16));
 		GlStateManager.popMatrix();
 
 		if (!blend) {

@@ -2,9 +2,9 @@ package meldexun.better_diving.capability.diving;
 
 public interface ICapabilityDivingAttributes {
 
-	public void tick();
+	void tick();
 
-	public void updateSize();
+	void updateSize();
 
 	/**
 	 * Only used when reading the capability from NBT or when receiving oxygen sync
@@ -12,7 +12,7 @@ public interface ICapabilityDivingAttributes {
 	 * 
 	 * @param oxygen
 	 */
-	public void setOxygen(int oxygen);
+	void setOxygen(int oxygen);
 
 	/**
 	 * Returns the amount of oxygen that the player has. <br>
@@ -21,11 +21,11 @@ public interface ICapabilityDivingAttributes {
 	 * 
 	 * @return
 	 */
-	public int getOxygen();
+	int getOxygen();
 
-	public int getOxygenFromPlayer();
+	int getOxygenFromPlayer();
 
-	public double getOxygenFromPlayerInPercent();
+	double getOxygenFromPlayerInPercent();
 
 	/**
 	 * Adds oxygen to the player. Returns the amount of oxygen that was added. <br>
@@ -35,9 +35,9 @@ public interface ICapabilityDivingAttributes {
 	 * @param amount
 	 * @return
 	 */
-	public int receiveOxygen(int amount);
+	int receiveOxygen(int amount);
 
-	public int receiveOxygenFromPlayer(int amount);
+	int receiveOxygenFromPlayer(int amount);
 
 	/**
 	 * Removes oxygen from the player. Returns the amount of oxygen that was
@@ -48,9 +48,9 @@ public interface ICapabilityDivingAttributes {
 	 * @param amount
 	 * @return
 	 */
-	public int extractOxygen(int amount);
+	int extractOxygen(int amount);
 
-	public int extractOxygenFromPlayer(int amount);
+	int extractOxygenFromPlayer(int amount);
 
 	/**
 	 * Returns the oxygen capacity of the player. <br>
@@ -59,9 +59,9 @@ public interface ICapabilityDivingAttributes {
 	 * 
 	 * @return
 	 */
-	public int getOxygenCapacity();
+	int getOxygenCapacity();
 
-	public int getOxygenCapacityFromPlayer();
+	int getOxygenCapacityFromPlayer();
 
 	/**
 	 * Returns the swim speed of the player. <br>
@@ -70,9 +70,9 @@ public interface ICapabilityDivingAttributes {
 	 * 
 	 * @return
 	 */
-	public double getSwimSpeed();
+	double getSwimSpeed();
 
-	public double getSwimSpeedFromPlayer();
+	double getSwimSpeedFromPlayer();
 
 	/**
 	 * Returns the break speed of the player. <br>
@@ -81,48 +81,48 @@ public interface ICapabilityDivingAttributes {
 	 * 
 	 * @return
 	 */
-	public float getBreakSpeed();
+	float getBreakSpeed();
 
-	public float getBreakSpeedFromPlayer();
+	float getBreakSpeedFromPlayer();
 
 	// isDiving setter and getter
 
-	public void setIsDiving(boolean isDiving);
+	void setIsDiving(boolean isDiving);
 
-	public boolean isDiving();
+	boolean isDiving();
 
-	public void setPrevIsDiving(boolean prevIsDiving);
+	void setPrevIsDiving(boolean prevIsDiving);
 
-	public boolean prevIsDiving();
+	boolean prevIsDiving();
 
 	// divingTick setter and getter
 
-	public void setDivingTick(float divingTick);
+	void setDivingTick(float divingTick);
 
-	public float getDivingTick();
+	float getDivingTick();
 
-	public void setPrevDivingTick(float prevDivingTick);
+	void setPrevDivingTick(float prevDivingTick);
 
-	public float getPrevDivingTick();
+	float getPrevDivingTick();
 
 	// divingTickHorizontal setter and getter
 
-	public void setDivingTickHorizontal(float divingTickHorizontal);
+	void setDivingTickHorizontal(float divingTickHorizontal);
 
-	public float getDivingTickHorizontal();
+	float getDivingTickHorizontal();
 
-	public void setPrevDivingTickHorizontal(float prevDivingTickHorizontal);
+	void setPrevDivingTickHorizontal(float prevDivingTickHorizontal);
 
-	public float getPrevDivingTickHorizontal();
+	float getPrevDivingTickHorizontal();
 
 	// divingTickVertical setter and getter
 
-	public void setDivingTickVertical(float divingTickVertical);
+	void setDivingTickVertical(float divingTickVertical);
 
-	public float getDivingTickVertical();
+	float getDivingTickVertical();
 
-	public void setPrevDivingTickVertical(float prevDivingTickVertical);
+	void setPrevDivingTickVertical(float prevDivingTickVertical);
 
-	public float getPrevDivingTickVertical();
+	float getPrevDivingTickVertical();
 
 }

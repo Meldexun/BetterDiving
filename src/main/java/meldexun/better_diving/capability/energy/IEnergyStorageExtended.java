@@ -4,8 +4,8 @@ import net.minecraftforge.energy.IEnergyStorage;
 
 public interface IEnergyStorageExtended extends IEnergyStorage {
 
-	public void setEnergy(int energy);
+	void setEnergy(int energy);
 
-	public int getEnergyPercent();
+	int getEnergyPercent();
 
 }

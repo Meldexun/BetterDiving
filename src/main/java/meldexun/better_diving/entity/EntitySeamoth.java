@@ -297,12 +297,12 @@ public class EntitySeamoth extends Entity implements IEntityAdditionalSpawnData 
 			this.partialTicks = mc.getRenderPartialTicks();
 
 			if (this.inWater && this.getEnergy() > 0) {
-				double d = (double) mc.gameSettings.mouseSensitivity * 0.6D + 0.2D;
+				double d = mc.gameSettings.mouseSensitivity * 0.6D + 0.2D;
 				double d1 = d * d * d * 8.0D;
-				double deltaX = (double) mc.mouseHelper.deltaX;
+				double deltaX = mc.mouseHelper.deltaX;
 				double deltaY = -(double) mc.mouseHelper.deltaY;
-				double d2 = MathHelper.clamp(deltaX * d1 * 0.06D, -24.0D * (double) f, 24.0D * (double) f);
-				double d3 = MathHelper.clamp(deltaY * d1 * 0.06D, -24.0D * (double) f, 24.0D * (double) f);
+				double d2 = MathHelper.clamp(deltaX * d1 * 0.06D, -24.0D * f, 24.0D * f);
+				double d3 = MathHelper.clamp(deltaY * d1 * 0.06D, -24.0D * f, 24.0D * f);
 				if (mc.gameSettings.invertMouse) {
 					d3 *= -1.0D;
 				}

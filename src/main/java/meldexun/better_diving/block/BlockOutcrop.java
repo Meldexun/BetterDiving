@@ -65,7 +65,7 @@ public class BlockOutcrop extends BlockUnderwaterBlock {
 	@Override
 	@Nullable
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		double d = rand.nextDouble() * (double) this.drop;
+		double d = rand.nextDouble() * this.drop;
 		for (Entry<Item, Integer> entry : this.dropList.entrySet()) {
 			d -= entry.getValue();
 			if (d <= 0) {

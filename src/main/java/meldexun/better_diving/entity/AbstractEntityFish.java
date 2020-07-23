@@ -163,7 +163,7 @@ public abstract class AbstractEntityFish extends EntityWaterMob {
 				}
 
 				if (this.isPotionActive(MobEffects.LEVITATION)) {
-					this.motionY += (0.05D * (double) (this.getActivePotionEffect(MobEffects.LEVITATION).getAmplifier() + 1) - this.motionY) * 0.2D;
+					this.motionY += (0.05D * (this.getActivePotionEffect(MobEffects.LEVITATION).getAmplifier() + 1) - this.motionY) * 0.2D;
 				} else {
 					blockpos$pooledmutableblockpos.setPos(this.posX, 0.0D, this.posZ);
 
@@ -179,8 +179,8 @@ public abstract class AbstractEntityFish extends EntityWaterMob {
 				}
 
 				this.motionY *= 0.9800000190734863D;
-				this.motionX *= (double) f6;
-				this.motionZ *= (double) f6;
+				this.motionX *= f6;
+				this.motionZ *= f6;
 				blockpos$pooledmutableblockpos.release();
 			}
 		}

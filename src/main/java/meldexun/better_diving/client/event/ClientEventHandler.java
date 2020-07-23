@@ -63,10 +63,10 @@ public class ClientEventHandler {
 			int blocksUnderwater = EntityHelper.blocksUnderWater(event.getEntity());
 
 			if (BetterDivingConfig.getInstance().client.fogSettings.fogColorEnabled) {
-				ClientEventHandler.setupFogColor(entity.world, (double) time, (double) blocksUnderwater);
+				ClientEventHandler.setupFogColor(entity.world, time, blocksUnderwater);
 			}
 			if (BetterDivingConfig.getInstance().client.fogSettings.fogDensityEnabled) {
-				ClientEventHandler.setupFogDensity(entity.world, (double) time, (double) blocksUnderwater);
+				ClientEventHandler.setupFogDensity(entity.world, time, blocksUnderwater);
 			}
 		}
 	}
@@ -163,8 +163,8 @@ public class ClientEventHandler {
 		ICapabilityDivingAttributes idiving = player.getCapability(CapabilityDivingAttributesProvider.DIVING_ATTRIBUTES, null);
 
 		if (player.getRidingEntity() instanceof EntitySeamoth) {
-			double sinYaw = Math.sin(Math.toRadians((double) player.rotationYaw));
-			double cosYaw = Math.cos(Math.toRadians((double) player.rotationYaw));
+			double sinYaw = Math.sin(Math.toRadians(player.rotationYaw));
+			double cosYaw = Math.cos(Math.toRadians(player.rotationYaw));
 			GL11.glPushMatrix();
 			if (ArtemisLib.loaded) {
 				GL11.glTranslated(x, y + 0.8D, z);

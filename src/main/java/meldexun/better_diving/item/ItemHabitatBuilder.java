@@ -31,7 +31,7 @@ public class ItemHabitatBuilder extends ItemTool {
 					rot = Rotation.COUNTERCLOCKWISE_90;
 				}
 
-				Vec3d start = new Vec3d(playerIn.posX, playerIn.posY + (double) playerIn.eyeHeight, playerIn.posZ);
+				Vec3d start = new Vec3d(playerIn.posX, playerIn.posY + playerIn.eyeHeight, playerIn.posZ);
 				Vec3d look = playerIn.getLookVec();
 				Vec3d end = new Vec3d(start.x + 5.0D * look.x, start.y + 5.0D * look.y, start.z + 5.0D * look.z);
 				RayTraceResult result = worldIn.rayTraceBlocks(start, end, false, false, false);

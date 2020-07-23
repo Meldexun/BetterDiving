@@ -30,8 +30,8 @@ public class GuiFabricator extends GuiContainer {
 	public void initGui() {
 		super.initGui();
 		ScaledResolution scaled = new ScaledResolution(this.mc);
-		int x = (int) ((double) scaled.getScaledWidth() * 0.5D);
-		int y = (int) ((double) scaled.getScaledHeight() * 0.5D);
+		int x = (int) (scaled.getScaledWidth() * 0.5D);
+		int y = (int) (scaled.getScaledHeight() * 0.5D);
 
 		List<Recipe> recipes = new ArrayList<>(Recipe.REGISTRY.getValuesCollection());
 		for (int i = 0; i < recipes.size() && i < 6; i++) {

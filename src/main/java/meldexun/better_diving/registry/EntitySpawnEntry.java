@@ -88,7 +88,7 @@ public class EntitySpawnEntry extends IForgeRegistryEntry.Impl<EntitySpawnEntry>
 		return this.entityProvider.createEntity(world);
 	}
 
-	public static interface IEntityProvider {
+	public interface IEntityProvider {
 		EntityLiving createEntity(World world);
 	}
 

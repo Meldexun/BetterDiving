@@ -84,8 +84,7 @@ public class RenderPlayerCustom extends RenderPlayer {
 
 			try {
 				float f14 = 75.0F + (float) divingTick * (15.0F - 75.0F);
-				float f = this.interpolateRotation(MathHelper.clamp(entity.prevRenderYawOffset, entity.prevRotationYaw - f14, entity.prevRotationYaw + f14), MathHelper.clamp(entity.renderYawOffset, entity.rotationYaw - f14, entity.rotationYaw + f14),
-						partialTicks);
+				float f = this.interpolateRotation(MathHelper.clamp(entity.prevRenderYawOffset, entity.prevRotationYaw - f14, entity.prevRotationYaw + f14), MathHelper.clamp(entity.renderYawOffset, entity.rotationYaw - f14, entity.rotationYaw + f14), partialTicks);
 				float f1 = this.interpolateRotation(entity.prevRotationYawHead, entity.rotationYawHead, partialTicks);
 				float f2 = f1 - f;
 
@@ -179,7 +178,7 @@ public class RenderPlayerCustom extends RenderPlayer {
 
 				GlStateManager.disableRescaleNormal();
 			} catch (Exception exception) {
-				BetterDiving.logger.error("Couldn't render entity", (Throwable) exception);
+				BetterDiving.logger.error("Couldn't render entity", exception);
 			}
 
 			GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);

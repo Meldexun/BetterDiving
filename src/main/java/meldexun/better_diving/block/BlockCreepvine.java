@@ -47,9 +47,7 @@ public class BlockCreepvine extends AbstractBlockCreepvine {
 			return ModBlocks.CREEPVINE_TOP.getDefaultState();
 		} else if (meta == 1 && ModBlocks.CREEPVINE != null) {
 			return ModBlocks.CREEPVINE.getDefaultState();
-		} else if (meta == 2 && ModBlocks.CREEPVINE_SEED != null) {
-			return ModBlocks.CREEPVINE_SEED.getDefaultState();
-		} else if (meta == 3 && ModBlocks.CREEPVINE_SEED != null) {
+		} else if ((meta == 2 && ModBlocks.CREEPVINE_SEED != null) || (meta == 3 && ModBlocks.CREEPVINE_SEED != null)) {
 			return ModBlocks.CREEPVINE_SEED.getDefaultState();
 		}
 		return this.getDefaultState();

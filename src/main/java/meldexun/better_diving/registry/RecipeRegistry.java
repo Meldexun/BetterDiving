@@ -26,8 +26,7 @@ public class RecipeRegistry {
 	@SubscribeEvent
 	public static void registerRecipes(RegistryEvent.Register<Recipe> event) {
 		IForgeRegistry<Recipe> registry = event.getRegistry();
-		registry.register(
-				new Recipe(new ItemStack(ModItems.HOLEFISH_CURED), new ItemStack[] { new ItemStack(ModItems.BLADDERFISH, 2), new ItemStack(ModItems.HOLEFISH, 4), new ItemStack(ModItems.BLADDERFISH, 1) }).setRegistryName(BetterDiving.MOD_ID, "test"));
+		registry.register(new Recipe(new ItemStack(ModItems.HOLEFISH_CURED), new ItemStack[] { new ItemStack(ModItems.BLADDERFISH, 2), new ItemStack(ModItems.HOLEFISH, 4), new ItemStack(ModItems.BLADDERFISH, 1) }).setRegistryName(BetterDiving.MOD_ID, "test"));
 	}
 
 }

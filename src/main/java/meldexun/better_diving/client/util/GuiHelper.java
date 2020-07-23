@@ -61,7 +61,7 @@ public class GuiHelper {
 	}
 
 	public static void drawEntity(EntityLivingBase entity, int x, int y, int scale, float mouseX, float mouseY) {
-		GuiInventory.drawEntityOnScreen(x, y, scale, (float) x - mouseX, (float) y - (float) scale * entity.getEyeHeight() - mouseY, entity);
+		GuiInventory.drawEntityOnScreen(x, y, scale, x - mouseX, y - scale * entity.getEyeHeight() - mouseY, entity);
 	}
 
 }

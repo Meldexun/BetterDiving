@@ -28,8 +28,8 @@ public class GuiHabitatBuilder extends GuiScreen {
 		super.initGui();
 		Minecraft mc = Minecraft.getMinecraft();
 		ScaledResolution scaled = new ScaledResolution(mc);
-		int x = (int) ((double) scaled.getScaledWidth() * 0.5D);
-		int y = (int) ((double) scaled.getScaledHeight() * 0.5D);
+		int x = (int) (scaled.getScaledWidth() * 0.5D);
+		int y = (int) (scaled.getScaledHeight() * 0.5D);
 
 		this.addTab(new GuiHabitatBuilderTab(0, x - 80, y - 80, 0));
 		this.addTab(new GuiHabitatBuilderTab(1, x - 48, y - 80, 1));
@@ -48,8 +48,8 @@ public class GuiHabitatBuilder extends GuiScreen {
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		Minecraft mc = Minecraft.getMinecraft();
 		ScaledResolution scaled = new ScaledResolution(mc);
-		int x = (int) ((double) scaled.getScaledWidth() * 0.5D);
-		int y = (int) ((double) scaled.getScaledHeight() * 0.5D);
+		int x = (int) (scaled.getScaledWidth() * 0.5D);
+		int y = (int) (scaled.getScaledHeight() * 0.5D);
 
 		GL11.glPushMatrix();
 		GL11.glDepthMask(false);
