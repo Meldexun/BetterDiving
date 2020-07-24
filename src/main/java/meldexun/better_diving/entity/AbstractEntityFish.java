@@ -1,5 +1,7 @@
 package meldexun.better_diving.entity;
 
+import java.util.List;
+
 import meldexun.better_diving.entity.ai.EntityAIFishWander;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -18,9 +20,13 @@ import net.minecraft.world.World;
 
 public abstract class AbstractEntityFish extends EntityWaterMob {
 
+	private boolean inLava;
+	private boolean isInsideWater;
+
 	public AbstractEntityFish(World worldIn) {
 		super(worldIn);
 		this.setSize(0.4F, 0.4F);
+		this.stepHeight = 0.0F;
 	}
 
 	@Override
@@ -30,6 +36,58 @@ public abstract class AbstractEntityFish extends EntityWaterMob {
 		}
 
 		super.onUpdate();
+	}
+
+	@Override
+	public void onEntityUpdate() {
+		this.handleLavaMovement();
+		this.updateIsInsideWater();
+		super.onEntityUpdate();
+	}
+
+	@Override
+	public boolean handleWaterMovement() {
+		this.inWater = this.world.isMaterialInBB(this.getEntityBoundingBox(), Material.WATER);
+		if (this.inWater) {
+			this.fallDistance = 0.0F;
+			this.extinguish();
+		}
+		return this.inWater;
+	}
+
+	public boolean handleLavaMovement() {
+		this.inLava = this.world.isMaterialInBB(this.getEntityBoundingBox(), Material.LAVA);
+		return this.inLava;
+	}
+
+	@Override
+	public boolean isInLava() {
+		return this.inLava;
+	}
+
+	public boolean updateIsInsideWater() {
+		double d0 = this.posY + (double) this.getEyeHeight();
+		BlockPos blockpos = new BlockPos(this.posX, d0, this.posZ);
+		IBlockState iblockstate = this.world.getBlockState(blockpos);
+
+		Boolean result = iblockstate.getBlock().isEntityInsideMaterial(this.world, blockpos, iblockstate, this, d0, Material.WATER, true);
+		if (result != null) {
+			this.isInsideWater = result;
+		} else if (iblockstate.getMaterial() == Material.WATER) {
+			this.isInsideWater = true;
+		} else {
+			this.isInsideWater = false;
+		}
+
+		return this.isInsideWater;
+	}
+
+	@Override
+	public boolean isInsideOfMaterial(Material materialIn) {
+		if (materialIn == Material.WATER) {
+			return this.isInsideWater;
+		}
+		return super.isInsideOfMaterial(materialIn);
 	}
 
 	@Override
@@ -64,6 +122,29 @@ public abstract class AbstractEntityFish extends EntityWaterMob {
 	@Override
 	public boolean isInRangeToRenderDist(double distance) {
 		return distance < 128 * 128;
+	}
+
+	@Override
+	protected void collideWithNearbyEntities() {
+		List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox(), Entity::canBePushed);
+
+		if (!list.isEmpty()) {
+			int i = this.world.getGameRules().getInt("maxEntityCramming");
+
+			if (i > 0 && list.size() > i - 1 && this.rand.nextInt(4) == 0) {
+				int j = 0;
+
+				for (int k = 0; k < list.size(); ++k) {
+					if (!((Entity) list.get(k)).isRiding()) {
+						++j;
+					}
+				}
+
+				if (j > i - 1) {
+					this.attackEntityFrom(DamageSource.CRAMMING, 6.0F);
+				}
+			}
+		}
 	}
 
 	@Override
