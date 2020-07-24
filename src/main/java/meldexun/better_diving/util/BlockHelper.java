@@ -22,6 +22,7 @@ public class BlockHelper {
 		while (isWaterBlock(world.getBlockState(mutablePos))) {
 			mutablePos.setY(mutablePos.getY() - 1);
 		}
+		mutablePos.setY(mutablePos.getY() + 1);
 		return mutablePos.toImmutable();
 	}
 
