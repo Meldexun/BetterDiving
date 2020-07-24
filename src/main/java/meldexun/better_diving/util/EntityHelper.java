@@ -25,7 +25,7 @@ public class EntityHelper {
 		int i = 0;
 		BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos(pos.getX(), pos.getY() + 1, pos.getZ());
 		while (world.getBlockState(mutablePos).getMaterial() != Material.AIR) {
-			mutablePos.setY(mutablePos.getY() - 1);
+			mutablePos.setY(mutablePos.getY() + 1);
 			i++;
 		}
 		return i + 1;
