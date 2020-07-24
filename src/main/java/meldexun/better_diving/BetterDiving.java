@@ -34,7 +34,7 @@ public class BetterDiving {
 
 	public static final String MOD_ID = "better_diving";
 	public static final String NAME = "Better Diving";
-	public static final String VERSION = "1.5.6";
+	public static final String VERSION = "1.5.7";
 	public static final String ACCEPTED_VERSIONS = "[1.12.2]";
 
 	public static final String CLIENT_PROXY_CLASS = "meldexun.better_diving.proxy.ClientProxy";
