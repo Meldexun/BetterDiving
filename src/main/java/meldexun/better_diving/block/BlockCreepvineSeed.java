@@ -30,7 +30,7 @@ public class BlockCreepvineSeed extends BlockCreepvine {
 		return 12;
 	}
 
-	// prevents deletion of creepvine when updating from v1.4.04
+	// prevents deletion of creepvine
 
 	@Override
 	protected BlockStateContainer createBlockState() {
@@ -40,11 +40,6 @@ public class BlockCreepvineSeed extends BlockCreepvine {
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		return 0;
-	}
-
-	@Override
-	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState();
 	}
 
 }

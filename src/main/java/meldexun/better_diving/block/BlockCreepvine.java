@@ -21,7 +21,7 @@ public class BlockCreepvine extends AbstractBlockCreepvine {
 		}
 	}
 
-	// prevents deletion of creepvine when updating from v1.4.04
+	// prevents deletion of creepvine
 
 	public static final PropertyInteger SEED = PropertyInteger.create("seed", 0, 3); // 0=top 1=full 2=seed 3=seeds
 
@@ -39,18 +39,6 @@ public class BlockCreepvine extends AbstractBlockCreepvine {
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		return state.getPropertyKeys().contains(BlockCreepvine.SEED) ? state.getValue(BlockCreepvine.SEED) : 0;
-	}
-
-	@Override
-	public IBlockState getStateFromMeta(int meta) {
-		if (meta == 0 && ModBlocks.CREEPVINE_TOP != null) {
-			return ModBlocks.CREEPVINE_TOP.getDefaultState();
-		} else if (meta == 1 && ModBlocks.CREEPVINE != null) {
-			return ModBlocks.CREEPVINE.getDefaultState();
-		} else if ((meta == 2 && ModBlocks.CREEPVINE_SEED != null) || (meta == 3 && ModBlocks.CREEPVINE_SEED != null)) {
-			return ModBlocks.CREEPVINE_SEED.getDefaultState();
-		}
-		return this.getDefaultState();
 	}
 
 }
