@@ -30,7 +30,7 @@ public class TileEntityCreepvineTop extends TileEntityCreepvine implements ITick
 					ModBlocks.CREEPVINE_TOP.setCreepvine(this.world, this.pos.up(), 3, this.getMaxHeight(), this.canGenerateSeeds());
 				}
 			} else if (BetterDivingConfig.getInstance().plants.shouldGenerateCreepvineSeedCluster && this.canGenerateSeeds() && this.rand.nextBoolean()) {
-				ModBlocks.CREEPVINE_SEED.setCreepvine(this.world, this.pos.down(height / 2), 3, this.getMaxHeight(), this.canGenerateSeeds());
+				ModBlocks.CREEPVINE_SEED.setCreepvine(this.world, this.pos.down((int) (height * 0.5D - 0.5D)), 3, this.getMaxHeight(), this.canGenerateSeeds());
 			}
 		}
 	}
