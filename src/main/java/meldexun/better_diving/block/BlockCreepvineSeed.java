@@ -21,9 +21,8 @@ public class BlockCreepvineSeed extends BlockCreepvine {
 		if (playerIn.addItemStackToInventory(new ItemStack(ModItems.CREEPVINE_SEED_CLUSTER))) {
 			TileEntityCreepvine tileEntity = (TileEntityCreepvine) worldIn.getTileEntity(pos);
 			ModBlocks.CREEPVINE.setCreepvine(worldIn, pos, 3, tileEntity.getMaxHeight(), tileEntity.canGenerateSeeds());
-			return true;
 		}
-		return false;
+		return true;
 	}
 
 	@Override
