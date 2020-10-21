@@ -14,7 +14,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.12.2-1.5.7'
+version = '1.12.2-1.5.8'
 group = 'meldexun.better_diving' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'BetterDiving'
 
