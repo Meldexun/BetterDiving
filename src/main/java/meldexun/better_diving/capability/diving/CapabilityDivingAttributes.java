@@ -38,7 +38,7 @@ public class CapabilityDivingAttributes implements ICapabilityDivingAttributes {
 
 	private final EntityPlayer player;
 
-	private int oxygen = 0;
+	private int oxygen = this.getOxygenCapacity();
 
 	private boolean isDiving = false;
 	private boolean prevIsDiving = false;
