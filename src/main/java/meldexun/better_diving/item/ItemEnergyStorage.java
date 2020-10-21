@@ -51,7 +51,11 @@ public abstract class ItemEnergyStorage extends ItemTooltip {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(I18n.format("tooltip.energy", ItemEnergyStorage.getEnergyPercent(stack), ItemEnergyStorage.getEnergy(stack), this.capacity));
+		if (flagIn.isAdvanced()) {
+			tooltip.add(I18n.format("tooltip.energy_advanced", ItemEnergyStorage.getEnergyPercent(stack), ItemEnergyStorage.getEnergy(stack), this.capacity));
+		} else {
+			tooltip.add(I18n.format("tooltip.energy", ItemEnergyStorage.getEnergyPercent(stack)));
+		}
 		super.addInformation(stack, worldIn, tooltip, flagIn);
 	}
 
