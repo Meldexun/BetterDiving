@@ -1,6 +1,7 @@
 package meldexun.better_diving.client.gui;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL14;
 
 import meldexun.better_diving.BetterDiving;
 import meldexun.better_diving.capability.diving.CapabilityDivingAttributesProvider;
@@ -46,6 +47,10 @@ public class GuiOxygen extends Gui {
 			int y = GuiHelper.getAnchorY(21, config.client.guiOxygenConfig);
 			double offset;
 
+			boolean blend = GL11.glGetBoolean(GL11.GL_BLEND);
+            GL11.glEnable(GL11.GL_BLEND);
+            GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+
 			textureManager.bindTexture(GuiOxygen.BACKGROUND);
 			GuiHelper.drawTexture(x, y, 0.0D, 0.0D, 102, 21, 1.0D, 1.0D);
 
@@ -65,6 +70,10 @@ public class GuiOxygen extends Gui {
 			textureManager.bindTexture(GuiOxygen.FRAME);
 			GuiHelper.drawTexture(x, y, 0.0D, 0.0D, 102, 21, 1.0D, 1.0D);
 
+			if (!blend) {
+				GL11.glDisable(GL11.GL_BLEND);
+			}
+
 			this.drawCenteredString(fontRenderer, Integer.toString(air), x + 91, y + 11, Integer.parseInt("FFFFFF", 16));
 			this.drawCenteredString(fontRenderer, "O\u2082", x + 91, y + 2, Integer.parseInt("FFFFFF", 16));
 		} else {
@@ -81,16 +90,16 @@ public class GuiOxygen extends Gui {
 
 			GL11.glColor4d(1.0D, 1.0D, 1.0D, 1.0D);
 			textureManager.bindTexture(new ResourceLocation(BetterDiving.MOD_ID, "textures/gui/oxygen/oxygen_background_" + i + ".png"));
-			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
-			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+			// GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+			// GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
 			GuiHelper.drawTexture(x, y, 0.0D, 0.0D, size, size, 1.0D, 1.0D);
 			textureManager.bindTexture(new ResourceLocation(BetterDiving.MOD_ID, "textures/gui/oxygen/oxygen_center_" + i + ".png"));
-			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
-			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+			// GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+			// GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
 			GuiHelper.drawTexture(x, y, 0.0D, 0.0D, size, size, 1.0D, 1.0D);
 			textureManager.bindTexture(new ResourceLocation(BetterDiving.MOD_ID, "textures/gui/oxygen/oxygen_foreground_" + i + ".png"));
-			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
-			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+			// GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+			// GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
 			GuiHelper.drawTexture(x, y, 0.0D, 0.0D, size, size, 1.0D, 1.0D);
 
 			double percent = idiving.getOxygenFromPlayerInPercent();
