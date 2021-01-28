@@ -1,6 +1,0 @@
-{
-    "parent": "better_diving:item/boomerang",
-    "textures": {
-        "0": "better_diving:entity/boomerang"
-    }
-}
