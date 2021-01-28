@@ -1,0 +1,12 @@
+modLoader="javafml"
+loaderVersion="[35,)"
+license="All rights reserved"
+issueTrackerURL="https://github.com/Meldexun/BetterDiving/issues"
+[[mods]]
+modId="better_diving"
+version="1.0.0"
+displayName="Better Diving"
+authors="Meldexun"
+description='''
+TODO
+'''
