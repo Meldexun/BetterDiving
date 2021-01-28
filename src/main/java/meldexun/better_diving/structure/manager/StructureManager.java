@@ -6,25 +6,30 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Nullable;
 
 import org.apache.commons.io.FileUtils;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import meldexun.better_diving.BetterDiving;
 import meldexun.better_diving.structure.SeabaseStructure;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 
 public class StructureManager {
 
-	private static final Map<World, StructureManager> instances = new HashMap<>();
+	private static final Int2ObjectMap<StructureManager> INSTANCES = new Int2ObjectOpenHashMap<>();
 	private final Map<UUID, SeabaseStructure> structures = new HashMap<>();
 	private final World world;
 	private final File folder;
@@ -41,41 +46,32 @@ public class StructureManager {
 
 	public static void onWorldSave(World world) {
 		if (!world.isRemote) {
-			StructureManager.getInstanceForWorld(world).saveData();
+			int dim = world.provider.getDimension();
+			INSTANCES.get(dim).saveData();
 		}
 	}
 
 	public static void onWorldLoad(World world) {
 		if (!world.isRemote) {
-			StructureManager.createInstanceForWorld(world);
-			StructureManager.getInstanceForWorld(world).loadData();
+			int dim = world.provider.getDimension();
+			INSTANCES.computeIfAbsent(dim, key -> new StructureManager(world)).loadData();
 		}
 	}
 
 	public static void onWorldUnload(World world) {
 		if (!world.isRemote) {
-			StructureManager.deleteInstanceForWorld(world);
+			int dim = world.provider.getDimension();
+			INSTANCES.remove(dim);
 		}
 	}
 
 	@Nullable
 	public static StructureManager getInstanceForWorld(World world) {
-		if (world != null && !world.isRemote) {
-			return StructureManager.instances.get(world);
+		if (world.isRemote) {
+			return null;
 		}
-		return null;
-	}
-
-	private static void createInstanceForWorld(World world) {
-		if (world != null && !world.isRemote && !StructureManager.instances.containsKey(world)) {
-			StructureManager.instances.put(world, new StructureManager(world));
-		}
-	}
-
-	private static void deleteInstanceForWorld(World world) {
-		if (world != null && !world.isRemote && StructureManager.instances.containsKey(world)) {
-			StructureManager.instances.remove(world);
-		}
+		int dim = world.provider.getDimension();
+		return StructureManager.INSTANCES.get(dim);
 	}
 
 	public boolean addStructure(SeabaseStructure structure) {
@@ -109,14 +105,11 @@ public class StructureManager {
 	}
 
 	public void deleteInvalidModules() {
-		List<SeabaseStructure> list = new LinkedList<>();
-		for (SeabaseStructure structure : this.structures.values()) {
+		for (Iterator<SeabaseStructure> iterator = this.structures.values().iterator(); iterator.hasNext(); ) {
+			SeabaseStructure structure = iterator.next();
 			if (!structure.exists()) {
-				list.add(structure);
+				iterator.remove();
 			}
-		}
-		for (SeabaseStructure structure : list) {
-			structure.delete();
 		}
 	}
 

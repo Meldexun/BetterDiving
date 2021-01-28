@@ -85,7 +85,7 @@ public class SeabaseStructure {
 		if (this.moduleList.isEmpty()) {
 			this.delete();
 		} else if (this.moduleList.size() > 1) {
-			Set<SeabaseModule> modules = this.moduleList.iterator().next().getConnectedModules(new HashSet<SeabaseModule>());
+			Set<SeabaseModule> modules = this.moduleList.iterator().next().getConnectedModules(new HashSet<>());
 
 			if (modules.size() < this.moduleList.size()) {
 				SeabaseStructure structure = new SeabaseStructure(this.world);

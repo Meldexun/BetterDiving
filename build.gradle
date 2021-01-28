@@ -15,7 +15,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
 version = '1.12.2-1.5.8'
-group = 'meldexun.better_diving' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = 'meldexun.better_diving'
 archivesBaseName = 'BetterDiving'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
@@ -23,11 +23,6 @@ sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = co
 minecraft {
     mappings channel: 'stable', version: '39-1.12'
 
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
-    // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-
-    // Default run configurations.
-    // These can be tweaked, removed, or duplicated as needed.
     runs {
         client {
             workingDirectory project.file('run')
@@ -60,11 +55,11 @@ dependencies {
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
 
     if (project.hasProperty('buildjar')) {
-        compile 'curse.maven:ArtemisLib:2741812'
-        compile 'curse.maven:IndustrialCraft:2980904'
-        compile 'curse.maven:MatterOverdrive:2699215'
-        compile 'curse.maven:McLib:3000300'
-        compile 'curse.maven:Metamorph:3000304'
-        compile 'curse.maven:Vampirism:2890062'
+        compile 'curse.maven:ArtemisLib-313590:2741812'
+        compile 'curse.maven:IndustrialCraft-242638:2980904'
+        compile 'curse.maven:MatterOverdrive-308192:2699215'
+        compile 'curse.maven:McLib-304750:3000300'
+        compile 'curse.maven:Metamorph-256932:3000304'
+        compile 'curse.maven:Vampirism-233029:2890062'
     }
 }
