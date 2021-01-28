@@ -26,7 +26,7 @@ public class BetterDiving {
 	public static final SimpleChannel NETWORK = NetworkRegistry.newSimpleChannel(new ResourceLocation(MOD_ID, "main"), () -> NETWORK_VERSION, NETWORK_VERSION::equals, NETWORK_VERSION::equals);
 
 	public BetterDiving() {
-		// ModLoadingContext.get().registerConfig(Type.CLIENT, BetterDivingConfig.CLIENT_SPEC);
+		ModLoadingContext.get().registerConfig(Type.CLIENT, BetterDivingConfig.CLIENT_SPEC);
 		ModLoadingContext.get().registerConfig(Type.SERVER, BetterDivingConfig.SERVER_SPEC);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 	}
