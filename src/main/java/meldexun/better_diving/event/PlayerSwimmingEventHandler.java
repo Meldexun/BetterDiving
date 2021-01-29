@@ -51,6 +51,7 @@ public class PlayerSwimmingEventHandler {
 	private static final ReflectionField<Boolean> FIELD_IS_JUMPING = new ReflectionField<>(LivingEntity.class, "field_70703_bu", "isJumping");
 	private static final ReflectionMethod<Float> METHOD_GET_WATER_SLOW_DOWN = new ReflectionMethod<>(LivingEntity.class, "func_189749_co", "getWaterSlowDown");
 
+	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void onInputUpdateEvent(InputUpdateEvent event) {
 		PlayerEntity player = event.getPlayer();
