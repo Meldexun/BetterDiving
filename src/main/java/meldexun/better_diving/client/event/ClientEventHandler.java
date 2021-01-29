@@ -61,7 +61,7 @@ public class ClientEventHandler {
 		double offset;
 
 		GlStateManager.enableBlend();
-		GlStateManager.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ZERO, GL11.GL_ONE);
+		GlStateManager.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.00390625F);
 
 		textureManager.bindTexture(BACKGROUND);
