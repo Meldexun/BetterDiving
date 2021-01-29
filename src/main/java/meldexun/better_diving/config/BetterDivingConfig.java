@@ -1,9 +1,11 @@
 package meldexun.better_diving.config;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
+
+import com.google.common.collect.Lists;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
@@ -29,7 +31,14 @@ public class BetterDivingConfig {
 		public final ForgeConfigSpec.BooleanValue movementChanges;
 		public final ForgeConfigSpec.BooleanValue oxygenChanges;
 		public final ForgeConfigSpec.ConfigValue<List<? extends String>> oxygenProviderEntities;
+		public final ForgeConfigSpec.ConfigValue<List<? extends String>> divingMaskProviderItems;
 		public final ForgeConfigSpec.ConfigValue<List<? extends String>> oxygenProviderItems;
+		public final ForgeConfigSpec.ConfigValue<List<? extends String>> miningspeedProviderItems;
+		public final ForgeConfigSpec.ConfigValue<List<? extends String>> swimspeedProviderItems;
+
+		public final ArmorValues divingGear;
+		public final ArmorValues improvedDivingGear;
+		public final ArmorValues reinforcedDivingGear;
 
 		public final Movement movement;
 		public final Oxygen oxygen;
@@ -39,8 +48,19 @@ public class BetterDivingConfig {
 			this.breakSpeedChanges = builder.comment("").define("breakSpeedChanges", true);
 			this.movementChanges = builder.comment("").define("movementChanges", true);
 			this.oxygenChanges = builder.comment("").define("oxygenChanges", true);
-			this.oxygenProviderEntities = builder.comment("modid:entity, oxygenCapacity").defineList("oxygenProviderEntities", new ArrayList<>(), o -> true);
-			this.oxygenProviderItems = builder.comment("modid:item, oxygenCapacity, equipmentSlots, maxDivingDepth").defineList("oxygenProviderItems", new ArrayList<>(), o -> true);
+
+			this.oxygenProviderEntities = builder.comment("modid:entity, oxygenCapacity").defineList("oxygenProviderEntities", Lists.newArrayList(), o -> true);
+			this.divingMaskProviderItems = builder.comment("modid:item, maxDivingDepth").defineList("divingMaskProviderItems", Lists.newArrayList("better_diving:diving_mask, 20", "better_diving:rebreather, 50", "better_diving:reinforced_diving_mask, 20"), o -> true);
+			this.oxygenProviderItems = builder.comment("modid:item, mainhand, offhand, feet, legs, chest, head, oxygenCapacity, needsDivingMask").defineList("oxygenProviderItems",
+					Lists.newArrayList("better_diving:standard_o2_tank, false, false, false, false, true, false, 600, true", "better_diving:high_capacity_o2_tank, false, false, false, false, true, false, 1800, true", "better_diving:reinforced_o2_tank, false, false, false, false, true, false, 600, true"), o -> true);
+			this.miningspeedProviderItems = builder.comment("modid:item, mainhand, offhand, feet, legs, chest, head, miningspeedBonus").defineList("miningspeedProviderItems",
+					Lists.newArrayList("better_diving:wetsuit_leggings, false, false, false, true, false, false, 0.15", "better_diving:improved_wetsuit_leggings, false, false, false, true, false, false, 0.3", "better_diving:reinforced_wetsuit_leggings, false, false, false, true, false, false, 0.15"), o -> true);
+			this.swimspeedProviderItems = builder.comment("modid:item, mainhand, offhand, feet, legs, chest, head, swimspeedBonus").defineList("swimspeedProviderItems",
+					Lists.newArrayList("better_diving:fins, false, false, true, false, false, false, 0.1667", "better_diving:ultra_glide_fins, false, false, true, false, false, false, 0.3333", "better_diving:reinforced_fins, false, false, true, false, false, false, 0.1667"), o -> true);
+
+			this.divingGear = new ArmorValues(builder, "divingGear", 60, 10, new Integer[] { 1, 3, 5, 1 }, 0.0D, 0.0D);
+			this.improvedDivingGear = new ArmorValues(builder, "improvedDivingGear", 60, 10, new Integer[] { 1, 3, 5, 1 }, 0.0D, 0.0D);
+			this.reinforcedDivingGear = new ArmorValues(builder, "reinforcedDivingGear", 80, 10, new Integer[] { 2, 5, 7, 2 }, 0.5D, 0.0D);
 
 			this.movement = new Movement(builder);
 			this.oxygen = new Oxygen(builder);
@@ -84,7 +104,7 @@ public class BetterDivingConfig {
 				this.depthStriderAmount = builder.comment("").defineInRange("depthStriderAmount", 0.1D, -1.0D, 1.0D);
 				this.depthStriderOperation = builder.comment("").defineInRange("depthStriderOperation", 1, 0, 2);
 
-				this.divingAmount = builder.comment("").defineInRange("divingAmount", 0.5D, -1.0D, 1.0D);
+				this.divingAmount = builder.comment("").defineInRange("divingAmount", 0.2D, -1.0D, 1.0D);
 				this.divingOperation = builder.comment("").defineInRange("divingOperation", 1, 0, 2);
 
 				this.dolphinsGraceAmount = builder.comment("").defineInRange("dolphinsGraceAmount", 1.0D, -1.0D, 1.0D);
@@ -104,7 +124,7 @@ public class BetterDivingConfig {
 				this.offhandOperation = builder.comment("").defineInRange("offhandOperation", 2, 0, 2);
 
 				this.overwaterModifier = builder.comment("").define("overwaterModifier", true);
-				this.overwaterAmount = builder.comment("").defineInRange("overwaterAmount", 0.25D, -1.0D, 1.0D);
+				this.overwaterAmount = builder.comment("").defineInRange("overwaterAmount", 0.2D, -1.0D, 1.0D);
 				this.overwaterOperation = builder.comment("").defineInRange("overwaterOperation", 1, 0, 2);
 
 				builder.pop();
@@ -125,7 +145,29 @@ public class BetterDivingConfig {
 				this.oxygenCapacity = builder.comment("").defineInRange("oxygenCapacity", 900, 0, 1000000);
 				this.oxygenCapacityRespiration = builder.comment("").defineInRange("oxygenCapacityRespiration", 300, 0, 1000000);
 				this.oxygenEfficiency = builder.comment("").define("oxygenEfficiency", true);
-				this.oxygenEfficiencyRate = builder.comment("").defineInRange("oxygenEfficiencyRate", 32, 0, 1000);
+				this.oxygenEfficiencyRate = builder.comment("").defineInRange("oxygenEfficiencyRate", 32, 1, 1000);
+
+				builder.pop();
+			}
+
+		}
+
+		public static class ArmorValues {
+
+			public final ForgeConfigSpec.IntValue durability;
+			public final ForgeConfigSpec.IntValue enchantability;
+			public final ForgeConfigSpec.ConfigValue<List<? extends Integer>> protection;
+			public final ForgeConfigSpec.DoubleValue toughness;
+			public final ForgeConfigSpec.DoubleValue knockbackResistance;
+
+			public ArmorValues(ForgeConfigSpec.Builder builder, String name, int durability, int enchantability, Integer[] protection, double toughness, double knockbackResistance) {
+				builder.push(name);
+
+				this.durability = builder.comment("").defineInRange("durability", durability, 0, 1000000);
+				this.enchantability = builder.comment("").defineInRange("enchantability", enchantability, 0, 1000);
+				this.protection = builder.comment("").defineList("protection", Arrays.asList(protection), o -> true);
+				this.toughness = builder.comment("").defineInRange("toughness", toughness, 0.0D, 1000.0D);
+				this.knockbackResistance = builder.comment("").defineInRange("knockbackResistance", knockbackResistance, -1.0D, 1.0D);
 
 				builder.pop();
 			}

@@ -12,14 +12,14 @@ public class CapabilityOxygenItem implements ICapabilityOxygenItem {
 
 	private final ItemStack stack;
 	private final int oxygenCapacity;
-	private final Set<EquipmentSlotType> equipmentSlots;
-	private final int maxDivingDepth;
+	private final Set<EquipmentSlotType> slots;
+	private final boolean needsDivingMask;
 
-	public CapabilityOxygenItem(ItemStack stack, int oxygenCapacity, Set<EquipmentSlotType> equipmentSlots, int maxDivingDepth) {
+	public CapabilityOxygenItem(ItemStack stack, int oxygenCapacity, Set<EquipmentSlotType> slots, boolean needsDivingMask) {
 		this.stack = stack;
 		this.oxygenCapacity = oxygenCapacity;
-		this.equipmentSlots = equipmentSlots;
-		this.maxDivingDepth = maxDivingDepth;
+		this.slots = slots;
+		this.needsDivingMask = needsDivingMask;
 	}
 
 	@Override
@@ -59,12 +59,12 @@ public class CapabilityOxygenItem implements ICapabilityOxygenItem {
 
 	@Override
 	public boolean isValidSlot(EquipmentSlotType slot) {
-		return this.equipmentSlots.contains(slot);
+		return this.slots.contains(slot);
 	}
 
 	@Override
-	public int getMaxDivingDepth() {
-		return this.maxDivingDepth;
+	public boolean needsDivingMask() {
+		return this.needsDivingMask;
 	}
 
 }

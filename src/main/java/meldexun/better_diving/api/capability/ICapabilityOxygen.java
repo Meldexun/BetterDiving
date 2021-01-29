@@ -1,5 +1,7 @@
 package meldexun.better_diving.api.capability;
 
+import net.minecraft.entity.player.PlayerEntity;
+
 public interface ICapabilityOxygen {
 
 	/**
@@ -26,5 +28,12 @@ public interface ICapabilityOxygen {
 	 * Returns the amount of oxygen that was extracted.
 	 */
 	int extractOxygen(int amount);
+
+	/**
+	 * Returns if this object can be used by the specified player.
+	 */
+	default boolean canBeUsed(PlayerEntity player) {
+		return true;
+	}
 
 }

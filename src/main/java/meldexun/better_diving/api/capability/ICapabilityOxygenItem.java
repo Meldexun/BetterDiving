@@ -10,9 +10,8 @@ public interface ICapabilityOxygenItem extends ICapabilityOxygen {
 	boolean isValidSlot(EquipmentSlotType slot);
 
 	/**
-	 * Only used when this item is equipped in the head slot!<br>
-	 * Returns the depth in blocks which a player can dive before he receives a penalty on oxygen consumption.
+	 * Returns if a diving mask is needed when using this item.
 	 */
-	int getMaxDivingDepth();
+	boolean needsDivingMask();
 
 }

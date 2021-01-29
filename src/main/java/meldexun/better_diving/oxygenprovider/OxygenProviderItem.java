@@ -1,86 +1,38 @@
 package meldexun.better_diving.oxygenprovider;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.registries.ForgeRegistries;
 
-public class OxygenProviderItem {
+public class OxygenProviderItem extends AbstractDivingGear {
 
-	private final Item item;
-	private final int oxygenCapacity;
-	private final Set<EquipmentSlotType> equipmentSlots;
-	private final int maxDivingDepth;
-	private final boolean isValid;
+	public final int oxygenCapacity;
+	public final boolean needsDivingMask;
 
-	public OxygenProviderItem(Item item, int oxygenCapacity, Set<EquipmentSlotType> equipmentSlots, int maxDivingDepth) {
-		this.item = item;
-		this.oxygenCapacity = Math.max(oxygenCapacity, 0);
-		this.equipmentSlots = new HashSet<>(equipmentSlots);
-		this.maxDivingDepth = Math.max(maxDivingDepth, 0);
-		this.isValid = this.item != null && (this.oxygenCapacity > 0 || this.maxDivingDepth > 0) && !this.equipmentSlots.isEmpty();
+	public OxygenProviderItem(ResourceLocation registryName, Set<EquipmentSlotType> slots, int oxygenCapacity, boolean needsDivingMask) {
+		super(registryName, slots);
+		this.oxygenCapacity = oxygenCapacity;
+		this.needsDivingMask = needsDivingMask;
 	}
 
-	public OxygenProviderItem(String config) {
-		String[] configArray = config.split(",");
-		for (int i = 0; i < configArray.length; i++) {
-			configArray[i] = configArray[i].trim();
-		}
-		String itemConfig = "";
-		int oxygenCapacityConfig = 0;
-		int equipmentSlotsConfig = 0;
-		int maxDivingDepthConfig = 0;
-		boolean flag = true;
+	@Nullable
+	public static OxygenProviderItem parse(String config) {
 		try {
-			itemConfig = configArray[0];
-			oxygenCapacityConfig = Integer.parseInt(configArray[1]);
-			equipmentSlotsConfig = Integer.parseInt(configArray[2]);
-			maxDivingDepthConfig = Integer.parseInt(configArray[3]);
-		} catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
-			flag = false;
-		}
-		if (flag) {
-			this.item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemConfig));
-			this.oxygenCapacity = Math.max(oxygenCapacityConfig, 0);
-			this.equipmentSlots = new HashSet<>();
-			for (EquipmentSlotType slot : EquipmentSlotType.values()) {
-				if (((equipmentSlotsConfig >> slot.ordinal()) & 1) == 1) {
-					this.equipmentSlots.add(slot);
-				}
+			String[] configArray = config.split(",");
+			for (int i = 0; i < configArray.length; i++) {
+				configArray[i] = configArray[i].trim();
 			}
-			this.maxDivingDepth = Math.max(maxDivingDepthConfig, 0);
-			this.isValid = this.item != null && (this.oxygenCapacity > 0 || this.maxDivingDepth > 0) && !this.equipmentSlots.isEmpty();
-		} else {
-			this.item = null;
-			this.oxygenCapacity = 0;
-			this.equipmentSlots = Collections.emptySet();
-			this.maxDivingDepth = 0;
-			this.isValid = false;
+			ResourceLocation registryName = new ResourceLocation(configArray[0]);
+			Set<EquipmentSlotType> slots = parseValidSlots(configArray, 1);
+			int oxygenCapacity = Integer.parseInt(configArray[7]);
+			boolean needsDivingMask = Boolean.parseBoolean(configArray[8]);
+			return new OxygenProviderItem(registryName, slots, oxygenCapacity, needsDivingMask);
+		} catch (Exception e) {
+			return null;
 		}
-	}
-
-	public Item getItem() {
-		return this.item;
-	}
-
-	public int getOxygenCapacity() {
-		return this.oxygenCapacity;
-	}
-
-	public Set<EquipmentSlotType> getEquipmentSlots() {
-		return this.equipmentSlots;
-	}
-
-	public int getMaxDivingDepth() {
-		return this.maxDivingDepth;
-	}
-
-	public boolean isValid() {
-		return this.isValid;
 	}
 
 }

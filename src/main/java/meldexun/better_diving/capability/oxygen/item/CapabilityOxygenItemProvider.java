@@ -1,10 +1,11 @@
 package meldexun.better_diving.capability.oxygen.item;
 
-import java.util.Collections;
+import java.util.EnumSet;
 
 import meldexun.better_diving.BetterDiving;
 import meldexun.better_diving.api.capability.ICapabilityOxygenItem;
 import meldexun.better_diving.capability.BasicCapabilityProvider;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
@@ -24,7 +25,7 @@ public class CapabilityOxygenItemProvider extends BasicCapabilityProvider<ICapab
 	}
 
 	public static void register() {
-		CapabilityManager.INSTANCE.register(ICapabilityOxygenItem.class, new CapabilityOxygenItemStorage(), () -> new CapabilityOxygenItem(ItemStack.EMPTY, 0, Collections.emptySet(), 0));
+		CapabilityManager.INSTANCE.register(ICapabilityOxygenItem.class, new CapabilityOxygenItemStorage(), () -> new CapabilityOxygenItem(ItemStack.EMPTY, 0, EnumSet.noneOf(EquipmentSlotType.class), false));
 	}
 
 }

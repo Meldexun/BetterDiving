@@ -8,6 +8,7 @@ import com.google.common.base.Predicates;
 import meldexun.better_diving.BetterDiving;
 import meldexun.better_diving.config.BetterDivingConfig;
 import meldexun.better_diving.util.BetterDivingHelper;
+import meldexun.better_diving.util.DivingGearHelper;
 import meldexun.better_diving.util.reflection.ReflectionField;
 import meldexun.better_diving.util.reflection.ReflectionMethod;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
@@ -32,6 +33,8 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputUpdateEvent;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -40,6 +43,7 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = BetterDiving.MOD_ID)
 public class PlayerSwimmingEventHandler {
 
+	private static final UUID DIVING_GEAR_MODIFIER = UUID.fromString("3f391130-0c29-4347-8ac9-72085af35236");
 	private static final UUID DEPTH_STRIDER_MODIFIER = UUID.fromString("e8b4c5fd-34e6-4b70-bf3e-70718c7fe670");
 	private static final UUID DIVING_MODIFIER = UUID.fromString("c47024c2-c4b9-4b57-8d31-17e51f317301");
 	private static final UUID DOLPHINS_GRACE_MODIFIER = UUID.fromString("987712a1-5b42-4676-a7f1-be3f8ee42bde");
@@ -150,6 +154,8 @@ public class PlayerSwimmingEventHandler {
 		if (BetterDivingConfig.SERVER_CONFIG.movementChanges.get()) {
 			BetterDivingConfig.ServerConfig.Movement config = BetterDivingConfig.SERVER_CONFIG.movement;
 
+			applyModifier(attribute, DIVING_GEAR_MODIFIER, "Diving Gear Modifier", DivingGearHelper.getSwimspeedBonus(player), 1);
+
 			ItemStack feet = player.getItemStackFromSlot(EquipmentSlotType.FEET);
 			int depthStriderLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.DEPTH_STRIDER, feet);
 			if (depthStriderLevel > 0) {
@@ -205,7 +211,7 @@ public class PlayerSwimmingEventHandler {
 				}
 			}
 		} else {
-			attribute.removeModifier(DEPTH_STRIDER_MODIFIER);
+			attribute.removeModifier(DIVING_GEAR_MODIFIER);
 			attribute.removeModifier(DEPTH_STRIDER_MODIFIER);
 			attribute.removeModifier(DIVING_MODIFIER);
 			attribute.removeModifier(DOLPHINS_GRACE_MODIFIER);

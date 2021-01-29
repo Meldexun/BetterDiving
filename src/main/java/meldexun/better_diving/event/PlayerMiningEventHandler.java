@@ -2,6 +2,7 @@ package meldexun.better_diving.event;
 
 import meldexun.better_diving.BetterDiving;
 import meldexun.better_diving.config.BetterDivingConfig;
+import meldexun.better_diving.util.DivingGearHelper;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
@@ -24,7 +25,7 @@ public class PlayerMiningEventHandler {
 		PlayerEntity player = event.getPlayer();
 
 		if (player.isInWater()) {
-			float multiplier = 1.0F;
+			float multiplier = 1.0F + (float) DivingGearHelper.getMiningspeedBonus(player);
 
 			if (player.areEyesInFluid(FluidTags.WATER)) {
 				ItemStack head = player.getItemStackFromSlot(EquipmentSlotType.HEAD);

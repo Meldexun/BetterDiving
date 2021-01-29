@@ -5,12 +5,10 @@ import meldexun.better_diving.capability.oxygen.entity.CapabilityOxygenProvider;
 import meldexun.better_diving.config.BetterDivingConfig;
 import meldexun.better_diving.network.packet.server.SPacketSyncOxygen;
 import meldexun.better_diving.util.BetterDivingHelper;
-import meldexun.better_diving.util.OxygenItemHelper;
+import meldexun.better_diving.util.DivingGearHelper;
 import meldexun.better_diving.util.OxygenPlayerHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.DamageSource;
@@ -40,10 +38,11 @@ public class PlayerOxygenEventHandler {
 					int oxygenUsage = 1;
 
 					if (BetterDivingConfig.SERVER_CONFIG.oxygen.oxygenEfficiency.get()) {
-						ItemStack head = player.getItemStackFromSlot(EquipmentSlotType.HEAD);
 						int blocksUnderWater = BetterDivingHelper.blocksUnderWater(player);
-						int maxDivingDepth = OxygenItemHelper.getMaxDivingDepth(head);
-						oxygenUsage += (blocksUnderWater - maxDivingDepth) / BetterDivingConfig.SERVER_CONFIG.oxygen.oxygenEfficiencyRate.get();
+						int maxDivingDepth = DivingGearHelper.getMaxDivingDepth(player);
+						if (blocksUnderWater > maxDivingDepth) {
+							oxygenUsage += (blocksUnderWater - maxDivingDepth) / BetterDivingConfig.SERVER_CONFIG.oxygen.oxygenEfficiencyRate.get();
+						}
 					}
 
 					OxygenPlayerHelper.extractOxygenRespectEquipment(player, oxygenUsage);

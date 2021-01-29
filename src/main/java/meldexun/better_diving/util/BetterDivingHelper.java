@@ -16,7 +16,8 @@ import net.minecraftforge.common.MinecraftForge;
 public class BetterDivingHelper {
 
 	public static double getSwimSpeedRespectEquipment(PlayerEntity player) {
-		double swimSpeed = BetterDivingConfig.SERVER_CONFIG.movement.baseSwimSpeed.get() * player.getAttribute(ForgeMod.SWIM_SPEED.get()).getValue();
+		double swimSpeed = BetterDivingConfig.SERVER_CONFIG.movement.baseSwimSpeed.get();
+		swimSpeed *= player.getAttribute(ForgeMod.SWIM_SPEED.get()).getValue();
 
 		PlayerSwimSpeedEvent event = new PlayerSwimSpeedEvent(player, swimSpeed);
 		MinecraftForge.EVENT_BUS.post(event);

@@ -26,7 +26,7 @@ public class OxygenPlayerHelper {
 
 		for (EquipmentSlotType slot : EquipmentSlotType.values()) {
 			ItemStack stack = player.getItemStackFromSlot(slot);
-			oxygenOfPlayer += OxygenItemHelper.getOxygen(stack, slot);
+			oxygenOfPlayer += OxygenItemHelper.getOxygen(stack, player, slot);
 		}
 
 		return oxygenOfPlayer;
@@ -47,7 +47,7 @@ public class OxygenPlayerHelper {
 
 		for (EquipmentSlotType slot : EquipmentSlotType.values()) {
 			ItemStack stack = player.getItemStackFromSlot(slot);
-			oxygenCapacity += OxygenItemHelper.getOxygenCapacity(stack, slot);
+			oxygenCapacity += OxygenItemHelper.getOxygenCapacity(stack, player, slot);
 		}
 
 		return oxygenCapacity;
@@ -72,7 +72,7 @@ public class OxygenPlayerHelper {
 
 		for (EquipmentSlotType slot : EquipmentSlotType.values()) {
 			ItemStack stack = player.getItemStackFromSlot(slot);
-			int j = OxygenItemHelper.receiveOxygen(stack, amount, slot);
+			int j = OxygenItemHelper.receiveOxygen(stack, amount, player, slot);
 			amountReceived += j;
 			amount -= j;
 		}
@@ -105,7 +105,7 @@ public class OxygenPlayerHelper {
 
 		for (EquipmentSlotType slot : EquipmentSlotType.values()) {
 			ItemStack stack = player.getItemStackFromSlot(slot);
-			int j = OxygenItemHelper.extractOxygen(stack, amount, slot);
+			int j = OxygenItemHelper.extractOxygen(stack, amount, player, slot);
 			amountExtracted += j;
 			amount -= j;
 		}

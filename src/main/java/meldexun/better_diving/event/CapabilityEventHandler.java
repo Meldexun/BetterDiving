@@ -7,9 +7,9 @@ import meldexun.better_diving.capability.oxygen.entity.player.CapabilityOxygenPl
 import meldexun.better_diving.capability.oxygen.item.CapabilityOxygenItem;
 import meldexun.better_diving.capability.oxygen.item.CapabilityOxygenItemProvider;
 import meldexun.better_diving.config.BetterDivingConfig;
+import meldexun.better_diving.oxygenprovider.DivingGearManager;
 import meldexun.better_diving.oxygenprovider.OxygenProviderEntity;
 import meldexun.better_diving.oxygenprovider.OxygenProviderItem;
-import meldexun.better_diving.oxygenprovider.OxygenProviderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -26,10 +26,9 @@ public class CapabilityEventHandler {
 		if (entity instanceof PlayerEntity) {
 			event.addCapability(CapabilityOxygenProvider.REGISTRY_NAME, new CapabilityOxygenProvider(() -> new CapabilityOxygenPlayer((PlayerEntity) entity, BetterDivingConfig.SERVER_CONFIG.oxygen.oxygenCapacity.get())));
 		} else {
-			OxygenProviderManager oxygenProviderManager = OxygenProviderManager.getInstance();
-			OxygenProviderEntity oxygenProviderEntity = oxygenProviderManager.getOxygenProviderEntity(entity);
+			OxygenProviderEntity oxygenProviderEntity = DivingGearManager.getOxygenProviderEntity(entity);
 			if (oxygenProviderEntity != null) {
-				event.addCapability(CapabilityOxygenProvider.REGISTRY_NAME, new CapabilityOxygenProvider(() -> new CapabilityOxygen(oxygenProviderEntity.getOxygenCapacity())));
+				event.addCapability(CapabilityOxygenProvider.REGISTRY_NAME, new CapabilityOxygenProvider(() -> new CapabilityOxygen(oxygenProviderEntity.oxygenCapacity)));
 			}
 		}
 	}
@@ -37,10 +36,9 @@ public class CapabilityEventHandler {
 	@SubscribeEvent
 	public static void onAttachCapabilitiesItemStackEvent(AttachCapabilitiesEvent<ItemStack> event) {
 		ItemStack stack = event.getObject();
-		OxygenProviderManager oxygenProviderManager = OxygenProviderManager.getInstance();
-		OxygenProviderItem oxygenProviderItem = oxygenProviderManager.getOxygenProviderItem(stack);
+		OxygenProviderItem oxygenProviderItem = DivingGearManager.getOxygenProviderItem(stack);
 		if (oxygenProviderItem != null) {
-			event.addCapability(CapabilityOxygenItemProvider.REGISTRY_NAME, new CapabilityOxygenItemProvider(() -> new CapabilityOxygenItem(stack, oxygenProviderItem.getOxygenCapacity(), oxygenProviderItem.getEquipmentSlots(), oxygenProviderItem.getMaxDivingDepth())));
+			event.addCapability(CapabilityOxygenItemProvider.REGISTRY_NAME, new CapabilityOxygenItemProvider(() -> new CapabilityOxygenItem(stack, oxygenProviderItem.oxygenCapacity, oxygenProviderItem.slots, oxygenProviderItem.needsDivingMask)));
 		}
 	}
 
