@@ -55,7 +55,7 @@ public class BetterDivingHelper {
 
 	public static Vector3d getMoveVec(double forward, double up, double strafe, double speed, double yaw, double pitch) {
 		double d = forward * forward + up * up + strafe * strafe;
-		if (d >= 1.0E-4D) {
+		if (d >= 1.0E-7D) {
 			if (forward == 0.0D) {
 				pitch = 0.0D;
 			}
@@ -75,7 +75,8 @@ public class BetterDivingHelper {
 			double d2 = Math.sin(Math.toRadians(-yaw - 180.0D));
 			double d3 = -Math.cos(Math.toRadians(-pitch));
 			double d4 = Math.sin(Math.toRadians(-pitch));
-			return new Vector3d(d2 * d3 * speed, d4 * speed, d1 * d3 * speed);
+			double d5 = d < 1.0D ? Math.sqrt(d) : 1.0D;
+			return new Vector3d(d2 * d3 * d5 * speed, d4 * d5 * speed, d1 * d3 * d5 * speed);
 		}
 		return Vector3d.ZERO;
 	}
