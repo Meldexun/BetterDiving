@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import meldexun.better_diving.config.BetterDivingConfig;
 import meldexun.better_diving.init.BetterDivingCapabilities;
+import meldexun.better_diving.init.BetterDivingEntities;
 import meldexun.better_diving.init.BetterDivingItems;
 import meldexun.better_diving.init.BetterDivingPackets;
 import net.minecraft.util.ResourceLocation;
@@ -31,6 +32,7 @@ public class BetterDiving {
 		ModLoadingContext.get().registerConfig(Type.SERVER, BetterDivingConfig.SERVER_SPEC);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 		BetterDivingItems.registerItems();
+		BetterDivingEntities.registerEntities();
 	}
 
 	private void setup(FMLCommonSetupEvent event) {
