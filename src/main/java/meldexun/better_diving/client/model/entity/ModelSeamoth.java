@@ -26,7 +26,7 @@ public class ModelSeamoth extends EntityModel<EntitySeamoth> {
 		textureHeight = 512;
 
 		bone = new ModelRenderer(this);
-		bone.setRotationPoint(0.0F, 24.0F, 0.0F);
+		bone.setRotationPoint(0.0F, 0.0F, 0.0F);
 		bone.setTextureOffset(0, 0).addBox(-12.0F, 12.0F, -12.0F, 24.0F, 1.0F, 24.0F, 0.0F, false);
 		bone.setTextureOffset(0, 25).addBox(12.0F, 2.0F, -13.0F, 1.0F, 10.0F, 26.0F, 0.0F, false);
 		bone.setTextureOffset(0, 61).addBox(-13.0F, 2.0F, -13.0F, 1.0F, 10.0F, 26.0F, 0.0F, false);
@@ -46,7 +46,7 @@ public class ModelSeamoth extends EntityModel<EntitySeamoth> {
 		bone.setTextureOffset(146, 22).addBox(-12.0F, -13.0F, 8.0F, 24.0F, 1.0F, 4.0F, 0.0F, false);
 
 		left_wing = new ModelRenderer(this);
-		left_wing.setRotationPoint(0.0F, 24.0F, 0.0F);
+		left_wing.setRotationPoint(0.0F, 0.0F, 0.0F);
 		left_wing.setTextureOffset(416, 128).addBox(9.0F, 10.0F, -29.0F, 4.0F, 1.0F, 16.0F, 0.0F, false);
 		left_wing.setTextureOffset(352, 152).addBox(9.0F, 2.0F, -30.0F, 4.0F, 8.0F, 1.0F, 0.0F, false);
 		left_wing.setTextureOffset(416, 162).addBox(13.0F, 10.0F, -28.0F, 3.0F, 1.0F, 44.0F, 0.0F, false);
@@ -88,7 +88,7 @@ public class ModelSeamoth extends EntityModel<EntitySeamoth> {
 		left_wing.setTextureOffset(352, 314).addBox(16.0F, 7.0F, 15.0F, 2.0F, 3.0F, 1.0F, 0.0F, false);
 
 		right_wing = new ModelRenderer(this);
-		right_wing.setRotationPoint(0.0F, 24.0F, 0.0F);
+		right_wing.setRotationPoint(0.0F, 0.0F, 0.0F);
 		right_wing.setTextureOffset(96, 291).addBox(-20.0F, 2.0F, 13.0F, 1.0F, 8.0F, 1.0F, 0.0F, false);
 		right_wing.setTextureOffset(160, 128).addBox(-13.0F, 10.0F, -29.0F, 4.0F, 1.0F, 16.0F, 0.0F, false);
 		right_wing.setTextureOffset(96, 152).addBox(-13.0F, 2.0F, -30.0F, 4.0F, 8.0F, 1.0F, 0.0F, false);
@@ -130,24 +130,24 @@ public class ModelSeamoth extends EntityModel<EntitySeamoth> {
 		right_wing.setTextureOffset(96, 175).addBox(-18.0F, 7.0F, -28.0F, 2.0F, 3.0F, 1.0F, 0.0F, false);
 
 		antena = new ModelRenderer(this);
-		antena.setRotationPoint(0.0F, 11.0F, 10.0F);
+		antena.setRotationPoint(0.0F, -13.0F, 10.0F);
 		setRotationAngle(antena, -0.7854F, 0.0F, 0.0F);
 		antena.setTextureOffset(480, 0).addBox(-1.0F, -8.0F, 0.0F, 2.0F, 8.0F, 2.0F, 0.0F, false);
 
 		window = new ModelRenderer(this);
-		window.setRotationPoint(0.0F, 24.0F, 0.0F);
+		window.setRotationPoint(0.0F, 0.0F, 0.0F);
 		window.setTextureOffset(0, 448).addBox(-13.0F, -12.9F, -13.0F, 26.0F, 0.0F, 21.0F, 0.0F, false);
 		window.setTextureOffset(94, 448).addBox(-13.0F, -13.0F, -12.9F, 26.0F, 24.0F, 0.0F, 0.0F, false);
 		window.setTextureOffset(146, 448).addBox(-12.9F, -13.0F, -13.0F, 0.0F, 15.0F, 21.0F, 0.0F, false);
 		window.setTextureOffset(188, 448).addBox(12.9F, -13.0F, -13.0F, 0.0F, 15.0F, 21.0F, 0.0F, false);
 
 		propellar = new ModelRenderer(this);
-		propellar.setRotationPoint(0.0F, 24.0F, 28.5F);
+		propellar.setRotationPoint(0.0F, 0.0F, 28.5F);
 		propellar.setTextureOffset(448, 0).addBox(-0.5F, -3.5F, -0.5F, 1.0F, 7.0F, 1.0F, 0.0F, false);
 		propellar.setTextureOffset(448, 8).addBox(-3.5F, -0.5F, -0.5F, 7.0F, 1.0F, 1.0F, 0.0F, false);
 
 		back = new ModelRenderer(this);
-		back.setRotationPoint(0.0F, 24.0F, 0.0F);
+		back.setRotationPoint(0.0F, 0.0F, 0.0F);
 		back.setTextureOffset(256, 0).addBox(-12.0F, -12.0F, 13.0F, 24.0F, 24.0F, 6.0F, 0.0F, false);
 		back.setTextureOffset(256, 30).addBox(-11.0F, -11.0F, 19.0F, 22.0F, 22.0F, 3.0F, 0.0F, false);
 		back.setTextureOffset(256, 55).addBox(-10.0F, -10.0F, 22.0F, 20.0F, 20.0F, 2.0F, 0.0F, false);
@@ -160,7 +160,7 @@ public class ModelSeamoth extends EntityModel<EntitySeamoth> {
 		back.setTextureOffset(316, 45).addBox(-0.5F, -0.5F, 27.0F, 1.0F, 1.0F, 3.0F, 0.0F, false);
 
 		light = new ModelRenderer(this);
-		light.setRotationPoint(0.0F, 24.0F, 0.0F);
+		light.setRotationPoint(0.0F, 0.0F, 0.0F);
 		light.setTextureOffset(0, 480).addBox(16.0F, 5.0F, -28.0F, 2.0F, 2.0F, 1.0F, 0.0F, false);
 		light.setTextureOffset(0, 480).addBox(21.0F, 5.0F, -24.0F, 1.0F, 2.0F, 2.0F, 0.0F, false);
 		light.setTextureOffset(0, 480).addBox(-18.0F, 5.0F, -28.0F, 2.0F, 2.0F, 1.0F, 0.0F, false);
