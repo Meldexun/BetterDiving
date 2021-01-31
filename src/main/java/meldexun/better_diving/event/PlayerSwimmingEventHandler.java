@@ -73,10 +73,10 @@ public class PlayerSwimmingEventHandler {
 						player.moveVertical -= 1.0F;
 					}
 					player.moveVertical *= 0.98F;
-				}
 
-				if (!player.abilities.isFlying && !isOnGround(player)) {
-					((ClientPlayerEntity) event.getPlayer()).movementInput.sneaking = false;
+					if (!player.abilities.isFlying && !player.isPassenger() && (player.areEyesInFluid(FluidTags.WATER) || !isOnGround(player))) {
+						((ClientPlayerEntity) event.getPlayer()).movementInput.sneaking = false;
+					}
 				}
 			}
 		}
