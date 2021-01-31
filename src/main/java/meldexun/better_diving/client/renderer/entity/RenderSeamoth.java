@@ -1,8 +1,7 @@
 package meldexun.better_diving.client.renderer.entity;
 
-import org.lwjgl.opengl.GL11;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.GlStateManager;
 
 import meldexun.better_diving.BetterDiving;
 import meldexun.better_diving.client.model.entity.ModelSeamoth;
@@ -12,11 +11,14 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.settings.PointOfView;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.util.math.vector.Vector3f;
 
 public class RenderSeamoth extends EntityRenderer<EntitySeamoth> {
 
@@ -33,28 +35,37 @@ public class RenderSeamoth extends EntityRenderer<EntitySeamoth> {
 		Minecraft mc = Minecraft.getInstance();
 		PlayerEntity player = mc.player;
 
-		GL11.glPushMatrix();
+		matrixStackIn.push();
 
-		if (player == entityIn.getControllingPassenger() && mc.gameSettings.getPointOfView() == PointOfView.FIRST_PERSON) {
-			GL11.glTranslated(0.0D, player.getEyeHeight(), 0.0D);
-			this.setupRotation(entityIn, partialTicks);
-			GL11.glTranslated(0.0D, 0.8125D - player.getEyeHeight(), -0.32D);
+		/*
+		if (mc.gameSettings.getPointOfView() == PointOfView.FIRST_PERSON) {
+			matrixStackIn.translate(0.0D, player.getEyeHeight(), 0.0D);
+			this.setupRotation(entityIn, partialTicks, matrixStackIn);
+			matrixStackIn.translate(0.0D, 0.8125D - player.getEyeHeight(), -0.32D);
 		} else {
-			GL11.glTranslated(0.0D, 0.8125D, 0.0D);
-			this.setupRotation(entityIn, partialTicks);
+			matrixStackIn.translate(0.0D, 0.8125D, 0.0D);
+			this.setupRotation(entityIn, partialTicks, matrixStackIn);
 		}
+		*/
 
-		GL11.glScaled(-1.0D, -1.0D, 1.0D);
-		MODEL.render(matrixStackIn, bufferIn.getBuffer(RenderType.getEntityTranslucentCull(TEXTURE)), packedLightIn, 0, 1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glPopMatrix();
+		matrixStackIn.scale(-1.0F, -1.0F, 1.0F);
+		MODEL.render(matrixStackIn, bufferIn.getBuffer(RenderType.getEntityCutoutNoCull(TEXTURE)), packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+		matrixStackIn.pop();
+
+		super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
 	}
 
-	protected void setupRotation(Entity entity, float partialTicks) {
-		double yaw = this.interpolateRotation(entity.prevRotationYaw, entity.rotationYaw, partialTicks);
-		double pitch = this.interpolateRotation(entity.prevRotationPitch, entity.rotationPitch, partialTicks);
-		// interpolated yaw and pitch does NOT work
-		GL11.glRotated(entity.rotationPitch, Math.cos(Math.toRadians(entity.rotationYaw)), 0.0D, Math.sin(Math.toRadians(entity.rotationYaw)));
-		GL11.glRotated(180.0D - entity.rotationYaw, 0.0D, 1.0D, 0.0D);
+	protected void setupRotation(EntitySeamoth entity, float partialTicks, MatrixStack matrixStackIn) {
+		float yaw = this.interpolateRotation(entity.prevRotationYaw, entity.rotationYaw, partialTicks);
+		float pitch = this.interpolateRotation(entity.prevRotationPitch, entity.rotationPitch, partialTicks);
+		yaw = 0;
+		pitch = 0;
+		float f = (float) Math.toRadians(yaw);
+		PlayerEntity player = Minecraft.getInstance().player;
+		matrixStackIn.rotate(Vector3f.YP.rotationDegrees(180.0F - yaw));
+		matrixStackIn.rotate(Vector3f.XP.rotationDegrees(-pitch));
+		//matrixStackIn.rotate(new Quaternion(pitch * MathHelper.cos(f), 0.0F, pitch * MathHelper.sin(f), true));
+		//matrixStackIn.rotate(new Quaternion(0.0F, 180.0F - yaw, 0.0F, true));
 	}
 
 	@Override
@@ -62,7 +73,7 @@ public class RenderSeamoth extends EntityRenderer<EntitySeamoth> {
 		return TEXTURE;
 	}
 
-	protected double interpolateRotation(double prevRotation, double rotation, double partialTicks) {
+	protected float interpolateRotation(float prevRotation, float rotation, float partialTicks) {
 		return prevRotation + MathHelper.wrapDegrees(rotation - prevRotation) * partialTicks;
 	}
 
