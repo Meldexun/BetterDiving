@@ -3,6 +3,7 @@ package meldexun.better_diving;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import meldexun.better_diving.client.renderer.entity.RenderSeamoth;
 import meldexun.better_diving.config.BetterDivingConfig;
 import meldexun.better_diving.init.BetterDivingCapabilities;
 import meldexun.better_diving.init.BetterDivingEntities;
@@ -10,8 +11,10 @@ import meldexun.better_diving.init.BetterDivingItems;
 import meldexun.better_diving.init.BetterDivingPackets;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig.Type;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.NetworkRegistry;
@@ -31,6 +34,7 @@ public class BetterDiving {
 		ModLoadingContext.get().registerConfig(Type.CLIENT, BetterDivingConfig.CLIENT_SPEC);
 		ModLoadingContext.get().registerConfig(Type.SERVER, BetterDivingConfig.SERVER_SPEC);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
 		BetterDivingItems.registerItems();
 		BetterDivingEntities.registerEntities();
 	}
@@ -38,6 +42,10 @@ public class BetterDiving {
 	private void setup(FMLCommonSetupEvent event) {
 		BetterDivingCapabilities.registerCapabilities();
 		BetterDivingPackets.registerPackets();
+	}
+
+	private void clientSetup(FMLClientSetupEvent event) {
+		RenderingRegistry.registerEntityRenderingHandler(BetterDivingEntities.SEAMOTH.get(), RenderSeamoth::new);
 	}
 
 }
