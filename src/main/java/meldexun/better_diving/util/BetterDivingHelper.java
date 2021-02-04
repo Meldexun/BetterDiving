@@ -57,29 +57,33 @@ public class BetterDivingHelper {
 	public static Vector3d getMoveVec(double forward, double up, double strafe, double speed, double yaw, double pitch) {
 		double d = forward * forward + up * up + strafe * strafe;
 		if (d >= 1.0E-7D) {
-			if (forward == 0.0D) {
-				pitch = 0.0D;
-			}
-			if (forward < 0.0D) {
-				yaw += 180.0D;
-				pitch = -pitch;
-			}
-			if (strafe != 0.0D) {
-				double d1 = forward < 0.0D ? 90.0D : -90.0D;
-				yaw += strafe / (Math.abs(forward) + Math.abs(strafe)) * d1;
-			}
-			if (up != 0.0D) {
-				double d1 = (up < 0.0D ? 90.0D : -90.0D) - pitch;
-				pitch += Math.abs(Math.toDegrees(Math.atan2(up, Math.sqrt(forward * forward + strafe * strafe)))) / 90.0D * d1;
-			}
-			double d1 = Math.cos(Math.toRadians(-yaw - 180.0D));
-			double d2 = Math.sin(Math.toRadians(-yaw - 180.0D));
-			double d3 = -Math.cos(Math.toRadians(-pitch));
-			double d4 = Math.sin(Math.toRadians(-pitch));
-			double d5 = d < 1.0D ? Math.sqrt(d) : 1.0D;
-			return new Vector3d(d2 * d3 * d5 * speed, d4 * d5 * speed, d1 * d3 * d5 * speed);
+			Vector3d vecForward = fromPitchYaw(forward < 0.0D ? -pitch : pitch, forward < 0.0D ? yaw + 180.0D : yaw).scale(Math.abs(forward));
+			Vector3d vecUp = fromPitchYaw((up < 0.0D ? 1.0D : -1.0D) * (90.0D + ((pitch + 90.0D) % 180.0D == 0.0D ? -0.0078125D : 0.0D)), yaw).scale(Math.abs(up));
+			Vector3d vecStrafe = fromPitchYaw(0.0D, yaw + (strafe < 0.0D ? 90.0D : -90.0D)).scale(Math.abs(strafe));
+			double d1 = d < 1.0D ? Math.sqrt(d) : 1.0D;
+			return vecForward.add(vecUp).add(vecStrafe).normalize().scale(d1 * speed);
 		}
 		return Vector3d.ZERO;
+	}
+
+	public static Vector3d getSeamothMoveVec(double forward, double up, double strafe, double speed, double yaw, double pitch) {
+		double d = forward * forward + up * up + strafe * strafe;
+		if (d >= 1.0E-7D) {
+			Vector3d vecForward = fromPitchYaw(forward < 0.0D ? -pitch : pitch, forward < 0.0D ? yaw + 180.0D : yaw).scale(Math.abs(forward));
+			Vector3d vecUp = fromPitchYaw(pitch + (up < 0.0D ? 90.0D : -90.0D), yaw).scale(Math.abs(up));
+			Vector3d vecStrafe = fromPitchYaw(0.0D, yaw + (strafe < 0.0D ? 90.0D : -90.0D)).scale(Math.abs(strafe));
+			double d1 = d < 1.0D ? Math.sqrt(d) : 1.0D;
+			return vecForward.add(vecUp).add(vecStrafe).normalize().scale(d1 * speed);
+		}
+		return Vector3d.ZERO;
+	}
+
+	private static Vector3d fromPitchYaw(double pitch, double yaw) {
+		double d1 = Math.cos(Math.toRadians(-yaw - 180.0D));
+		double d2 = Math.sin(Math.toRadians(-yaw - 180.0D));
+		double d3 = -Math.cos(Math.toRadians(-pitch));
+		double d4 = Math.sin(Math.toRadians(-pitch));
+		return new Vector3d(d2 * d3, d4, d1 * d3);
 	}
 
 }
