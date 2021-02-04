@@ -117,7 +117,7 @@ public class PlayerSwimmingEventHandler {
 			double d4 = d3 < -0.2D ? 0.085D : 0.06D;
 			if (d3 <= 0.0D || FIELD_IS_JUMPING.get(player) || !player.world.getBlockState(new BlockPos(player.getPosX(), player.getPosY() + 1.0D - 0.1D, player.getPosZ())).getFluidState().isEmpty()) {
 				Vector3d vector3d1 = player.getMotion();
-				player.setMotion(vector3d1.subtract(0.0D, (d3 - vector3d1.y) * d4, 0.0D));
+				player.setMotion(new Vector3d(vector3d1.x, (vector3d1.y - d4 * d3) / (1 - d4), vector3d1.z));
 			}
 		}
 
