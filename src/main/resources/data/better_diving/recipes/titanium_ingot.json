@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "better_diving:titanium_block"
+    }
+  ],
+  "result": {
+    "item": "better_diving:titanium_ingot",
+    "count": 9
+  }
+}

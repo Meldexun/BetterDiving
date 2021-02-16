@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "better_diving:iron_chunk"
+  },
+  "result": "minecraft:iron_ingot",
+  "experience": 1.0,
+  "cookingtime": 200
+}

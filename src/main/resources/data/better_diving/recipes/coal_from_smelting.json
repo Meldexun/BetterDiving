@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "better_diving:coal_chunk"
+  },
+  "result": "minecraft:coal",
+  "experience": 1.0,
+  "cookingtime": 200
+}

@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "better_diving:redstone_chunk"
+  },
+  "result": "minecraft:redstone",
+  "experience": 1.0,
+  "cookingtime": 200
+}

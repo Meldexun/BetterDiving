@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "better_diving:lead_block"
+    }
+  ],
+  "result": {
+    "item": "better_diving:lead_ingot",
+    "count": 9
+  }
+}

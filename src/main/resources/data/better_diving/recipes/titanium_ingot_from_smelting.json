@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "better_diving:titanium_chunk"
+  },
+  "result": "better_diving:titanium_ingot",
+  "experience": 1.0,
+  "cookingtime": 200
+}
