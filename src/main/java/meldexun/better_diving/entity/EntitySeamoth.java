@@ -7,6 +7,7 @@ import meldexun.better_diving.client.ClientBetterDiving;
 import meldexun.better_diving.client.audio.SeamothEngineLoopSound;
 import meldexun.better_diving.client.audio.SeamothStartSound;
 import meldexun.better_diving.client.util.BetterDivingMouseHelper;
+import meldexun.better_diving.config.BetterDivingConfig;
 import meldexun.better_diving.init.BetterDivingItems;
 import meldexun.better_diving.init.BetterDivingSounds;
 import meldexun.better_diving.item.ItemEnergyStorage;
@@ -366,12 +367,12 @@ public class EntitySeamoth extends Entity {
 
 		if (this.getControllingPassenger() instanceof PlayerEntity && this.isPlayerSteering() && this.hasEnergy()) {
 			if (!this.world.isRemote) {
-				this.extractEnergy(1);
+				this.extractEnergy(BetterDivingConfig.SERVER_CONFIG.seamoth.seamothEnergyUsage.get());
 				this.syncEnergy();
 			}
 
 			if (this.insideWater) {
-				double speed = 0.0275D; // TODO config option
+				double speed = BetterDivingConfig.SERVER_CONFIG.seamoth.seamothSpeed.get();
 
 				double forward = 0.0D;
 				double up = 0.0D;

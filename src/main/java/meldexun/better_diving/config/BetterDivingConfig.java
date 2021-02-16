@@ -42,6 +42,7 @@ public class BetterDivingConfig {
 
 		public final Movement movement;
 		public final Oxygen oxygen;
+		public final Seamoth seamoth;
 
 		public ServerConfig(ForgeConfigSpec.Builder builder) {
 			this.breakSpeedAquaAffinity = builder.comment("").defineInRange("breakSpeedAquaAffinity", 0.25D, 0.0D, 10.0D);
@@ -64,6 +65,7 @@ public class BetterDivingConfig {
 
 			this.movement = new Movement(builder);
 			this.oxygen = new Oxygen(builder);
+			this.seamoth = new Seamoth(builder);
 		}
 
 		public static class Movement {
@@ -144,14 +146,30 @@ public class BetterDivingConfig {
 				builder.push("oxygen");
 
 				this.oxygenBaseDivingDepth = builder.comment("").defineInRange("oxygenBaseDivingDepth", 20, 0, 1024);
-				this.oxygenCapacity = builder.comment("").defineInRange("oxygenCapacity", 900, 0, 1000000);
-				this.oxygenCapacityRespiration = builder.comment("").defineInRange("oxygenCapacityRespiration", 300, 0, 1000000);
+				this.oxygenCapacity = builder.comment("").defineInRange("oxygenCapacity", 900, 0, 1_000_000);
+				this.oxygenCapacityRespiration = builder.comment("").defineInRange("oxygenCapacityRespiration", 300, 0, 1_000_000);
 				this.oxygenEfficiency = builder.comment("").define("oxygenEfficiency", true);
 				this.oxygenEfficiencyRate = builder.comment("").defineInRange("oxygenEfficiencyRate", 4, 1, 1024);
 
 				builder.pop();
 			}
 
+		}
+
+		public static class Seamoth {
+
+			public final ForgeConfigSpec.DoubleValue seamothSpeed;
+			public final ForgeConfigSpec.IntValue seamothEnergyUsage;
+			
+			public Seamoth(ForgeConfigSpec.Builder builder) {
+				builder.push("seamoth");
+
+				this.seamothSpeed = builder.comment("").defineInRange("seamothSpeed", 0.0275D, 0.0D, 1.0D);
+				this.seamothEnergyUsage = builder.comment("").defineInRange("seamothEnergyUsage", 100, 0, 1_000_000);
+				
+				builder.pop();
+			}
+		
 		}
 
 		public static class ArmorValues {
@@ -165,7 +183,7 @@ public class BetterDivingConfig {
 			public ArmorValues(ForgeConfigSpec.Builder builder, String name, int durability, int enchantability, Integer[] protection, double toughness, double knockbackResistance) {
 				builder.push(name);
 
-				this.durability = builder.comment("").defineInRange("durability", durability, 0, 1000000);
+				this.durability = builder.comment("").defineInRange("durability", durability, 0, 1_000_000);
 				this.enchantability = builder.comment("").defineInRange("enchantability", enchantability, 0, 1000);
 				this.protection = builder.comment("").defineList("protection", Arrays.asList(protection), o -> true);
 				this.toughness = builder.comment("").defineInRange("toughness", toughness, 0.0D, 1000.0D);
