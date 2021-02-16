@@ -15,6 +15,7 @@ import meldexun.better_diving.network.packet.client.CPacketSyncSeamothInput;
 import meldexun.better_diving.network.packet.server.SPacketSyncSeamothEnergy;
 import meldexun.better_diving.network.packet.server.SPacketSyncSeamothPowerCell;
 import meldexun.better_diving.util.BetterDivingHelper;
+import meldexun.better_diving.util.reflection.ReflectionMethod;
 import net.minecraft.client.GameSettings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
@@ -47,6 +48,8 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class EntitySeamoth extends Entity {
+
+	private static final ReflectionMethod<?> METHOD_UPDATE_POSE = new ReflectionMethod<>(PlayerEntity.class, "", "updatePose");
 
 	private int damage = 0;
 
@@ -238,6 +241,9 @@ public class EntitySeamoth extends Entity {
 			player.rotationYaw = this.rotationYaw;
 			player.rotationPitch = this.rotationPitch;
 			player.startRiding(this);
+			player.setPose(Pose.STANDING);
+			METHOD_UPDATE_POSE.invoke(player);
+			player.recalculateSize();
 			if (!this.world.isRemote) {
 				this.syncPowerCell();
 			} else {
