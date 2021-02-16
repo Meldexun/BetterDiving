@@ -3,6 +3,7 @@ package meldexun.better_diving.entity;
 import java.util.List;
 
 import meldexun.better_diving.BetterDiving;
+import meldexun.better_diving.client.ClientBetterDiving;
 import meldexun.better_diving.client.audio.SeamothEngineLoopSound;
 import meldexun.better_diving.client.audio.SeamothStartSound;
 import meldexun.better_diving.client.util.BetterDivingMouseHelper;
@@ -145,7 +146,7 @@ public class EntitySeamoth extends Entity {
 			this.inputBack = settings.keyBindBack.isKeyDown();
 			this.inputLeft = settings.keyBindLeft.isKeyDown();
 			this.inputUp = settings.keyBindJump.isKeyDown();
-			this.inputDown = false; // TODO descend key bind
+			this.inputDown = ClientBetterDiving.KEY_BIND_SEAMOTH_DESCEND.isKeyDown();
 
 			BetterDiving.NETWORK.sendToServer(new CPacketSyncSeamothInput(this));
 		} else if (this.prevControlled) {
