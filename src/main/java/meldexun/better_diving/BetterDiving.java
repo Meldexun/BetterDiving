@@ -9,6 +9,7 @@ import meldexun.better_diving.init.BetterDivingCapabilities;
 import meldexun.better_diving.init.BetterDivingEntities;
 import meldexun.better_diving.init.BetterDivingItems;
 import meldexun.better_diving.init.BetterDivingPackets;
+import meldexun.better_diving.init.BetterDivingSounds;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -37,6 +38,7 @@ public class BetterDiving {
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
 		BetterDivingItems.registerItems();
 		BetterDivingEntities.registerEntities();
+		BetterDivingSounds.registerSounds();
 	}
 
 	private void setup(FMLCommonSetupEvent event) {

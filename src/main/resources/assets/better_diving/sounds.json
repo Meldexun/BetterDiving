@@ -1,0 +1,37 @@
+{
+  "seamoth_engine_loop": {
+    "category": "master",
+    "sounds": [
+      {
+        "name": "better_diving:seamoth_engine_loop",
+        "stream": true
+      }
+    ]
+  },
+  "seamoth_enter": {
+    "category": "master",
+    "sounds": [
+      {
+        "name": "better_diving:seamoth_enter",
+        "volume": 0.5
+      }
+    ]
+  },
+  "seamoth_start": {
+    "category": "master",
+    "sounds": [
+      {
+        "name": "better_diving:seamoth_start",
+        "volume": 0.5
+      }
+    ]
+  },
+  "seamoth_impact": {
+    "category": "master",
+    "sounds": [
+      "better_diving:seamoth_impact_1",
+      "better_diving:seamoth_impact_2",
+      "better_diving:seamoth_impact_3"
+    ]
+  }
+}
