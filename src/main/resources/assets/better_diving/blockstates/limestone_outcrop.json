@@ -1,0 +1,31 @@
+{
+  "variants": {
+    "facing=up": {
+      "model": "better_diving:block/limestone_outcrop"
+    },
+    "facing=down": {
+      "model": "better_diving:block/limestone_outcrop",
+      "x": 180
+    },
+    "facing=north": {
+      "model": "better_diving:block/limestone_outcrop",
+      "x": 90,
+      "y": 0
+    },
+    "facing=south": {
+      "model": "better_diving:block/limestone_outcrop",
+      "x": 90,
+      "y": 180
+    },
+    "facing=east": {
+      "model": "better_diving:block/limestone_outcrop",
+      "x": 90,
+      "y": 90
+    },
+    "facing=west": {
+      "model": "better_diving:block/limestone_outcrop",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

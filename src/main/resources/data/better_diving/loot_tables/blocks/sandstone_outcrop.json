@@ -1,0 +1,24 @@
+{
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "better_diving:lead_chunk",
+          "weight": 50
+        },
+        {
+          "type": "minecraft:item",
+          "name": "better_diving:silver_chunk",
+          "weight": 35
+        },
+        {
+          "type": "minecraft:item",
+          "name": "better_diving:gold_chunk",
+          "weight": 15
+        }
+      ]
+    }
+  ]
+}

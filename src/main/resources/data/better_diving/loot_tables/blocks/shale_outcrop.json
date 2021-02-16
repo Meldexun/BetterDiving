@@ -1,0 +1,29 @@
+{
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "better_diving:lapis_chunk",
+          "weight": 35
+        },
+        {
+          "type": "minecraft:item",
+          "name": "better_diving:redstone_chunk",
+          "weight": 35
+        },
+        {
+          "type": "minecraft:item",
+          "name": "better_diving:diamond_chunk",
+          "weight": 25
+        },
+        {
+          "type": "minecraft:item",
+          "name": "better_diving:emerald_chunk",
+          "weight": 5
+        }
+      ]
+    }
+  ]
+}

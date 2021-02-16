@@ -4,9 +4,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import meldexun.better_diving.config.BetterDivingConfig;
+import meldexun.better_diving.event.FeatureEventHandler;
 import meldexun.better_diving.init.BetterDivingBlocks;
 import meldexun.better_diving.init.BetterDivingCapabilities;
 import meldexun.better_diving.init.BetterDivingEntities;
+import meldexun.better_diving.init.BetterDivingFeatures;
 import meldexun.better_diving.init.BetterDivingItems;
 import meldexun.better_diving.init.BetterDivingPackets;
 import meldexun.better_diving.init.BetterDivingSounds;
@@ -37,11 +39,13 @@ public class BetterDiving {
 		BetterDivingItems.registerItems();
 		BetterDivingEntities.registerEntities();
 		BetterDivingSounds.registerSounds();
+		BetterDivingFeatures.registerFeatures();
 	}
 
 	private void setup(FMLCommonSetupEvent event) {
 		BetterDivingCapabilities.registerCapabilities();
 		BetterDivingPackets.registerPackets();
+		FeatureEventHandler.registerConfiguredFeatures();
 	}
 
 }

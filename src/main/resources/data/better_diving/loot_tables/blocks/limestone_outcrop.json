@@ -1,0 +1,24 @@
+{
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "better_diving:titanium_chunk",
+          "weight": 60
+        },
+        {
+          "type": "minecraft:item",
+          "name": "better_diving:iron_chunk",
+          "weight": 30
+        },
+        {
+          "type": "minecraft:item",
+          "name": "better_diving:coal_chunk",
+          "weight": 10
+        }
+      ]
+    }
+  ]
+}
