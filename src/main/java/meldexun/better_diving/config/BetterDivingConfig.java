@@ -50,7 +50,7 @@ public class BetterDivingConfig {
 			this.oxygenChanges = builder.comment("").define("oxygenChanges", true);
 
 			this.oxygenProviderEntities = builder.comment("modid:entity, oxygenCapacity").defineList("oxygenProviderEntities", Lists.newArrayList(), o -> true);
-			this.divingMaskProviderItems = builder.comment("modid:item, maxDivingDepth").defineList("divingMaskProviderItems", Lists.newArrayList("better_diving:diving_mask, 20", "better_diving:rebreather, 50", "better_diving:reinforced_diving_mask, 20"), o -> true);
+			this.divingMaskProviderItems = builder.comment("modid:item, maxDivingDepth").defineList("divingMaskProviderItems", Lists.newArrayList("better_diving:diving_mask, 40", "better_diving:rebreather, 60", "better_diving:reinforced_diving_mask, 40"), o -> true);
 			this.oxygenProviderItems = builder.comment("modid:item, mainhand, offhand, feet, legs, chest, head, oxygenCapacity, needsDivingMask").defineList("oxygenProviderItems",
 					Lists.newArrayList("better_diving:standard_o2_tank, false, false, false, false, true, false, 600, true", "better_diving:high_capacity_o2_tank, false, false, false, false, true, false, 1800, true", "better_diving:reinforced_o2_tank, false, false, false, false, true, false, 600, true"), o -> true);
 			this.miningspeedProviderItems = builder.comment("modid:item, mainhand, offhand, feet, legs, chest, head, miningspeedBonus").defineList("miningspeedProviderItems",
@@ -134,6 +134,7 @@ public class BetterDivingConfig {
 
 		public static class Oxygen {
 
+			public final ForgeConfigSpec.IntValue oxygenBaseDivingDepth;
 			public final ForgeConfigSpec.IntValue oxygenCapacity;
 			public final ForgeConfigSpec.IntValue oxygenCapacityRespiration;
 			public final ForgeConfigSpec.BooleanValue oxygenEfficiency;
@@ -142,10 +143,11 @@ public class BetterDivingConfig {
 			public Oxygen(ForgeConfigSpec.Builder builder) {
 				builder.push("oxygen");
 
+				this.oxygenBaseDivingDepth = builder.comment("").defineInRange("oxygenBaseDivingDepth", 20, 0, 1024);
 				this.oxygenCapacity = builder.comment("").defineInRange("oxygenCapacity", 900, 0, 1000000);
 				this.oxygenCapacityRespiration = builder.comment("").defineInRange("oxygenCapacityRespiration", 300, 0, 1000000);
 				this.oxygenEfficiency = builder.comment("").define("oxygenEfficiency", true);
-				this.oxygenEfficiencyRate = builder.comment("").defineInRange("oxygenEfficiencyRate", 32, 1, 1000);
+				this.oxygenEfficiencyRate = builder.comment("").defineInRange("oxygenEfficiencyRate", 4, 1, 1024);
 
 				builder.pop();
 			}

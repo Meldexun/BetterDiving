@@ -41,7 +41,7 @@ public class PlayerOxygenEventHandler {
 						int blocksUnderWater = BetterDivingHelper.blocksUnderWater(player);
 						int maxDivingDepth = DivingGearHelper.getMaxDivingDepth(player);
 						if (blocksUnderWater > maxDivingDepth) {
-							oxygenUsage += (blocksUnderWater - maxDivingDepth) / BetterDivingConfig.SERVER_CONFIG.oxygen.oxygenEfficiencyRate.get();
+							oxygenUsage += 1 + (blocksUnderWater - maxDivingDepth) / BetterDivingConfig.SERVER_CONFIG.oxygen.oxygenEfficiencyRate.get();
 						}
 					}
 
