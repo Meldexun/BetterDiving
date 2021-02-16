@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import meldexun.better_diving.config.BetterDivingConfig;
+import meldexun.better_diving.init.BetterDivingBlocks;
 import meldexun.better_diving.init.BetterDivingCapabilities;
 import meldexun.better_diving.init.BetterDivingEntities;
 import meldexun.better_diving.init.BetterDivingItems;
@@ -32,6 +33,7 @@ public class BetterDiving {
 		ModLoadingContext.get().registerConfig(Type.CLIENT, BetterDivingConfig.CLIENT_SPEC);
 		ModLoadingContext.get().registerConfig(Type.SERVER, BetterDivingConfig.SERVER_SPEC);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+		BetterDivingBlocks.registerBlocks();
 		BetterDivingItems.registerItems();
 		BetterDivingEntities.registerEntities();
 		BetterDivingSounds.registerSounds();
