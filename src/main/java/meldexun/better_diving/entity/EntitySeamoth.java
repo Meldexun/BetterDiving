@@ -437,6 +437,16 @@ public class EntitySeamoth extends Entity {
 		return true;
 	}
 
+	@Override
+	public void onEnterBubbleColumn(boolean downwards) {
+		// do nothing
+	}
+
+	@Override
+	public void onEnterBubbleColumnWithAirAbove(boolean downwards) {
+		// do nothing
+	}
+
 	public ItemStack toItemStack() {
 		ItemStack stack = new ItemStack(BetterDivingItems.SEAMOTH.get());
 		stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(c -> {
