@@ -8,11 +8,11 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class GuiHelper {
+public class BetterDivingGuiHelper {
 
 	public static final double TWO_PI = 2.0D * Math.PI;
 
-	private GuiHelper() {
+	private BetterDivingGuiHelper() {
 
 	}
 
