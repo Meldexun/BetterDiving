@@ -35,6 +35,8 @@ public class BetterDivingItems {
 	public static final RegistryObject<Item> LEAD_INGOT = ITEMS.register("lead_ingot", () -> new Item(new Item.Properties().group(BetterDivingItemGroups.BETTER_DIVING)));
 	public static final RegistryObject<Item> LITHIUM_INGOT = ITEMS.register("lithium_ingot", () -> new Item(new Item.Properties().group(BetterDivingItemGroups.BETTER_DIVING)));
 
+	public static final RegistryObject<Item> FIBER_MESH = ITEMS.register("fiber_mesh", () -> new Item(new Item.Properties().group(BetterDivingItemGroups.BETTER_DIVING)));
+
 	public static final RegistryObject<AbstractItemDivingGear> DIVING_MASK = ITEMS.register("diving_mask", () -> new AbstractItemDivingGear(BetterDivingMaterials.ArmorMaterials.DIVING_GEAR, EquipmentSlotType.HEAD));
 	public static final RegistryObject<AbstractItemDivingGear> STANDARD_O2_TANK = ITEMS.register("standard_o2_tank", () -> new AbstractItemDivingGear(BetterDivingMaterials.ArmorMaterials.DIVING_GEAR, EquipmentSlotType.CHEST));
 	public static final RegistryObject<AbstractItemDivingGear> WETSUIT_LEGGINGS = ITEMS.register("wetsuit_leggings", () -> new AbstractItemDivingGear(BetterDivingMaterials.ArmorMaterials.DIVING_GEAR, EquipmentSlotType.LEGS));
