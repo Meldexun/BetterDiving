@@ -1,6 +1,7 @@
 package meldexun.better_diving.item;
 
 import meldexun.better_diving.client.ArmorModels;
+import meldexun.better_diving.init.BetterDivingItemGroups;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.entity.LivingEntity;
@@ -13,8 +14,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class AbstractItemDivingGear extends ArmorItem {
 
-	public AbstractItemDivingGear(IArmorMaterial materialIn, EquipmentSlotType slot, Properties builderIn) {
-		super(materialIn, slot, builderIn);
+	public AbstractItemDivingGear(IArmorMaterial materialIn, EquipmentSlotType slot) {
+		super(materialIn, slot, new Properties().group(BetterDivingItemGroups.BETTER_DIVING));
 	}
 
 	@SuppressWarnings("unchecked")
