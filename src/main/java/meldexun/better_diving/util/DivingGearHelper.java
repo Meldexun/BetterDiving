@@ -1,5 +1,6 @@
 package meldexun.better_diving.util;
 
+import meldexun.better_diving.config.BetterDivingConfig;
 import meldexun.better_diving.oxygenprovider.DivingGearManager;
 import meldexun.better_diving.oxygenprovider.DivingMaskProviderItem;
 import meldexun.better_diving.oxygenprovider.MiningspeedProviderItem;
@@ -13,7 +14,8 @@ public class DivingGearHelper {
 	public static int getMaxDivingDepth(PlayerEntity player) {
 		ItemStack stack = player.getItemStackFromSlot(EquipmentSlotType.HEAD);
 		DivingMaskProviderItem divingMaskProviderItem = DivingGearManager.getDivingMaskProviderItem(stack);
-		return divingMaskProviderItem != null ? divingMaskProviderItem.maxDivingDepth : 0;
+		int i = BetterDivingConfig.SERVER_CONFIG.oxygen.oxygenBaseDivingDepth.get();
+		return divingMaskProviderItem != null ? Math.max(i, divingMaskProviderItem.maxDivingDepth) : i;
 	}
 
 	public static boolean isWearingDivingMask(PlayerEntity player) {
