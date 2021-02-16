@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "L L",
+    "DXD"
+  ],
+  "key": {
+    "L": {
+      "tag": "forge:ingots/lead"
+    },
+    "D": {
+      "tag": "forge:gems/diamond"
+    },
+    "X": {
+      "item": "better_diving:fins"
+    }
+  },
+  "result": {
+    "item": "better_diving:reinforced_fins"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "L L",
+    "SXS"
+  ],
+  "key": {
+    "L": {
+      "tag": "forge:ingots/lead"
+    },
+    "S": {
+      "tag": "forge:ingots/silver"
+    },
+    "X": {
+      "item": "better_diving:fins"
+    }
+  },
+  "result": {
+    "item": "better_diving:ultra_glide_fins"
+  }
+}

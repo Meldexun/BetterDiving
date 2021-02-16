@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "LLL",
+    "DXD"
+  ],
+  "key": {
+    "L": {
+      "tag": "forge:ingots/lead"
+    },
+    "D": {
+      "tag": "forge:gems/diamond"
+    },
+    "X": {
+      "item": "better_diving:diving_mask"
+    }
+  },
+  "result": {
+    "item": "better_diving:reinforced_diving_mask"
+  }
+}

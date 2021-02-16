@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "L L",
+    "LXL",
+    "SSS"
+  ],
+  "key": {
+    "L": {
+      "tag": "forge:ingots/lead"
+    },
+    "S": {
+      "tag": "forge:ingots/silver"
+    },
+    "X": {
+      "item": "better_diving:standard_o2_tank"
+    }
+  },
+  "result": {
+    "item": "better_diving:high_capacity_o2_tank"
+  }
+}

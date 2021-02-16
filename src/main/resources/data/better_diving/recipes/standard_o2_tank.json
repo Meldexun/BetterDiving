@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "T T",
+    "FTF",
+    "FFF"
+  ],
+  "key": {
+    "T": {
+      "tag": "forge:ingots/titanium"
+    },
+    "F": {
+      "item": "better_diving:fiber_mesh"
+    }
+  },
+  "result": {
+    "item": "better_diving:standard_o2_tank"
+  }
+}

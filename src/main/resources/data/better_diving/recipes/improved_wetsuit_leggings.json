@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    "LXL",
+    "L L"
+  ],
+  "key": {
+    "L": {
+      "tag": "forge:ingots/lead"
+    },
+    "S": {
+      "tag": "forge:ingots/silver"
+    },
+    "X": {
+      "item": "better_diving:wetsuit_leggings"
+    }
+  },
+  "result": {
+    "item": "better_diving:improved_wetsuit_leggings"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "FFF",
+    "T T"
+  ],
+  "key": {
+    "F": {
+      "item": "better_diving:fiber_mesh"
+    },
+    "T": {
+      "tag": "forge:ingots/titanium"
+    }
+  },
+  "result": {
+    "item": "better_diving:diving_mask"
+  }
+}

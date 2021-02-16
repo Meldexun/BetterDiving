@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "DDD",
+    "LXL",
+    "L L"
+  ],
+  "key": {
+    "L": {
+      "tag": "forge:ingots/lead"
+    },
+    "D": {
+      "tag": "forge:gems/diamond"
+    },
+    "X": {
+      "item": "better_diving:wetsuit_leggings"
+    }
+  },
+  "result": {
+    "item": "better_diving:reinforced_wetsuit_leggings"
+  }
+}
