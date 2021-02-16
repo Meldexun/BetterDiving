@@ -3,6 +3,7 @@ package meldexun.better_diving.init;
 import meldexun.better_diving.BetterDiving;
 import meldexun.better_diving.item.AbstractItemDivingGear;
 import meldexun.better_diving.item.ItemPowerCell;
+import meldexun.better_diving.item.ItemSeamoth;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.BlockItem;
@@ -39,6 +40,8 @@ public class BetterDivingItems {
 	public static final RegistryObject<Item> FIBER_MESH = ITEMS.register("fiber_mesh", () -> new Item(new Item.Properties().group(BetterDivingItemGroups.BETTER_DIVING)));
 
 	public static final RegistryObject<ItemPowerCell> POWER_CELL = ITEMS.register("power_cell", () -> new ItemPowerCell(200_000, 20_000, 20_000));
+
+	public static final RegistryObject<ItemSeamoth> SEAMOTH = ITEMS.register("seamoth", ItemSeamoth::new);
 
 	public static final RegistryObject<AbstractItemDivingGear> DIVING_MASK = ITEMS.register("diving_mask", () -> new AbstractItemDivingGear(BetterDivingMaterials.ArmorMaterials.DIVING_GEAR, EquipmentSlotType.HEAD));
 	public static final RegistryObject<AbstractItemDivingGear> STANDARD_O2_TANK = ITEMS.register("standard_o2_tank", () -> new AbstractItemDivingGear(BetterDivingMaterials.ArmorMaterials.DIVING_GEAR, EquipmentSlotType.CHEST));

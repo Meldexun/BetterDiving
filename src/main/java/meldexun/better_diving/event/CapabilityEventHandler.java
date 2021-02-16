@@ -1,12 +1,14 @@
 package meldexun.better_diving.event;
 
 import meldexun.better_diving.BetterDiving;
+import meldexun.better_diving.capability.inventory.CapabilityItemHandlerProvider;
 import meldexun.better_diving.capability.oxygen.entity.CapabilityOxygen;
 import meldexun.better_diving.capability.oxygen.entity.CapabilityOxygenProvider;
 import meldexun.better_diving.capability.oxygen.entity.player.CapabilityOxygenPlayer;
 import meldexun.better_diving.capability.oxygen.item.CapabilityOxygenItem;
 import meldexun.better_diving.capability.oxygen.item.CapabilityOxygenItemProvider;
 import meldexun.better_diving.config.BetterDivingConfig;
+import meldexun.better_diving.entity.EntitySeamoth;
 import meldexun.better_diving.oxygenprovider.DivingGearManager;
 import meldexun.better_diving.oxygenprovider.OxygenProviderEntity;
 import meldexun.better_diving.oxygenprovider.OxygenProviderItem;
@@ -16,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.items.ItemStackHandler;
 
 @Mod.EventBusSubscriber(modid = BetterDiving.MOD_ID)
 public class CapabilityEventHandler {
@@ -30,6 +33,9 @@ public class CapabilityEventHandler {
 			if (oxygenProviderEntity != null) {
 				event.addCapability(CapabilityOxygenProvider.REGISTRY_NAME, new CapabilityOxygenProvider(() -> new CapabilityOxygen(oxygenProviderEntity.oxygenCapacity)));
 			}
+		}
+		if (entity instanceof EntitySeamoth) {
+			event.addCapability(CapabilityItemHandlerProvider.LOCATION_ITEM_STACK_HANDLER, new CapabilityItemHandlerProvider(() -> new ItemStackHandler(1)));
 		}
 	}
 

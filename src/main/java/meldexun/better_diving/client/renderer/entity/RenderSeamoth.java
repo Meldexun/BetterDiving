@@ -1,11 +1,11 @@
 package meldexun.better_diving.client.renderer.entity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
 
 import meldexun.better_diving.BetterDiving;
 import meldexun.better_diving.client.model.entity.ModelSeamoth;
 import meldexun.better_diving.entity.EntitySeamoth;
+import meldexun.better_diving.util.reflection.ReflectionField;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
@@ -17,9 +17,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class RenderSeamoth extends EntityRenderer<EntitySeamoth> {
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation(BetterDiving.MOD_ID, "textures/entity/seamoth.png");
@@ -27,7 +29,7 @@ public class RenderSeamoth extends EntityRenderer<EntitySeamoth> {
 
 	public RenderSeamoth(EntityRendererManager renderManager) {
 		super(renderManager);
-		this.shadowSize = 0.0F;
+		this.shadowSize = 0.5F;
 	}
 
 	@Override
@@ -35,37 +37,33 @@ public class RenderSeamoth extends EntityRenderer<EntitySeamoth> {
 		Minecraft mc = Minecraft.getInstance();
 		PlayerEntity player = mc.player;
 
+		// TODO fix eye height
+		new ReflectionField<>(Entity.class, "eyeHeight", "eyeHeight").set(mc.player, 1.164375F);
+
 		matrixStackIn.push();
 
-		/*
 		if (mc.gameSettings.getPointOfView() == PointOfView.FIRST_PERSON) {
 			matrixStackIn.translate(0.0D, player.getEyeHeight(), 0.0D);
-			this.setupRotation(entityIn, partialTicks, matrixStackIn);
-			matrixStackIn.translate(0.0D, 0.8125D - player.getEyeHeight(), -0.32D);
+			this.setupRotation(entityIn, matrixStackIn);
+			matrixStackIn.translate(0.0D, 0.8125D - player.getEyeHeight(), -0.16D);
 		} else {
 			matrixStackIn.translate(0.0D, 0.8125D, 0.0D);
-			this.setupRotation(entityIn, partialTicks, matrixStackIn);
+			this.setupRotation(entityIn, matrixStackIn);
 		}
-		*/
 
 		matrixStackIn.scale(-1.0F, -1.0F, 1.0F);
-		MODEL.render(matrixStackIn, bufferIn.getBuffer(RenderType.getEntityCutoutNoCull(TEXTURE)), packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+		MODEL.render(matrixStackIn, bufferIn.getBuffer(RenderType.getEntityTranslucentCull(TEXTURE)), packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
 		matrixStackIn.pop();
 
 		super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+
+		// otherwise entity will be invisible when player is outside of the water and entity is underwater
+		((IRenderTypeBuffer.Impl) bufferIn).finish(RenderType.getEntityTranslucentCull(TEXTURE));
 	}
 
-	protected void setupRotation(EntitySeamoth entity, float partialTicks, MatrixStack matrixStackIn) {
-		float yaw = this.interpolateRotation(entity.prevRotationYaw, entity.rotationYaw, partialTicks);
-		float pitch = this.interpolateRotation(entity.prevRotationPitch, entity.rotationPitch, partialTicks);
-		yaw = 0;
-		pitch = 0;
-		float f = (float) Math.toRadians(yaw);
-		PlayerEntity player = Minecraft.getInstance().player;
-		matrixStackIn.rotate(Vector3f.YP.rotationDegrees(180.0F - yaw));
-		matrixStackIn.rotate(Vector3f.XP.rotationDegrees(-pitch));
-		//matrixStackIn.rotate(new Quaternion(pitch * MathHelper.cos(f), 0.0F, pitch * MathHelper.sin(f), true));
-		//matrixStackIn.rotate(new Quaternion(0.0F, 180.0F - yaw, 0.0F, true));
+	protected void setupRotation(EntitySeamoth entity, MatrixStack matrixStackIn) {
+		matrixStackIn.rotate(Vector3f.YP.rotationDegrees(180.0F - entity.rotationYaw));
+		matrixStackIn.rotate(Vector3f.XP.rotationDegrees(-entity.rotationPitch));
 	}
 
 	@Override
