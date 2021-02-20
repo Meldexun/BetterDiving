@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SPS",
+    "GGG",
+    "TLT"
+  ],
+  "key": {
+    "S": {
+      "tag": "forge:ingots/silver"
+    },
+    "P": {
+      "item": "better_diving:power_cell"
+    },
+    "G": {
+      "tag": "forge:glass/colorless"
+    },
+    "T": {
+      "tag": "forge:storage_blocks/titanium"
+    },
+    "L": {
+      "tag": "forge:storage_blocks/lead"
+    }
+  },
+  "result": {
+    "item": "better_diving:seamoth"
+  }
+}
