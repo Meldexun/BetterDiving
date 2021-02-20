@@ -31,6 +31,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
@@ -42,13 +43,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class EntitySeamoth extends Entity {
+public class EntitySeamoth extends Entity implements IEntityAdditionalSpawnData {
 
 	private static final ReflectionMethod<?> METHOD_UPDATE_POSE = new ReflectionMethod<>(PlayerEntity.class, "", "updatePose");
 
@@ -71,6 +73,8 @@ public class EntitySeamoth extends Entity {
 
 	public boolean insideWater = false;
 
+	private int prevEnergy;
+
 	@OnlyIn(Dist.CLIENT)
 	public SeamothStartSound startSound;
 	@OnlyIn(Dist.CLIENT)
@@ -87,12 +91,22 @@ public class EntitySeamoth extends Entity {
 
 	@Override
 	protected void readAdditional(CompoundNBT compound) {
-		this.setPowerCell(ItemStack.read(compound.getCompound("power_cell")));
+
 	}
 
 	@Override
 	protected void writeAdditional(CompoundNBT compound) {
-		compound.put("power_cell", this.getPowerCell().write(new CompoundNBT()));
+
+	}
+
+	@Override
+	public void writeSpawnData(PacketBuffer buffer) {
+		buffer.writeItemStack(this.getPowerCell(), false);
+	}
+
+	@Override
+	public void readSpawnData(PacketBuffer additionalData) {
+		this.setPowerCell(additionalData.readItemStack());
 	}
 
 	@Override
@@ -188,6 +202,13 @@ public class EntitySeamoth extends Entity {
 		this.updateMotion();
 
 		this.move(MoverType.SELF, this.getMotion());
+
+		if (!this.world.isRemote) {
+			if (this.getEnergy() != this.prevEnergy) {
+				this.syncEnergy();
+			}
+			this.prevEnergy = this.getEnergy();
+		}
 	}
 
 	@Override
@@ -368,7 +389,6 @@ public class EntitySeamoth extends Entity {
 		if (this.getControllingPassenger() instanceof PlayerEntity && this.isPlayerSteering() && this.hasEnergy()) {
 			if (!this.world.isRemote) {
 				this.extractEnergy(BetterDivingConfig.SERVER_CONFIG.seamoth.seamothEnergyUsage.get());
-				this.syncEnergy();
 			}
 
 			if (this.insideWater) {
