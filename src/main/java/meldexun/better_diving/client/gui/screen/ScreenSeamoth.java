@@ -26,13 +26,13 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 
-public class ScreenSeamoth<C extends ContainerSeamoth> extends ContainerScreen<C> {
+public class ScreenSeamoth extends ContainerScreen<ContainerSeamoth> {
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation(BetterDiving.MOD_ID, "textures/gui/seamoth_container.png");
 
 	private final EntitySeamoth seamoth = new EntitySeamoth(BetterDivingEntities.SEAMOTH.get(), Minecraft.getInstance().world);
 
-	public ScreenSeamoth(C screenContainer, PlayerInventory inv, ITextComponent titleIn) {
+	public ScreenSeamoth(ContainerSeamoth screenContainer, PlayerInventory inv, ITextComponent titleIn) {
 		super(screenContainer, inv, titleIn);
 	}
 
