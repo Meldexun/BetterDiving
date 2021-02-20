@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " CT",
+    "CSC",
+    "TC "
+  ],
+  "key": {
+    "C": {
+      "tag": "forge:ingots/copper"
+    },
+    "T": {
+      "tag": "forge:ingots/titanium"
+    },
+    "S": {
+      "tag": "forge:ingots/silver"
+    }
+  },
+  "result": {
+    "item": "better_diving:power_cell"
+  }
+}
