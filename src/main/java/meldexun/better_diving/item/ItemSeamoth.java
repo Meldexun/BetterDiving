@@ -99,7 +99,12 @@ public class ItemSeamoth extends Item {
 			powerCell = cap.orElseThrow(NullPointerException::new).getStackInSlot(0);
 		}
 		if (!powerCell.isEmpty() && powerCell.getItem() instanceof ItemPowerCell) {
-			tooltip.add(new StringTextComponent(TextFormatting.GRAY + String.format("Energy %d%%", ItemEnergyStorage.getEnergyPercent(powerCell))));
+			int energy = MathHelper.ceil(ItemEnergyStorage.getEnergyPercent(powerCell) * 100.0D);
+			if (flagIn.isAdvanced()) {
+				tooltip.add(new StringTextComponent(TextFormatting.GRAY + String.format("Energy %d%% (%d/%d)", energy, ItemEnergyStorage.getEnergy(powerCell), ItemEnergyStorage.getEnergyCapacity(powerCell))));
+			} else {
+				tooltip.add(new StringTextComponent(TextFormatting.GRAY + String.format("Energy %d%%", energy)));
+			}
 		} else {
 			tooltip.add(new StringTextComponent(TextFormatting.GRAY + "No power cell"));
 		}

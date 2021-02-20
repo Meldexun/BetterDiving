@@ -2,9 +2,10 @@ package meldexun.better_diving.item;
 
 import java.util.List;
 
-import meldexun.better_diving.capability.energy.CapabilityEnergyStorage;
-import meldexun.better_diving.capability.energy.CapabilityEnergyStorageProvider;
-import meldexun.better_diving.capability.energy.IEnergyStorageExtended;
+import meldexun.better_diving.api.capability.IEnergyStorageExtended;
+import meldexun.better_diving.capability.energy.item.CapabilityEnergyStorageItem;
+import meldexun.better_diving.capability.energy.item.CapabilityEnergyStorageItemProvider;
+import meldexun.better_diving.config.BetterDivingConfig;
 import meldexun.better_diving.init.BetterDivingItemGroups;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
@@ -12,6 +13,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -23,20 +25,16 @@ import net.minecraftforge.energy.IEnergyStorage;
 
 public class ItemEnergyStorage extends Item {
 
-	protected int capacity;
-	protected int maxReceive;
-	protected int maxExtract;
+	protected final BetterDivingConfig.ServerConfig.EnergyStorageItem config;
 
-	public ItemEnergyStorage(int capacity, int maxReceive, int maxExtract) {
+	public ItemEnergyStorage(BetterDivingConfig.ServerConfig.EnergyStorageItem config) {
 		super(new Item.Properties().maxStackSize(1).group(BetterDivingItemGroups.BETTER_DIVING));
-		this.capacity = capacity;
-		this.maxReceive = maxReceive;
-		this.maxExtract = maxExtract;
+		this.config = config;
 	}
 
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, CompoundNBT nbt) {
-		return new CapabilityEnergyStorageProvider(() -> new CapabilityEnergyStorage(this.capacity, this.maxReceive, this.maxExtract, this.capacity));
+		return new CapabilityEnergyStorageItemProvider(() -> new CapabilityEnergyStorageItem(stack, this.getCapacity(), this.getMaxReceive(), this.getMaxExtract(), this.getEnergy()));
 	}
 
 	@Override
@@ -68,7 +66,12 @@ public class ItemEnergyStorage extends Item {
 
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(new StringTextComponent(TextFormatting.GRAY + String.format("Energy %d%%", ItemEnergyStorage.getEnergyPercent(stack))));
+		int energy = MathHelper.ceil(getEnergyPercent(stack) * 100.0D);
+		if (flagIn.isAdvanced()) {
+			tooltip.add(new StringTextComponent(TextFormatting.GRAY + String.format("Energy %d%% (%d/%d)", energy, getEnergy(stack), getEnergyCapacity(stack))));
+		} else {
+			tooltip.add(new StringTextComponent(TextFormatting.GRAY + String.format("Energy %d%%", energy)));
+		}
 		super.addInformation(stack, worldIn, tooltip, flagIn);
 	}
 
@@ -101,16 +104,16 @@ public class ItemEnergyStorage extends Item {
 		return false;
 	}
 
-	public static int getEnergyPercent(ItemStack stack) {
+	public static double getEnergyPercent(ItemStack stack) {
 		if (stack.getItem() instanceof ItemEnergyStorage) {
 			LazyOptional<IEnergyStorage> optionalOxygenCap = stack.getCapability(CapabilityEnergy.ENERGY);
 			if (!optionalOxygenCap.isPresent()) {
-				return 0;
+				return 0.0D;
 			}
 			IEnergyStorage energyCap = optionalOxygenCap.orElseThrow(NullPointerException::new);
 			return ((IEnergyStorageExtended) energyCap).getEnergyPercent();
 		}
-		return 0;
+		return 0.0D;
 	}
 
 	public static int getEnergyCapacity(ItemStack stack) {
@@ -150,15 +153,19 @@ public class ItemEnergyStorage extends Item {
 	}
 
 	public int getCapacity() {
-		return this.capacity;
+		return this.config.capacity.get();
 	}
 
 	public int getMaxReceive() {
-		return this.maxReceive;
+		return this.config.maxReceive.get();
 	}
 
 	public int getMaxExtract() {
-		return this.maxExtract;
+		return this.config.maxExtract.get();
+	}
+
+	public int getEnergy() {
+		return this.config.energy.get();
 	}
 
 }

@@ -1,6 +1,7 @@
 package meldexun.better_diving.init;
 
 import meldexun.better_diving.BetterDiving;
+import meldexun.better_diving.config.BetterDivingConfig;
 import meldexun.better_diving.item.AbstractItemDivingGear;
 import meldexun.better_diving.item.ItemPowerCell;
 import meldexun.better_diving.item.ItemSeamoth;
@@ -39,7 +40,7 @@ public class BetterDivingItems {
 
 	public static final RegistryObject<Item> FIBER_MESH = ITEMS.register("fiber_mesh", () -> new Item(new Item.Properties().group(BetterDivingItemGroups.BETTER_DIVING)));
 
-	public static final RegistryObject<ItemPowerCell> POWER_CELL = ITEMS.register("power_cell", () -> new ItemPowerCell(200_000, 20_000, 20_000));
+	public static final RegistryObject<ItemPowerCell> POWER_CELL = ITEMS.register("power_cell", () -> new ItemPowerCell(BetterDivingConfig.SERVER_CONFIG.powerCell));
 
 	public static final RegistryObject<ItemSeamoth> SEAMOTH = ITEMS.register("seamoth", ItemSeamoth::new);
 

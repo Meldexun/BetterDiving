@@ -36,6 +36,8 @@ public class BetterDivingConfig {
 		public final ForgeConfigSpec.ConfigValue<List<? extends String>> miningspeedProviderItems;
 		public final ForgeConfigSpec.ConfigValue<List<? extends String>> swimspeedProviderItems;
 
+		public final EnergyStorageItem powerCell;
+
 		public final ArmorValues divingGear;
 		public final ArmorValues improvedDivingGear;
 		public final ArmorValues reinforcedDivingGear;
@@ -58,6 +60,8 @@ public class BetterDivingConfig {
 					Lists.newArrayList("better_diving:wetsuit_leggings, false, false, false, true, false, false, 0.15", "better_diving:improved_wetsuit_leggings, false, false, false, true, false, false, 0.3", "better_diving:reinforced_wetsuit_leggings, false, false, false, true, false, false, 0.15"), o -> true);
 			this.swimspeedProviderItems = builder.comment("modid:item, mainhand, offhand, feet, legs, chest, head, swimspeedBonus").defineList("swimspeedProviderItems",
 					Lists.newArrayList("better_diving:fins, false, false, true, false, false, false, 0.1667", "better_diving:ultra_glide_fins, false, false, true, false, false, false, 0.3333", "better_diving:reinforced_fins, false, false, true, false, false, false, 0.1667"), o -> true);
+
+			this.powerCell = new EnergyStorageItem(builder, "powerCell", 2_000_000, 5000, 500, 2_000_000);
 
 			this.divingGear = new ArmorValues(builder, "divingGear", 60, 10, new Integer[] { 1, 3, 5, 1 }, 0.0D, 0.0D);
 			this.improvedDivingGear = new ArmorValues(builder, "improvedDivingGear", 60, 10, new Integer[] { 1, 3, 5, 1 }, 0.0D, 0.0D);
@@ -170,6 +174,26 @@ public class BetterDivingConfig {
 				builder.pop();
 			}
 		
+		}
+
+		public static class EnergyStorageItem {
+
+			public final ForgeConfigSpec.IntValue capacity;
+			public final ForgeConfigSpec.IntValue maxReceive;
+			public final ForgeConfigSpec.IntValue maxExtract;
+			public final ForgeConfigSpec.IntValue energy;
+
+			public EnergyStorageItem(ForgeConfigSpec.Builder builder, String name, int capacity, int maxReceive, int maxExtract, int energy) {
+				builder.push(name);
+
+				this.capacity = builder.comment("").defineInRange("capacity", capacity, 0, Integer.MAX_VALUE);
+				this.maxReceive = builder.comment("").defineInRange("maxReceive", maxReceive, 0, Integer.MAX_VALUE);
+				this.maxExtract = builder.comment("").defineInRange("maxExtract", maxExtract, 0, Integer.MAX_VALUE);
+				this.energy = builder.comment("").defineInRange("energy", energy, 0, Integer.MAX_VALUE);
+
+				builder.pop();
+			}
+
 		}
 
 		public static class ArmorValues {

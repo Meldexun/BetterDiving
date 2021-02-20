@@ -1,5 +1,6 @@
 package meldexun.better_diving.capability.energy;
 
+import meldexun.better_diving.api.capability.IEnergyStorageExtended;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.energy.EnergyStorage;
 
@@ -11,12 +12,12 @@ public class CapabilityEnergyStorage extends EnergyStorage implements IEnergySto
 
 	@Override
 	public void setEnergy(int energy) {
-		this.energy = MathHelper.clamp(energy, 0, this.capacity);
+		this.energy = MathHelper.clamp(energy, 0, this.getMaxEnergyStored());
 	}
 
 	@Override
-	public int getEnergyPercent() {
-		return (int) (100.0D * this.energy / this.capacity);
+	public double getEnergyPercent() {
+		return (double) this.getEnergyStored() / (double) this.getMaxEnergyStored();
 	}
 
 }
