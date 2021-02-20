@@ -86,7 +86,7 @@ public class ClientEventHandler {
 	@SubscribeEvent
 	public static void onKeyInputEvent(KeyInputEvent event) {
 		Minecraft mc = Minecraft.getInstance();
-		if (mc.player.getRidingEntity() instanceof EntitySeamoth && event.getKey() == mc.gameSettings.keyBindInventory.getKey().getKeyCode() && event.getAction() == 1 && mc.currentScreen == null) {
+		if (mc.player != null && mc.player.getRidingEntity() instanceof EntitySeamoth && event.getKey() == mc.gameSettings.keyBindInventory.getKey().getKeyCode() && event.getAction() == 1 && mc.currentScreen == null) {
 			BetterDiving.NETWORK.sendToServer(new CPacketOpenSeamothInventory());
 		}
 	}
