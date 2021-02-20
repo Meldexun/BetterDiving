@@ -35,7 +35,7 @@ public class SPacketSyncSeamothPowerCell implements IPacket {
 	@Override
 	public void encode(PacketBuffer buffer) {
 		buffer.writeInt(this.entityId);
-		buffer.writeItemStack(this.powerCell);
+		buffer.writeItemStack(this.powerCell, false);
 	}
 
 	@Override

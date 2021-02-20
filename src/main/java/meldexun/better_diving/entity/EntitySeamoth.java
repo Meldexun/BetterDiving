@@ -254,26 +254,30 @@ public class EntitySeamoth extends Entity implements IEntityAdditionalSpawnData 
 
 	@Override
 	public ActionResultType processInitialInteract(PlayerEntity player, Hand hand) {
-		if (player.isSneaking()) {
-			if (!this.world.isRemote) {
-				// TODO open gui
-			}
-			return ActionResultType.SUCCESS;
-		} else if (!this.isBeingRidden()) {
-			player.rotationYaw = this.rotationYaw;
-			player.rotationPitch = this.rotationPitch;
-			player.startRiding(this);
-			player.setPose(Pose.STANDING);
-			METHOD_UPDATE_POSE.invoke(player);
-			player.recalculateSize();
-			if (!this.world.isRemote) {
-				this.syncPowerCell();
-			} else {
-				this.world.playSound(player, this.getPosition(), BetterDivingSounds.SEAMOTH_ENTER.get(), this.getSoundCategory(), 1.0F, 1.0F);
-			}
-			return ActionResultType.SUCCESS;
+		if (this.isBeingRidden()) {
+			return ActionResultType.FAIL;
 		}
-		return ActionResultType.PASS;
+		if (!this.world.isRemote) {
+			player.startRiding(this);
+		}
+		return ActionResultType.SUCCESS;
+	}
+
+	@Override
+	protected void addPassenger(Entity passenger) {
+		super.addPassenger(passenger);
+		passenger.rotationYaw = this.rotationYaw;
+		passenger.rotationPitch = this.rotationPitch;
+		passenger.setPose(Pose.STANDING);
+		if (passenger instanceof PlayerEntity) {
+			METHOD_UPDATE_POSE.invoke(passenger);
+		}
+		passenger.recalculateSize();
+		if (!this.world.isRemote) {
+			this.syncPowerCell();
+		} else if (passenger instanceof PlayerEntity) {
+			this.world.playSound((PlayerEntity) passenger, this.getPosition(), BetterDivingSounds.SEAMOTH_ENTER.get(), this.getSoundCategory(), 1.0F, 1.0F);
+		}
 	}
 
 	@Override

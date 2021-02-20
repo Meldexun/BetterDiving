@@ -2,14 +2,17 @@ package meldexun.better_diving.item;
 
 import java.util.List;
 
-import meldexun.better_diving.capability.inventory.CapabilityItemHandlerProvider;
+import meldexun.better_diving.capability.inventory.item.CapabilityItemHandlerItem;
+import meldexun.better_diving.capability.inventory.item.CapabilityItemHandlerItemProvider;
 import meldexun.better_diving.entity.EntitySeamoth;
 import meldexun.better_diving.init.BetterDivingEntities;
 import meldexun.better_diving.init.BetterDivingItemGroups;
 import meldexun.better_diving.init.BetterDivingItems;
+import meldexun.better_diving.inventory.container.ContainerSeamothItem;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.container.SimpleNamedContainerProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -18,6 +21,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceContext.BlockMode;
 import net.minecraft.util.math.RayTraceContext.FluidMode;
@@ -26,6 +30,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
@@ -41,7 +46,7 @@ public class ItemSeamoth extends Item {
 
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, CompoundNBT nbt) {
-		return new CapabilityItemHandlerProvider(() -> new ItemStackHandler(1));
+		return new CapabilityItemHandlerItemProvider(() -> new CapabilityItemHandlerItem(stack, 1));
 	}
 
 	@Override
@@ -60,7 +65,9 @@ public class ItemSeamoth extends Item {
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		if (!worldIn.isRemote) {
 			if (playerIn.isSneaking()) {
-				// TODO open gui
+				playerIn.openContainer(new SimpleNamedContainerProvider((id, playerInv, player) -> {
+					return new ContainerSeamothItem(id, playerInv, playerIn.getHeldItem(handIn), handIn);
+				}, new TranslationTextComponent("Seamoth")));
 			} else {
 				EntitySeamoth seamoth = new EntitySeamoth(BetterDivingEntities.SEAMOTH.get(), worldIn);
 

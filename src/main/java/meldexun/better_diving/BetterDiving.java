@@ -7,6 +7,7 @@ import meldexun.better_diving.config.BetterDivingConfig;
 import meldexun.better_diving.event.FeatureEventHandler;
 import meldexun.better_diving.init.BetterDivingBlocks;
 import meldexun.better_diving.init.BetterDivingCapabilities;
+import meldexun.better_diving.init.BetterDivingContainers;
 import meldexun.better_diving.init.BetterDivingEntities;
 import meldexun.better_diving.init.BetterDivingFeatures;
 import meldexun.better_diving.init.BetterDivingItems;
@@ -38,6 +39,7 @@ public class BetterDiving {
 		BetterDivingBlocks.registerBlocks();
 		BetterDivingItems.registerItems();
 		BetterDivingEntities.registerEntities();
+		BetterDivingContainers.registerContainers();
 		BetterDivingSounds.registerSounds();
 		BetterDivingFeatures.registerFeatures();
 	}

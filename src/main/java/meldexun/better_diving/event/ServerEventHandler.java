@@ -1,6 +1,7 @@
 package meldexun.better_diving.event;
 
 import meldexun.better_diving.BetterDiving;
+import meldexun.better_diving.api.event.PlayerWaterBreathingEvent;
 import meldexun.better_diving.entity.EntitySeamoth;
 import meldexun.better_diving.oxygenprovider.DivingGearManager;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,6 +24,13 @@ public class ServerEventHandler {
 	@SubscribeEvent
 	public static void onServerStartedEvent(FMLServerStartingEvent event) {
 		DivingGearManager.reloadConfigs();
+	}
+
+	@SubscribeEvent
+	public static void onPlayerWaterBreathingEvent(PlayerWaterBreathingEvent event) {
+		if (event.getPlayer().getRidingEntity() instanceof EntitySeamoth && ((EntitySeamoth) event.getPlayer().getRidingEntity()).hasEnergy()) {
+			event.setHasWaterBreathing(true);
+		}
 	}
 
 }

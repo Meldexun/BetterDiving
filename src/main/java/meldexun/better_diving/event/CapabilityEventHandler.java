@@ -2,6 +2,7 @@ package meldexun.better_diving.event;
 
 import meldexun.better_diving.BetterDiving;
 import meldexun.better_diving.capability.inventory.CapabilityItemHandlerProvider;
+import meldexun.better_diving.capability.inventory.item.CapabilityItemHandlerItemProvider;
 import meldexun.better_diving.capability.oxygen.entity.CapabilityOxygen;
 import meldexun.better_diving.capability.oxygen.entity.CapabilityOxygenProvider;
 import meldexun.better_diving.capability.oxygen.entity.player.CapabilityOxygenPlayer;
@@ -35,7 +36,7 @@ public class CapabilityEventHandler {
 			}
 		}
 		if (entity instanceof EntitySeamoth) {
-			event.addCapability(CapabilityItemHandlerProvider.LOCATION_ITEM_STACK_HANDLER, new CapabilityItemHandlerProvider(() -> new ItemStackHandler(1)));
+			event.addCapability(CapabilityItemHandlerItemProvider.REGISTRY_NAME, new CapabilityItemHandlerProvider(() -> new ItemStackHandler(1)));
 		}
 	}
 

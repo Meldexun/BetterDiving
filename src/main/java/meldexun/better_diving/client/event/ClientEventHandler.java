@@ -9,6 +9,7 @@ import meldexun.better_diving.client.gui.GuiOxygen;
 import meldexun.better_diving.client.gui.GuiSeamoth;
 import meldexun.better_diving.config.BetterDivingConfig;
 import meldexun.better_diving.entity.EntitySeamoth;
+import meldexun.better_diving.network.packet.client.CPacketOpenSeamothInventory;
 import meldexun.better_diving.oxygenprovider.DivingGearManager;
 import meldexun.better_diving.oxygenprovider.DivingMaskProviderItem;
 import meldexun.better_diving.oxygenprovider.MiningspeedProviderItem;
@@ -22,6 +23,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
+import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -79,6 +81,12 @@ public class ClientEventHandler {
 			tooltip.add(1, new StringTextComponent(TextFormatting.GRAY + (swimspeedProvider.swimspeed >= 0.0D ? "+" : "") + FORMAT.format(swimspeedProvider.swimspeed * 100.0D) + "% Swim Speed"));
 		}
 	}
+
+	@SuppressWarnings("resource")
+	@SubscribeEvent
+	public static void onKeyInputEvent(KeyInputEvent event) {
+		if (event.getKey() == Minecraft.getInstance().gameSettings.keyBindInventory.getKey().getKeyCode() && event.getAction() == 1) {
+			BetterDiving.NETWORK.sendToServer(new CPacketOpenSeamothInventory());
 		}
 	}
 
