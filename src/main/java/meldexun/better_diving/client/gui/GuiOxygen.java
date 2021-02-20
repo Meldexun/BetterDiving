@@ -35,9 +35,11 @@ public class GuiOxygen {
 
 		int oxygen = (int) Math.round(OxygenPlayerHelper.getOxygenRespectEquipment(mc.player) / 20.0D / 3.0D) * 3;
 		double percent = (int) (OxygenPlayerHelper.getOxygenRespectEquipmentInPercent(mc.player) * 80.0D) / 80.0D;
-		int x = BetterDivingGuiHelper.getAnchorX(102, BetterDivingConfig.CLIENT_CONFIG.oxygenGuiAnchor.get(), BetterDivingConfig.CLIENT_CONFIG.oxygenGuiOffsetX.get());
-		int y = BetterDivingGuiHelper.getAnchorY(21, BetterDivingConfig.CLIENT_CONFIG.oxygenGuiAnchor.get(), BetterDivingConfig.CLIENT_CONFIG.oxygenGuiOffsetY.get());
-		double offset;
+
+		int width = 105;
+		int height = 25;
+		int x = BetterDivingGuiHelper.getAnchorX(width, BetterDivingConfig.CLIENT_CONFIG.oxygenGuiAnchor.get(), BetterDivingConfig.CLIENT_CONFIG.oxygenGuiOffsetX.get());
+		int y = BetterDivingGuiHelper.getAnchorY(height, BetterDivingConfig.CLIENT_CONFIG.oxygenGuiAnchor.get(), BetterDivingConfig.CLIENT_CONFIG.oxygenGuiOffsetY.get());
 
 		boolean blend = GL11.glGetBoolean(GL11.GL_BLEND);
 		GlStateManager.enableBlend();
@@ -45,28 +47,28 @@ public class GuiOxygen {
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.00390625F);
 
 		textureManager.bindTexture(BACKGROUND);
-		BetterDivingGuiHelper.drawTexture(x, y, 0.0D, 0.0D, 102, 21, 1.0D, 1.0D);
+		BetterDivingGuiHelper.drawTexture(x, y, 0.0D, 0.0D, width, height, width / 128.0D, height / 32.0D);
 
 		textureManager.bindTexture(BAR);
-		BetterDivingGuiHelper.drawTexture(x + 1.0D + 80.0D * (1.0D - percent), y + 7.0D, 1.0D - percent, mc.world.getGameTime() * 9.0D / 576.0D, 80.0D * percent, 7.0D, percent, 9.0D / 576.0D);
+		BetterDivingGuiHelper.drawTexture(x + 1.0D + 80.0D * (1.0D - percent), y + 9.0D, 1.0D - percent, mc.world.getGameTime() * 9.0D / 576.0D, 80.0D * percent, 7.0D, percent, 9.0D / 576.0D);
 
 		textureManager.bindTexture(BUBBLES);
-		offset = 2.0D * (tick + partialTicks) % 128 / 128.0D;
-		drawBubbles(x + 1.0D, y + 7.0D, 0.0D, offset, percent);
-		offset = 2.5D * (tick + partialTicks) % 128 / 128.0D;
-		drawBubbles(x + 1.0D, y + 7.0D, 20.0D, offset + 0.45D, percent);
-		offset = 1.5D * (tick + partialTicks) % 128 / 128.0D;
-		drawBubbles(x + 1.0D, y + 7.0D, 35.0D, offset + 0.12D, percent);
-		offset = 2.0D * (tick + partialTicks) % 128 / 128.0D;
-		drawBubbles(x + 1.0D, y + 7.0D, 55.0D, offset + 0.68D, percent);
+		double bubbleOffset = 2.0D * (tick + partialTicks) % 128 / 128.0D;
+		drawBubbles(x + 1.0D, y + 9.0D, 0.0D, bubbleOffset, percent);
+		bubbleOffset = 2.5D * (tick + partialTicks) % 128 / 128.0D;
+		drawBubbles(x + 1.0D, y + 9.0D, 20.0D, bubbleOffset + 0.45D, percent);
+		bubbleOffset = 1.5D * (tick + partialTicks) % 128 / 128.0D;
+		drawBubbles(x + 1.0D, y + 9.0D, 35.0D, bubbleOffset + 0.12D, percent);
+		bubbleOffset = 2.0D * (tick + partialTicks) % 128 / 128.0D;
+		drawBubbles(x + 1.0D, y + 9.0D, 55.0D, bubbleOffset + 0.68D, percent);
 
 		textureManager.bindTexture(FRAME);
-		BetterDivingGuiHelper.drawTexture(x, y, 0.0D, 0.0D, 102, 21, 1.0D, 1.0D);
+		BetterDivingGuiHelper.drawTexture(x, y, 0.0D, 0.0D, width, height, width / 128.0D, height / 32.0D);
 
 		String s1 = Integer.toString(oxygen);
-		fontRenderer.drawStringWithShadow(matrixStack, s1, x + 91 - fontRenderer.getStringWidth(s1) / 2, y + 11, 0xFFFFFF);
+		fontRenderer.drawString(matrixStack, s1, x + 93 - fontRenderer.getStringWidth(s1) / 2, y + 14, 0xFFFFFF);
 		String s2 = "O\u2082";
-		fontRenderer.drawStringWithShadow(matrixStack, s2, x + 91 - fontRenderer.getStringWidth(s2) / 2, y + 2, 0xFFFFFF);
+		fontRenderer.drawString(matrixStack, s2, x + 93 - fontRenderer.getStringWidth(s2) / 2, y + 4, 0xFFFFFF);
 
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 		if (!blend) {

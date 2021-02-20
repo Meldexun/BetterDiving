@@ -1,11 +1,14 @@
 package meldexun.better_diving.client.event;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import meldexun.better_diving.BetterDiving;
 import meldexun.better_diving.capability.oxygen.item.CapabilityOxygenItemProvider;
 import meldexun.better_diving.client.gui.GuiOxygen;
+import meldexun.better_diving.client.gui.GuiSeamoth;
 import meldexun.better_diving.config.BetterDivingConfig;
+import meldexun.better_diving.entity.EntitySeamoth;
 import meldexun.better_diving.oxygenprovider.DivingGearManager;
 import meldexun.better_diving.oxygenprovider.DivingMaskProviderItem;
 import meldexun.better_diving.oxygenprovider.MiningspeedProviderItem;
@@ -13,6 +16,7 @@ import meldexun.better_diving.oxygenprovider.SwimspeedProviderItem;
 import meldexun.better_diving.util.OxygenPlayerHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -27,18 +31,20 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = BetterDiving.MOD_ID, value = Dist.CLIENT)
 public class ClientEventHandler {
 
+	private static final DecimalFormat FORMAT = new DecimalFormat("#.##");
+
 	@SubscribeEvent
 	public static void onRenderGameOverlayEventPre(RenderGameOverlayEvent.Pre event) {
-		if (!BetterDivingConfig.CLIENT_CONFIG.oxygenGuiEnabled.get()) {
-			return;
-		}
-		if (event.getType() == ElementType.AIR) {
+		Minecraft mc = Minecraft.getInstance();
+		if (event.getType() == ElementType.AIR && BetterDivingConfig.CLIENT_CONFIG.oxygenGuiEnabled.get()) {
 			event.setCanceled(true);
 
-			Minecraft mc = Minecraft.getInstance();
-			if (OxygenPlayerHelper.getOxygenRespectEquipment(mc.player) < OxygenPlayerHelper.getOxygenCapacityRespectEquipment(mc.player)) {
+			if (mc.player.areEyesInFluid(FluidTags.WATER) || OxygenPlayerHelper.getOxygenRespectEquipment(mc.player) < OxygenPlayerHelper.getOxygenCapacityRespectEquipment(mc.player)) {
 				GuiOxygen.render(event.getMatrixStack());
 			}
+		}
+		if (event.getType() == ElementType.ALL && BetterDivingConfig.CLIENT_CONFIG.seamothGuiEnabled.get() && mc.player.getRidingEntity() instanceof EntitySeamoth) {
+			GuiSeamoth.render(event.getMatrixStack());
 		}
 	}
 
@@ -56,21 +62,23 @@ public class ClientEventHandler {
 
 		DivingMaskProviderItem divingMaskProvider = DivingGearManager.getDivingMaskProviderItem(stack);
 		if (divingMaskProvider != null) {
-			tooltip.add(1, new StringTextComponent(TextFormatting.GRAY + String.format("Max Diving Depth %d", divingMaskProvider.maxDivingDepth)));
+			tooltip.add(1, new StringTextComponent(TextFormatting.GRAY + String.format("Max Diving Depth %dm", divingMaskProvider.maxDivingDepth)));
 		}
 
 		stack.getCapability(CapabilityOxygenItemProvider.OXYGEN).ifPresent(c -> {
-			tooltip.add(1, new StringTextComponent(TextFormatting.GRAY + String.format("Oxygen %d/%d", c.getOxygen(), c.getOxygenCapacity())));
+			tooltip.add(1, new StringTextComponent(TextFormatting.GRAY + Integer.toString((int) Math.round(c.getOxygen() / 20.0D / 3.0D) * 3) + "s of Oxygen"));
 		});
 
 		MiningspeedProviderItem miningSpeedProvider = DivingGearManager.getMiningspeedProviderItem(stack);
 		if (miningSpeedProvider != null) {
-			tooltip.add(1, new StringTextComponent(TextFormatting.GRAY + String.format("Mining Speed %.2f%%", miningSpeedProvider.miningspeed * 100)));
+			tooltip.add(1, new StringTextComponent(TextFormatting.GRAY + (miningSpeedProvider.miningspeed >= 0.0D ? "+" : "") + FORMAT.format(miningSpeedProvider.miningspeed * 100.0D) + "% Mining Speed"));
 		}
 
 		SwimspeedProviderItem swimspeedProvider = DivingGearManager.getSwimspeedProviderItem(stack);
 		if (swimspeedProvider != null) {
-			tooltip.add(1, new StringTextComponent(TextFormatting.GRAY + String.format("Swim Speed %.2f%%", swimspeedProvider.swimspeed * 100)));
+			tooltip.add(1, new StringTextComponent(TextFormatting.GRAY + (swimspeedProvider.swimspeed >= 0.0D ? "+" : "") + FORMAT.format(swimspeedProvider.swimspeed * 100.0D) + "% Swim Speed"));
+		}
+	}
 		}
 	}
 

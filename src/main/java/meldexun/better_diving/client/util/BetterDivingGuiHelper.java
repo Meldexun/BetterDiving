@@ -21,7 +21,7 @@ public class BetterDivingGuiHelper {
 
 		if (anchor == 1 || anchor == 4) {
 			// top mid or bot mid
-			return offsetX + (mainWindow.getScaledWidth() - width) / 2;
+			return offsetX + mainWindow.getScaledWidth() / 2 - width / 2;
 		} else if (anchor == 2 || anchor == 3) {
 			// top right or bot right
 			return offsetX + mainWindow.getScaledWidth() - width;

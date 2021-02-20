@@ -164,16 +164,16 @@ public class BetterDivingConfig {
 
 			public final ForgeConfigSpec.DoubleValue seamothSpeed;
 			public final ForgeConfigSpec.IntValue seamothEnergyUsage;
-			
+
 			public Seamoth(ForgeConfigSpec.Builder builder) {
 				builder.push("seamoth");
 
 				this.seamothSpeed = builder.comment("").defineInRange("seamothSpeed", 0.0275D, 0.0D, 1.0D);
 				this.seamothEnergyUsage = builder.comment("").defineInRange("seamothEnergyUsage", 100, 0, 1_000_000);
-				
+
 				builder.pop();
 			}
-		
+
 		}
 
 		public static class EnergyStorageItem {
@@ -227,11 +227,21 @@ public class BetterDivingConfig {
 		public final ForgeConfigSpec.IntValue oxygenGuiOffsetX;
 		public final ForgeConfigSpec.IntValue oxygenGuiOffsetY;
 
+		public final ForgeConfigSpec.IntValue seamothGuiAnchor;
+		public final ForgeConfigSpec.BooleanValue seamothGuiEnabled;
+		public final ForgeConfigSpec.IntValue seamothGuiOffsetX;
+		public final ForgeConfigSpec.IntValue seamothGuiOffsetY;
+
 		public ClientConfig(ForgeConfigSpec.Builder builder) {
 			this.oxygenGuiAnchor = builder.comment("0: top-left, 1: top-middle, 2: top-right, 3: bottom-right, 4: bottom-middle, 5: bottom-left").defineInRange("oxygenGuiAnchor", 4, 0, 5);
 			this.oxygenGuiEnabled = builder.comment("").define("oxygenGuiEnabled", true);
-			this.oxygenGuiOffsetX = builder.comment("").defineInRange("oxygenGuiOffsetX", 61, -1000, 1000);
-			this.oxygenGuiOffsetY = builder.comment("").defineInRange("oxygenGuiOffsetY", -36, -1000, 1000);
+			this.oxygenGuiOffsetX = builder.comment("").defineInRange("oxygenGuiOffsetX", 62, -1000, 1000);
+			this.oxygenGuiOffsetY = builder.comment("").defineInRange("oxygenGuiOffsetY", -32, -1000, 1000);
+
+			this.seamothGuiAnchor = builder.comment("0: top-left, 1: top-middle, 2: top-right, 3: bottom-right, 4: bottom-middle, 5: bottom-left").defineInRange("seamothGuiAnchor", 3, 0, 5);
+			this.seamothGuiEnabled = builder.comment("").define("seamothGuiEnabled", true);
+			this.seamothGuiOffsetX = builder.comment("").defineInRange("seamothGuiOffsetX", -4, -1000, 1000);
+			this.seamothGuiOffsetY = builder.comment("").defineInRange("seamothGuiOffsetY", -8, -1000, 1000);
 		}
 
 	}
