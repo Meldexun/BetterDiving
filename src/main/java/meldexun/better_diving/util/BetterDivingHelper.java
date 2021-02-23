@@ -1,12 +1,13 @@
 package meldexun.better_diving.util;
 
+import meldexun.better_diving.api.event.PlayerCanBreathEvent;
 import meldexun.better_diving.api.event.PlayerSwimSpeedEvent;
-import meldexun.better_diving.api.event.PlayerWaterBreathingEvent;
 import meldexun.better_diving.config.BetterDivingConfig;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.Effects;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
@@ -24,20 +25,15 @@ public class BetterDivingHelper {
 		return event.getNewSwimSpeed();
 	}
 
-	public static boolean canBreathUnderwater(PlayerEntity player) {
-		if (player.isCreative()) {
-			return true;
-		}
-		if (player.canBreatheUnderwater()) {
-			return true;
-		}
-		if (player.isPotionActive(Effects.WATER_BREATHING)) {
-			return true;
-		}
+	public static boolean canBreath(PlayerEntity player) {
+		boolean canBreath = !player.areEyesInFluid(FluidTags.WATER);
+		canBreath |= player.isCreative();
+		canBreath |= player.canBreatheUnderwater();
+		canBreath |= player.isPotionActive(Effects.WATER_BREATHING);
 
-		PlayerWaterBreathingEvent event = new PlayerWaterBreathingEvent(player, false);
+		PlayerCanBreathEvent event = new PlayerCanBreathEvent(player, canBreath);
 		MinecraftForge.EVENT_BUS.post(event);
-		return event.hasWaterBreathing();
+		return event.canBreath();
 	}
 
 	public static int blocksUnderWater(Entity entity) {

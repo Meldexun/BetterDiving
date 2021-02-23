@@ -10,7 +10,6 @@ import meldexun.better_diving.util.OxygenPlayerHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.TickEvent;
@@ -34,7 +33,7 @@ public class PlayerOxygenEventHandler {
 		player.getCapability(CapabilityOxygenProvider.OXYGEN).ifPresent(cap -> {
 			cap.setOxygen(cap.getOxygen());
 			if (!player.world.isRemote) {
-				if (player.areEyesInFluid(FluidTags.WATER) && !BetterDivingHelper.canBreathUnderwater(player)) {
+				if (!BetterDivingHelper.canBreath(player)) {
 					int oxygenUsage = 1;
 
 					if (BetterDivingConfig.SERVER_CONFIG.oxygen.oxygenEfficiency.get()) {

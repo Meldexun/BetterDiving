@@ -1,7 +1,7 @@
 package meldexun.better_diving.event;
 
 import meldexun.better_diving.BetterDiving;
-import meldexun.better_diving.api.event.PlayerWaterBreathingEvent;
+import meldexun.better_diving.api.event.PlayerCanBreathEvent;
 import meldexun.better_diving.entity.EntitySeamoth;
 import meldexun.better_diving.oxygenprovider.DivingGearManager;
 import net.minecraft.entity.player.PlayerEntity;
@@ -26,10 +26,10 @@ public class ServerEventHandler {
 		DivingGearManager.reloadConfigs();
 	}
 
-	@SubscribeEvent
-	public static void onPlayerWaterBreathingEvent(PlayerWaterBreathingEvent event) {
+	@SubscribeEvent(priority = EventPriority.LOW)
+	public static void onPlayerWaterBreathingEvent(PlayerCanBreathEvent event) {
 		if (event.getPlayer().getRidingEntity() instanceof EntitySeamoth && ((EntitySeamoth) event.getPlayer().getRidingEntity()).hasEnergy()) {
-			event.setHasWaterBreathing(true);
+			event.setCanBreath(true);
 		}
 	}
 
