@@ -72,7 +72,6 @@ public class ScreenSeamoth extends ContainerScreen<ContainerSeamoth> {
 	/**
 	 * Copied from {@link InventoryScreen#drawEntityOnScreen(int, int, int, float, float, LivingEntity)}
 	 */
-	@SuppressWarnings("deprecation")
 	public static void drawEntityOnScreen(int posX, int posY, int scale, float mouseX, float mouseY, Entity entity) {
 		float f = (float) Math.atan((double) (mouseX / 40.0F));
 		float f1 = (float) Math.atan((double) (mouseY / 40.0F));
