@@ -16,12 +16,12 @@
         {
           "type": "minecraft:item",
           "name": "better_diving:diamond_chunk",
-          "weight": 25
+          "weight": 20
         },
         {
           "type": "minecraft:item",
           "name": "better_diving:emerald_chunk",
-          "weight": 5
+          "weight": 10
         }
       ]
     }
