@@ -3,10 +3,11 @@ package meldexun.better_diving.util;
 import meldexun.better_diving.api.event.PlayerCanBreathEvent;
 import meldexun.better_diving.api.event.PlayerSwimSpeedEvent;
 import meldexun.better_diving.config.BetterDivingConfig;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.Effects;
+import net.minecraft.potion.EffectUtils;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
@@ -27,9 +28,10 @@ public class BetterDivingHelper {
 
 	public static boolean canBreath(PlayerEntity player) {
 		boolean canBreath = !player.areEyesInFluid(FluidTags.WATER);
+		canBreath |= player.world.getBlockState(player.getPosition()).isIn(Blocks.BUBBLE_COLUMN);
 		canBreath |= player.isCreative();
 		canBreath |= player.canBreatheUnderwater();
-		canBreath |= player.isPotionActive(Effects.WATER_BREATHING);
+		canBreath |= EffectUtils.canBreatheUnderwater(player);
 
 		PlayerCanBreathEvent event = new PlayerCanBreathEvent(player, canBreath);
 		MinecraftForge.EVENT_BUS.post(event);
