@@ -1,6 +1,7 @@
 package meldexun.better_diving.event;
 
 import meldexun.better_diving.BetterDiving;
+import meldexun.better_diving.api.event.PlayerSuffocateEvent;
 import meldexun.better_diving.capability.oxygen.entity.CapabilityOxygenProvider;
 import meldexun.better_diving.config.BetterDivingConfig;
 import meldexun.better_diving.network.packet.server.SPacketSyncOxygen;
@@ -12,6 +13,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -54,7 +56,7 @@ public class PlayerOxygenEventHandler {
 				if (cap.getOxygen() <= -20) {
 					cap.setOxygen(0);
 
-					if (!player.world.isRemote) {
+					if (!player.world.isRemote && !MinecraftForge.EVENT_BUS.post(new PlayerSuffocateEvent(player))) {
 						((ServerWorld) player.world).spawnParticle(ParticleTypes.BUBBLE, player.getPosX(), player.getPosY() + player.getHeight() * 0.5D, player.getPosZ(), 8, 0.25D, 0.25D, 0.25D, 0.0D);
 
 						player.attackEntityFrom(DamageSource.DROWN, 2.0F);
