@@ -1,0 +1,54 @@
+{
+  "itemGroup.better_diving": "水世界",
+
+  "item.better_diving.diving_mask": "潜水面罩",
+  "item.better_diving.standard_o2_tank": "标准氧气瓶",
+  "item.better_diving.wetsuit_leggings": "潜水裤",
+  "item.better_diving.fins": "脚蹼",
+
+  "item.better_diving.rebreather": "循环呼吸器",
+  "item.better_diving.high_capacity_o2_tank": "大容量氧气瓶",
+  "item.better_diving.improved_wetsuit_leggings": "高级潜水裤",
+  "item.better_diving.ultra_glide_fins": "流线型脚蹼",
+
+  "item.better_diving.reinforced_diving_mask": "强化潜水面罩",
+  "item.better_diving.reinforced_o2_tank": "强化氧气瓶",
+  "item.better_diving.reinforced_wetsuit_leggings": "强化潜水裤",
+  "item.better_diving.reinforced_fins": "强化脚蹼",
+
+  "item.better_diving.coal_chunk": "煤矿块",
+  "item.better_diving.iron_chunk": "铁矿块",
+  "item.better_diving.gold_chunk": "金矿块",
+  "item.better_diving.lapis_chunk": "青金石矿块",
+  "item.better_diving.redstone_chunk": "红石矿块",
+  "item.better_diving.emerald_chunk": "绿宝石矿块",
+  "item.better_diving.diamond_chunk": "钻石矿块",
+
+  "item.better_diving.titanium_chunk": "钛矿块",
+  "item.better_diving.copper_chunk": "铜矿块",
+  "item.better_diving.silver_chunk": "银矿块",
+  "item.better_diving.lead_chunk": "铅矿块",
+  "item.better_diving.lithium_chunk": "锂矿块",
+
+  "item.better_diving.titanium_ingot": "钛锭",
+  "item.better_diving.copper_ingot": "铜锭",
+  "item.better_diving.silver_ingot": "银锭",
+  "item.better_diving.lead_ingot": "铅锭",
+  "item.better_diving.lithium_ingot": "锂锭",
+
+  "item.better_diving.fiber_mesh": "纤维网",
+
+  "item.better_diving.power_cell": "燃料电池",
+
+  "item.better_diving.seamoth": "海蛾号",
+
+  "block.better_diving.limestone_outcrop": "石灰岩礁",
+  "block.better_diving.sandstone_outcrop": "砂岩礁",
+  "block.better_diving.shale_outcrop": "页岩礁",
+
+  "block.better_diving.titanium_block": "钛块",
+  "block.better_diving.copper_block": "铜块",
+  "block.better_diving.silver_block": "银块",
+  "block.better_diving.lead_block": "铅块",
+  "block.better_diving.lithium_block": "锂块"
+}
