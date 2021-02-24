@@ -4,7 +4,7 @@ license="All rights reserved"
 issueTrackerURL="https://github.com/Meldexun/BetterDiving/issues"
 [[mods]]
 modId="better_diving"
-version="1.2.2"
+version="1.2.3"
 displayName="Better Diving"
 credits="Thank you Xemnes for providing the oxygen gui and seamoth gui textures."
 authors="Meldexun"
