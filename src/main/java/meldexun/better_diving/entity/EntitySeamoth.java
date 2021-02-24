@@ -52,7 +52,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class EntitySeamoth extends Entity implements IEntityAdditionalSpawnData {
 
-	private static final ReflectionMethod<?> METHOD_UPDATE_POSE = new ReflectionMethod<>(PlayerEntity.class, "", "updatePose");
+	private static final ReflectionMethod<?> METHOD_UPDATE_POSE = new ReflectionMethod<>(PlayerEntity.class, "func_213832_dB", "updatePose");
 
 	private int damage = 0;
 
