@@ -23,7 +23,7 @@ public class FeatureEventHandler {
 	public static ConfiguredFeature<FeatureSpreadConfig, ?> shaleOutcrop;
 
 	private static ConfiguredFeature<FeatureSpreadConfig, ?> register(String name, Feature<FeatureSpreadConfig> feature, int base, int spread) {
-		return Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, new ResourceLocation(BetterDiving.MOD_ID, name), feature.withConfiguration(new FeatureSpreadConfig(FeatureSpread.func_242253_a(base, spread))));
+		return Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, new ResourceLocation(BetterDiving.MOD_ID, name), feature.withConfiguration(new FeatureSpreadConfig(FeatureSpread.create(base, spread))));
 	}
 
 	public static void registerConfiguredFeatures() {

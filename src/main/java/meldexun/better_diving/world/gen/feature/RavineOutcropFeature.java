@@ -33,7 +33,7 @@ public class RavineOutcropFeature extends Feature<FeatureSpreadConfig> {
 	@Override
 	public boolean generate(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, FeatureSpreadConfig config) {
 		int i = 0;
-		int j = config.func_242799_a().func_242259_a(rand);
+		int j = config.getSpread().getSpread(rand);
 		for (int k = 0; k < j; k++) {
 			for (int l = 0; l < 16; l++) {
 				int x = rand.nextInt(8) - rand.nextInt(8);
@@ -44,7 +44,7 @@ public class RavineOutcropFeature extends Feature<FeatureSpreadConfig> {
 				}
 				int y = 1 + rand.nextInt(height - 1);
 				BlockPos p = new BlockPos(pos.getX() + x, y, pos.getZ() + z);
-				if (!reader.getBlockState(p).isIn(Blocks.WATER)) {
+				if (!reader.getBlockState(p).matchesBlock(Blocks.WATER)) {
 					continue;
 				}
 				boolean flag = false;

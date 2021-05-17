@@ -28,7 +28,7 @@ public class BetterDivingHelper {
 
 	public static boolean canBreath(PlayerEntity player) {
 		boolean canBreath = !player.areEyesInFluid(FluidTags.WATER);
-		canBreath |= player.world.getBlockState(player.getPosition()).isIn(Blocks.BUBBLE_COLUMN);
+		canBreath |= player.world.getBlockState(player.getPosition()).matchesBlock(Blocks.BUBBLE_COLUMN);
 		canBreath |= player.isCreative();
 		canBreath |= player.canBreatheUnderwater();
 		canBreath |= EffectUtils.canBreatheUnderwater(player);
