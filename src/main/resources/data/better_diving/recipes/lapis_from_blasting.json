@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "better_diving:lapis_chunk"
+  },
+  "result": "minecraft:lapis_lazuli",
+  "experience": 1.0,
+  "cookingtime": 100
+}

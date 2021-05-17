@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "better_diving:lithium_chunk"
+  },
+  "result": "better_diving:lithium_ingot",
+  "experience": 1.0,
+  "cookingtime": 100
+}
