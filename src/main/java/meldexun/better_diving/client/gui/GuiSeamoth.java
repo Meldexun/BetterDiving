@@ -48,7 +48,7 @@ public class GuiSeamoth {
 
 		String s3 = Integer.toString(temperature);
 		fontRenderer.drawStringWithShadow(matrixStack, s3, offsetX + 62 - fontRenderer.getStringWidth(s3) / 2, offsetY + 24, 0xFFFFFF);
-		String s4 = "°C";
+		String s4 = "\u00B0C";
 		fontRenderer.drawStringWithShadow(matrixStack, s4, offsetX + 73 - fontRenderer.getStringWidth(s4) / 2, offsetY + 24, 0xF6DC47);
 
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
