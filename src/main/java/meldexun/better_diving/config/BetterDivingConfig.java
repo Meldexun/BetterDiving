@@ -102,6 +102,8 @@ public class BetterDivingConfig {
 			public final ForgeConfigSpec.DoubleValue overwaterAmount;
 			public final ForgeConfigSpec.IntValue overwaterOperation;
 
+            public final ForgeConfigSpec.BooleanValue weakerSneakDescending;
+
 			public Movement(ForgeConfigSpec.Builder builder) {
 				builder.push("movement");
 
@@ -132,6 +134,8 @@ public class BetterDivingConfig {
 				this.overwaterModifier = builder.comment("").define("overwaterModifier", true);
 				this.overwaterAmount = builder.comment("").defineInRange("overwaterAmount", 0.2D, -1.0D, 1.0D);
 				this.overwaterOperation = builder.comment("").defineInRange("overwaterOperation", 1, 0, 2);
+
+				this.weakerSneakDescending = builder.comment("When enabled sneaking in water only let's you descend slowly. The idea is that when you are in water you can still use items that require you to sneak without descending too far. Note that you can always use the descend key (default C) to descend while in water.").define("weakerSneakDescending", false);
 
 				builder.pop();
 			}
