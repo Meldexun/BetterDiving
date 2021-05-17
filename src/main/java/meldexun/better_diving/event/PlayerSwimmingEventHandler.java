@@ -1,11 +1,9 @@
 package meldexun.better_diving.event;
 
 import java.util.UUID;
-import java.util.stream.Stream;
-
-import com.google.common.base.Predicates;
 
 import meldexun.better_diving.BetterDiving;
+import meldexun.better_diving.client.ClientBetterDiving;
 import meldexun.better_diving.config.BetterDivingConfig;
 import meldexun.better_diving.util.BetterDivingHelper;
 import meldexun.better_diving.util.DivingGearHelper;
@@ -14,7 +12,6 @@ import meldexun.better_diving.util.reflection.ReflectionMethod;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -25,13 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effects;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.MovementInput;
-import net.minecraft.util.ReuseableStream;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.IBooleanFunction;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -73,29 +64,9 @@ public class PlayerSwimmingEventHandler {
 						player.moveVertical -= 1.0F;
 					}
 					player.moveVertical *= 0.98F;
-
-					if (!player.abilities.isFlying && !player.isPassenger() && (player.areEyesInFluid(FluidTags.WATER) || !isOnGround(player))) {
-						((ClientPlayerEntity) event.getPlayer()).movementInput.sneaking = false;
-					}
 				}
 			}
 		}
-	}
-
-	/**
-	 * Copied from {@link Entity#move(MoverType, Vector3d)} and
-	 * {@link Entity#getAllowedMovement(Vector3d, AxisAlignedBB, net.minecraft.world.IWorldReader, ISelectionContext, ReuseableStream)}
-	 */
-	private static boolean isOnGround(PlayerEntity player) {
-		Vector3d vec = new Vector3d(0.0D, -0.01D, 0.0D);
-		AxisAlignedBB axisalignedbb = player.getBoundingBox();
-		ISelectionContext iselectioncontext = ISelectionContext.forEntity(player);
-		VoxelShape voxelshape = player.world.getWorldBorder().getShape();
-		Stream<VoxelShape> stream = VoxelShapes.compare(voxelshape, VoxelShapes.create(axisalignedbb.shrink(1.0E-7D)), IBooleanFunction.AND) ? Stream.empty() : Stream.of(voxelshape);
-		Stream<VoxelShape> stream1 = player.world.func_230318_c_(player, axisalignedbb.expand(vec), Predicates.alwaysTrue());
-		ReuseableStream<VoxelShape> reuseablestream = new ReuseableStream<>(Stream.concat(stream1, stream));
-		Vector3d vector3d = vec.lengthSquared() == 0.0D ? vec : Entity.collideBoundingBoxHeuristically(player, vec, axisalignedbb, player.world, iselectioncontext, reuseablestream);
-		return vec.y != vector3d.y;
 	}
 
 	public static boolean handlePlayerTravelInWater(LivingEntity entity) {
