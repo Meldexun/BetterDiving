@@ -99,6 +99,11 @@ public class PlayerSwimmingEventHandler {
 			player.setMotion(player.getMotion().subtract(0.0D, (double) 0.04F * player.getAttribute(ForgeMod.SWIM_SPEED.get()).getValue(), 0.0D));
 		}
 
+		// subtract sneak factor applied in LivingEntity#handleFluidSneak()
+		if (player.world.isRemote) {
+			handleFluidSneak(player);
+		}
+
 		// handle movement in water
 		double oldY = player.getPosY();
 		double slowdown = (double) METHOD_GET_WATER_SLOW_DOWN.invoke(player);
@@ -204,6 +209,17 @@ public class PlayerSwimmingEventHandler {
 			attribute.removeModifier(oldModifier);
 			attribute.applyNonPersistentModifier(new AttributeModifier(modifierId, modifierName, modifierAmount, operation));
 		}
+	}
+
+	@OnlyIn(Dist.CLIENT)
+	private static void handleFluidSneak(PlayerEntity player) {
+		if (!(player instanceof ClientPlayerEntity)) {
+			return;
+		}
+		if (!((ClientPlayerEntity) player).movementInput.sneaking) {
+			return;
+		}
+		player.setMotion(player.getMotion().subtract(0.0D, (double) -0.04F * player.getAttribute(ForgeMod.SWIM_SPEED.get()).getValue(), 0.0D));
 	}
 
 }
