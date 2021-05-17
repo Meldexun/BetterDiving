@@ -60,7 +60,9 @@ public class PlayerSwimmingEventHandler {
 					if (input.jump) {
 						player.moveVertical += 1.0F;
 					}
-					if (input.sneaking) {
+					if (ClientBetterDiving.KEY_BIND_DESCEND.isKeyDown()) {
+                        player.moveVertical -= 1.0F;
+                    } else if (input.sneaking) {
 						player.moveVertical -= 1.0F;
 					}
 					player.moveVertical *= 0.98F;

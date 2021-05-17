@@ -164,7 +164,7 @@ public class EntitySeamoth extends Entity implements IEntityAdditionalSpawnData 
 			this.inputBack = settings.keyBindBack.isKeyDown();
 			this.inputLeft = settings.keyBindLeft.isKeyDown();
 			this.inputUp = settings.keyBindJump.isKeyDown();
-			this.inputDown = ClientBetterDiving.KEY_BIND_SEAMOTH_DESCEND.isKeyDown();
+			this.inputDown = ClientBetterDiving.KEY_BIND_DESCEND.isKeyDown();
 
 			BetterDiving.NETWORK.sendToServer(new CPacketSyncSeamothInput(this));
 		} else if (this.prevControlled) {

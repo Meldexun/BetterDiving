@@ -1,5 +1,7 @@
 package meldexun.better_diving.client;
 
+import org.lwjgl.glfw.GLFW;
+
 import meldexun.better_diving.BetterDiving;
 import meldexun.better_diving.client.gui.screen.ScreenSeamoth;
 import meldexun.better_diving.client.renderer.entity.RenderSeamoth;
@@ -26,7 +28,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 @Mod.EventBusSubscriber(modid = BetterDiving.MOD_ID, value = Dist.CLIENT, bus = Bus.MOD)
 public class ClientBetterDiving {
 
-	public static final KeyBinding KEY_BIND_SEAMOTH_DESCEND = new KeyBinding("Seamoth Descend", 67, BetterDiving.MOD_ID);
+	public static final KeyBinding KEY_BIND_DESCEND = new KeyBinding("Descend", GLFW.GLFW_KEY_C, BetterDiving.MOD_ID);
 
 	@SuppressWarnings("resource")
 	public static PlayerEntity getPlayer() {
@@ -40,7 +42,7 @@ public class ClientBetterDiving {
 
 	@SubscribeEvent
 	public static void onFMLClientSetupEvent(FMLClientSetupEvent event) {
-		ClientRegistry.registerKeyBinding(KEY_BIND_SEAMOTH_DESCEND);
+		ClientRegistry.registerKeyBinding(KEY_BIND_DESCEND);
 
 		RenderingRegistry.registerEntityRenderingHandler(BetterDivingEntities.SEAMOTH.get(), RenderSeamoth::new);
 
