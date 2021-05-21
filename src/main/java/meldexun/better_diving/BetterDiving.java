@@ -14,6 +14,7 @@ import meldexun.better_diving.init.BetterDivingFeatures;
 import meldexun.better_diving.init.BetterDivingItems;
 import meldexun.better_diving.init.BetterDivingPackets;
 import meldexun.better_diving.init.BetterDivingSounds;
+import meldexun.better_diving.oxygenprovider.DivingGearManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -55,6 +56,7 @@ public class BetterDiving {
 
 	private void updateConfig(ModConfig.ModConfigEvent event) {
 		if (event.getConfig().getModId().equals(MOD_ID)) {
+			DivingGearManager.reloadConfigs();
 			BetterDivingModules.breakSpeedChanges = BetterDivingConfig.SERVER_CONFIG.breakSpeedChanges.get();
 			BetterDivingModules.movementChanges = BetterDivingConfig.SERVER_CONFIG.movementChanges.get();
 			BetterDivingModules.oxygenChanges = BetterDivingConfig.SERVER_CONFIG.oxygenChanges.get();

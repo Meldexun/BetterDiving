@@ -7,7 +7,6 @@ import meldexun.better_diving.client.gui.screen.ScreenSeamoth;
 import meldexun.better_diving.client.renderer.entity.RenderSeamoth;
 import meldexun.better_diving.init.BetterDivingContainers;
 import meldexun.better_diving.init.BetterDivingEntities;
-import meldexun.better_diving.oxygenprovider.DivingGearManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.settings.KeyBinding;
@@ -22,7 +21,6 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.fml.config.ModConfig.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 @Mod.EventBusSubscriber(modid = BetterDiving.MOD_ID, value = Dist.CLIENT, bus = Bus.MOD)
@@ -55,11 +53,6 @@ public class ClientBetterDiving {
 		if (event.getMap().getTextureLocation().equals(PlayerContainer.LOCATION_BLOCKS_TEXTURE)) {
 			event.addSprite(new ResourceLocation(BetterDiving.MOD_ID, "item/empty_power_cell"));
 		}
-	}
-
-	@SubscribeEvent
-	public static void onPlayerLoggedInEvent(ModConfigEvent event) {
-		DivingGearManager.reloadConfigs();
 	}
 
 }
