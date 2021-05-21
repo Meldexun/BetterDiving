@@ -5,12 +5,12 @@ import net.minecraft.util.math.MathHelper;
 
 public class CapabilityOxygen implements ICapabilityOxygen {
 
-	protected final int oxygenCapacity;
-	protected int oxygen;
+	private final int oxygenCapacity;
+	private int oxygen;
 
 	public CapabilityOxygen(int oxygenCapacity) {
 		this.oxygenCapacity = oxygenCapacity;
-		this.oxygen = oxygenCapacity;
+		this.setOxygen(this.getOxygenCapacity());
 	}
 
 	@Override
@@ -26,20 +26,6 @@ public class CapabilityOxygen implements ICapabilityOxygen {
 	@Override
 	public int getOxygenCapacity() {
 		return this.oxygenCapacity;
-	}
-
-	@Override
-	public int receiveOxygen(int amount) {
-		amount = MathHelper.clamp(amount, 0, this.getOxygenCapacity() - this.oxygen);
-		this.oxygen = this.oxygen + amount;
-		return amount;
-	}
-
-	@Override
-	public int extractOxygen(int amount) {
-		amount = MathHelper.clamp(amount, 0, this.oxygen);
-		this.oxygen = this.oxygen - amount;
-		return amount;
 	}
 
 }
