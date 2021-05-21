@@ -4,6 +4,7 @@ import meldexun.better_diving.BetterDiving;
 import meldexun.better_diving.api.event.PlayerSuffocateEvent;
 import meldexun.better_diving.capability.oxygen.entity.CapabilityOxygenProvider;
 import meldexun.better_diving.config.BetterDivingConfig;
+import meldexun.better_diving.entity.EntitySeamoth;
 import meldexun.better_diving.network.packet.server.SPacketSyncOxygen;
 import meldexun.better_diving.util.BetterDivingHelper;
 import meldexun.better_diving.util.DivingGearHelper;
@@ -25,13 +26,16 @@ public class PlayerOxygenEventHandler {
 
 	@SubscribeEvent
 	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event) {
-		if (!BetterDivingConfig.SERVER_CONFIG.oxygenChanges.get()) {
-			return;
-		}
 		if (event.phase == Phase.START) {
 			return;
 		}
 		PlayerEntity player = event.player;
+		if (!BetterDivingConfig.SERVER_CONFIG.oxygenChanges.get()) {
+			if (!player.world.isRemote && player.getRidingEntity() instanceof EntitySeamoth) {
+				player.setAir(player.getAir() + 5);
+			}
+			return;
+		}
 		player.getCapability(CapabilityOxygenProvider.OXYGEN).ifPresent(cap -> {
 			cap.setOxygen(cap.getOxygen());
 			if (!player.world.isRemote) {
