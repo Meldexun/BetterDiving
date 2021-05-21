@@ -80,7 +80,7 @@ public class BetterDivingConfig {
 			public Mining(ForgeConfigSpec.Builder builder) {
 				builder.push("mining");
 
-				this.breakSpeedAquaAffinity = builder.comment("Break speed modifier underwater with the Aqua Affinity enchantment. (Vanilla = 5.0)").defineInRange("breakSpeedAquaAffinity", 0.25D, 0.0D, 10.0D);
+				this.breakSpeedAquaAffinity = builder.comment("Break speed modifier underwater with the Aqua Affinity enchantment. (Vanilla = 5.0)").defineInRange("breakSpeedAquaAffinity", 1.25D, 0.0D, 10.0D);
 				this.breakSpeedBase = builder.comment("Base break speed in water. (Vanilla = 0.2)").defineInRange("breakSpeedBase", 1.0D, 0.0D, 10.0D);
 
 				builder.pop();
