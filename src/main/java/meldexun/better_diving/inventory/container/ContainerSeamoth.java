@@ -1,7 +1,6 @@
 package meldexun.better_diving.inventory.container;
 
 import meldexun.better_diving.BetterDiving;
-import meldexun.better_diving.capability.inventory.item.CapabilityItemHandlerItem;
 import meldexun.better_diving.item.ItemPowerCell;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -40,9 +39,7 @@ public class ContainerSeamoth extends Container {
 
 			@Override
 			public void onSlotChanged() {
-				if (seamothInv instanceof CapabilityItemHandlerItem) {
-					((CapabilityItemHandlerItem) seamothInv).onContentsChanged(0);
-				}
+				ContainerSeamoth.this.onSeamothSlotChanged(this.getSlotIndex());
 			}
 		}.setBackground(PlayerContainer.LOCATION_BLOCKS_TEXTURE, new ResourceLocation(BetterDiving.MOD_ID, "item/empty_power_cell")));
 	}
@@ -99,6 +96,10 @@ public class ContainerSeamoth extends Container {
 
 		slot.onSlotChanged();
 		return stack;
+	}
+
+	protected void onSeamothSlotChanged(int slot) {
+
 	}
 
 }
