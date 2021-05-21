@@ -129,10 +129,10 @@ public class PlayerSwimmingEventHandler {
 	private static void updateSwimSpeed(PlayerEntity player) {
 		ModifiableAttributeInstance attribute = player.getAttribute(ForgeMod.SWIM_SPEED.get());
 
+		applyModifier(attribute, DIVING_GEAR_MODIFIER, "Diving Gear Modifier", DivingGearHelper.getSwimspeedBonus(player), 1);
+
 		if (BetterDivingConfig.SERVER_CONFIG.movementChanges.get()) {
 			BetterDivingConfig.ServerConfig.Movement config = BetterDivingConfig.SERVER_CONFIG.movement;
-
-			applyModifier(attribute, DIVING_GEAR_MODIFIER, "Diving Gear Modifier", DivingGearHelper.getSwimspeedBonus(player), 1);
 
 			ItemStack feet = player.getItemStackFromSlot(EquipmentSlotType.FEET);
 			int depthStriderLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.DEPTH_STRIDER, feet);
@@ -189,7 +189,6 @@ public class PlayerSwimmingEventHandler {
 				}
 			}
 		} else {
-			attribute.removeModifier(DIVING_GEAR_MODIFIER);
 			attribute.removeModifier(DEPTH_STRIDER_MODIFIER);
 			attribute.removeModifier(DIVING_MODIFIER);
 			attribute.removeModifier(DOLPHINS_GRACE_MODIFIER);
