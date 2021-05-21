@@ -80,8 +80,8 @@ public class BetterDivingConfig {
 			public Mining(ForgeConfigSpec.Builder builder) {
 				builder.push("mining");
 
-				this.breakSpeedAquaAffinity = builder.comment("").defineInRange("breakSpeedAquaAffinity", 0.25D, 0.0D, 10.0D);
-				this.breakSpeedBase = builder.comment("").defineInRange("breakSpeedBase", 1.0D, 0.0D, 10.0D);
+				this.breakSpeedAquaAffinity = builder.comment("Break speed modifier underwater with the Aqua Affinity enchantment. (Vanilla = 5.0)").defineInRange("breakSpeedAquaAffinity", 0.25D, 0.0D, 10.0D);
+				this.breakSpeedBase = builder.comment("Base break speed in water. (Vanilla = 0.2)").defineInRange("breakSpeedBase", 1.0D, 0.0D, 10.0D);
 
 				builder.pop();
 			}
@@ -123,33 +123,33 @@ public class BetterDivingConfig {
 			public Movement(ForgeConfigSpec.Builder builder) {
 				builder.push("movement");
 
-				this.baseSwimSpeed = builder.comment("").defineInRange("baseSwimSpeed", 0.04D, 0.0D, 1.0D);
+				this.baseSwimSpeed = builder.comment("Base swim speed. (Vanilla = 0.02)").defineInRange("baseSwimSpeed", 0.04D, 0.0D, 1.0D);
 
-				this.depthStriderAmount = builder.comment("").defineInRange("depthStriderAmount", 0.1D, -1.0D, 1.0D);
-				this.depthStriderOperation = builder.comment("").defineInRange("depthStriderOperation", 1, 0, 2);
+				this.depthStriderAmount = builder.comment("Bonus swim speed with Depth Strider enchantment.").defineInRange("depthStriderAmount", 0.1D, -1.0D, 1.0D);
+				this.depthStriderOperation = builder.comment("0 = add, 1 = multiply_base, 2 = mulitply (For more info check the minecraft wiki: https://minecraft.fandom.com/wiki/Attribute#Operations)").defineInRange("depthStriderOperation", 1, 0, 2);
 
-				this.divingAmount = builder.comment("").defineInRange("divingAmount", 0.2D, -1.0D, 1.0D);
-				this.divingOperation = builder.comment("").defineInRange("divingOperation", 1, 0, 2);
+				this.divingAmount = builder.comment("Bonus swim speed when diving. (Diving means being underwater and pressing sprint + forward)").defineInRange("divingAmount", 0.2D, -1.0D, 1.0D);
+				this.divingOperation = builder.comment("0 = add, 1 = multiply_base, 2 = mulitply (For more info check the minecraft wiki: https://minecraft.fandom.com/wiki/Attribute#Operations)").defineInRange("divingOperation", 1, 0, 2);
 
-				this.dolphinsGraceAmount = builder.comment("").defineInRange("dolphinsGraceAmount", 1.0D, -1.0D, 1.0D);
-				this.dolphinsGraceOperation = builder.comment("").defineInRange("dolphinsGraceOperation", 1, 0, 2);
+				this.dolphinsGraceAmount = builder.comment("Bonus swim speed with Dolphin's Grace effect.").defineInRange("dolphinsGraceAmount", 1.0D, -1.0D, 1.0D);
+				this.dolphinsGraceOperation = builder.comment("0 = add, 1 = multiply_base, 2 = mulitply (For more info check the minecraft wiki: https://minecraft.fandom.com/wiki/Attribute#Operations)").defineInRange("dolphinsGraceOperation", 1, 0, 2);
 
-				this.hungerModifier = builder.comment("").define("hungerModifier", true);
-				this.hungerThreshold = builder.comment("").defineInRange("hungerThreshold", 0.2D, 0.0D, 1.0D);
+				this.hungerModifier = builder.comment("Enable/Disable swim speed penalty when having low hunger.").define("hungerModifier", true);
+				this.hungerThreshold = builder.comment("Hunger threshold at which the swim speed will start to decrease. (Example with hungerThreshold = 0.2 hungerAmount = -0.5: swimSpeedPenalty at 0.1 hunger = -0.0,  swimSpeedPenalty at 0.1 hunger = -0.25,  swimSpeedPenalty at 0.0 hunger = -0.5)").defineInRange("hungerThreshold", 0.2D, 0.0D, 1.0D);
 				this.hungerAmount = builder.comment("").defineInRange("hungerAmount", -0.5D, -1.0D, 1.0D);
-				this.hungerOperation = builder.comment("").defineInRange("hungerOperation", 2, 0, 2);
+				this.hungerOperation = builder.comment("0 = add, 1 = multiply_base, 2 = mulitply (For more info check the minecraft wiki: https://minecraft.fandom.com/wiki/Attribute#Operations)").defineInRange("hungerOperation", 2, 0, 2);
 
-				this.mainhandModifier = builder.comment("").define("mainhandModifier", true);
+				this.mainhandModifier = builder.comment("Enable/Disable swim speed penalty when holding an item in the mainhand.").define("mainhandModifier", true);
 				this.mainhandAmount = builder.comment("").defineInRange("mainhandAmount", -0.05D, -1.0D, 1.0D);
-				this.mainhandOperation = builder.comment("").defineInRange("mainhandOperation", 2, 0, 2);
+				this.mainhandOperation = builder.comment("0 = add, 1 = multiply_base, 2 = mulitply (For more info check the minecraft wiki: https://minecraft.fandom.com/wiki/Attribute#Operations)").defineInRange("mainhandOperation", 2, 0, 2);
 
-				this.offhandModifier = builder.comment("").define("offhandModifier", true);
+				this.offhandModifier = builder.comment("Enable/Disable swim speed penalty when holding an item in the offhand.").define("offhandModifier", true);
 				this.offhandAmount = builder.comment("").defineInRange("offhandAmount", -0.05D, -1.0D, 1.0D);
-				this.offhandOperation = builder.comment("").defineInRange("offhandOperation", 2, 0, 2);
+				this.offhandOperation = builder.comment("0 = add, 1 = multiply_base, 2 = mulitply (For more info check the minecraft wiki: https://minecraft.fandom.com/wiki/Attribute#Operations)").defineInRange("offhandOperation", 2, 0, 2);
 
-				this.overwaterModifier = builder.comment("").define("overwaterModifier", true);
+				this.overwaterModifier = builder.comment("Enable/Disable swim speed bonus when swimming at the water surface.").define("overwaterModifier", true);
 				this.overwaterAmount = builder.comment("").defineInRange("overwaterAmount", 0.2D, -1.0D, 1.0D);
-				this.overwaterOperation = builder.comment("").defineInRange("overwaterOperation", 1, 0, 2);
+				this.overwaterOperation = builder.comment("0 = add, 1 = multiply_base, 2 = mulitply (For more info check the minecraft wiki: https://minecraft.fandom.com/wiki/Attribute#Operations)").defineInRange("overwaterOperation", 1, 0, 2);
 
 				this.weakerSneakDescending = builder.comment("When enabled sneaking in water only let's you descend slowly. The idea is that when you are in water you can still use items that require you to sneak without descending too far. Note that you can always use the descend key (default C) to descend while in water.").define("weakerSneakDescending", false);
 
@@ -169,11 +169,11 @@ public class BetterDivingConfig {
 			public Oxygen(ForgeConfigSpec.Builder builder) {
 				builder.push("oxygen");
 
-				this.oxygenBaseDivingDepth = builder.comment("").defineInRange("oxygenBaseDivingDepth", 20, 0, 1024);
-				this.oxygenCapacity = builder.comment("").defineInRange("oxygenCapacity", 900, 0, 1_000_000);
+				this.oxygenBaseDivingDepth = builder.comment("Base diving depth. (Check 'oxygenEfficiencyRate' for more information)").defineInRange("oxygenBaseDivingDepth", 20, 0, 1024);
+				this.oxygenCapacity = builder.comment("Base oxygen capacity in ticks. (20 ticks = 1 second)").defineInRange("oxygenCapacity", 900, 0, 1_000_000);
 				this.oxygenCapacityRespiration = builder.comment("").defineInRange("oxygenCapacityRespiration", 300, 0, 1_000_000);
-				this.oxygenEfficiency = builder.comment("").define("oxygenEfficiency", true);
-				this.oxygenEfficiencyRate = builder.comment("").defineInRange("oxygenEfficiencyRate", 4, 1, 1024);
+				this.oxygenEfficiency = builder.comment("Enable/Disable decreased oxygen efficiency while diving deeper.").define("oxygenEfficiency", true);
+				this.oxygenEfficiencyRate = builder.comment("Every x blocks below the max diving depth (defined by 'oxygenBaseDivingDepth' and equipment) consumes one unit of oxygen more per second.").defineInRange("oxygenEfficiencyRate", 4, 1, 1024);
 
 				builder.pop();
 			}
@@ -188,8 +188,8 @@ public class BetterDivingConfig {
 			public Seamoth(ForgeConfigSpec.Builder builder) {
 				builder.push("seamoth");
 
-				this.seamothSpeed = builder.comment("").defineInRange("seamothSpeed", 0.0275D, 0.0D, 1.0D);
-				this.seamothEnergyUsage = builder.comment("").defineInRange("seamothEnergyUsage", 100, 0, 1_000_000);
+				this.seamothSpeed = builder.comment("Speed of the seamoth. (blocks per second = x * 400)").defineInRange("seamothSpeed", 0.0275D, 0.0D, 1.0D);
+				this.seamothEnergyUsage = builder.comment("Energy usage of the seamoth per tick.").defineInRange("seamothEnergyUsage", 100, 0, 1_000_000);
 
 				builder.pop();
 			}
