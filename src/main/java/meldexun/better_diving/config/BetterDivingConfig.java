@@ -26,7 +26,6 @@ public class BetterDivingConfig {
 
 	public static class ServerConfig {
 
-		public final ForgeConfigSpec.DoubleValue breakSpeedAquaAffinity;
 		public final ForgeConfigSpec.BooleanValue breakSpeedChanges;
 		public final ForgeConfigSpec.BooleanValue movementChanges;
 		public final ForgeConfigSpec.BooleanValue oxygenChanges;
@@ -42,12 +41,12 @@ public class BetterDivingConfig {
 		public final ArmorValues improvedDivingGear;
 		public final ArmorValues reinforcedDivingGear;
 
+		public final Mining mining;
 		public final Movement movement;
 		public final Oxygen oxygen;
 		public final Seamoth seamoth;
 
 		public ServerConfig(ForgeConfigSpec.Builder builder) {
-			this.breakSpeedAquaAffinity = builder.comment("").defineInRange("breakSpeedAquaAffinity", 0.25D, 0.0D, 10.0D);
 			this.breakSpeedChanges = builder.comment("").define("breakSpeedChanges", true);
 			this.movementChanges = builder.comment("").define("movementChanges", true);
 			this.oxygenChanges = builder.comment("").define("oxygenChanges", true);
@@ -67,9 +66,26 @@ public class BetterDivingConfig {
 			this.improvedDivingGear = new ArmorValues(builder, "improvedDivingGear", 60, 10, new Integer[] { 1, 3, 5, 1 }, 0.0D, 0.0D);
 			this.reinforcedDivingGear = new ArmorValues(builder, "reinforcedDivingGear", 80, 10, new Integer[] { 2, 5, 7, 2 }, 0.5D, 0.0D);
 
+			this.mining = new Mining(builder);
 			this.movement = new Movement(builder);
 			this.oxygen = new Oxygen(builder);
 			this.seamoth = new Seamoth(builder);
+		}
+
+		public static class Mining {
+
+			public final ForgeConfigSpec.DoubleValue breakSpeedAquaAffinity;
+			public final ForgeConfigSpec.DoubleValue breakSpeedBase;
+
+			public Mining(ForgeConfigSpec.Builder builder) {
+				builder.push("mining");
+
+				this.breakSpeedAquaAffinity = builder.comment("").defineInRange("breakSpeedAquaAffinity", 0.25D, 0.0D, 10.0D);
+				this.breakSpeedBase = builder.comment("").defineInRange("breakSpeedBase", 1.0D, 0.0D, 10.0D);
+
+				builder.pop();
+			}
+
 		}
 
 		public static class Movement {

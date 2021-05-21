@@ -31,9 +31,9 @@ public class PlayerMiningEventHandler {
 				ItemStack head = player.getItemStackFromSlot(EquipmentSlotType.HEAD);
 				int aquaAffinityLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.AQUA_AFFINITY, head);
 				if (aquaAffinityLevel > 0) {
-					multiplier *= 1.0F + BetterDivingConfig.SERVER_CONFIG.breakSpeedAquaAffinity.get() * aquaAffinityLevel;
+					multiplier *= 1.0F + BetterDivingConfig.SERVER_CONFIG.mining.breakSpeedAquaAffinity.get() * aquaAffinityLevel;
 				} else {
-					multiplier *= 5.0F;
+					multiplier *= 5.0F * BetterDivingConfig.SERVER_CONFIG.mining.breakSpeedBase.get();
 				}
 			}
 
