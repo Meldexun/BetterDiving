@@ -1,6 +1,7 @@
 package meldexun.better_diving.api.capability;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.MathHelper;
 
 public interface ICapabilityOxygen {
 
@@ -22,12 +23,20 @@ public interface ICapabilityOxygen {
 	/**
 	 * Returns the amount of oxygen that was received.
 	 */
-	int receiveOxygen(int amount);
+	default int receiveOxygen(int amount) {
+		amount = MathHelper.clamp(amount, 0, this.getOxygenCapacity() - this.getOxygen());
+		this.setOxygen(this.getOxygen() + amount);
+		return amount;
+	}
 
 	/**
 	 * Returns the amount of oxygen that was extracted.
 	 */
-	int extractOxygen(int amount);
+	default int extractOxygen(int amount) {
+		amount = MathHelper.clamp(amount, 0, this.getOxygen());
+		this.setOxygen(this.getOxygen() - amount);
+		return amount;
+	}
 
 	/**
 	 * Returns if this object can be used by the specified player.
