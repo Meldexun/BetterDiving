@@ -3,6 +3,7 @@ package meldexun.better_diving;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import meldexun.better_diving.api.BetterDivingModules;
 import meldexun.better_diving.config.BetterDivingConfig;
 import meldexun.better_diving.event.FeatureEventHandler;
 import meldexun.better_diving.init.BetterDivingBlocks;
@@ -16,6 +17,7 @@ import meldexun.better_diving.init.BetterDivingSounds;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.config.ModConfig.Type;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -36,6 +38,7 @@ public class BetterDiving {
 		ModLoadingContext.get().registerConfig(Type.CLIENT, BetterDivingConfig.CLIENT_SPEC);
 		ModLoadingContext.get().registerConfig(Type.SERVER, BetterDivingConfig.SERVER_SPEC);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::updateConfig);
 		BetterDivingBlocks.registerBlocks();
 		BetterDivingItems.registerItems();
 		BetterDivingEntities.registerEntities();
@@ -48,6 +51,14 @@ public class BetterDiving {
 		BetterDivingCapabilities.registerCapabilities();
 		BetterDivingPackets.registerPackets();
 		FeatureEventHandler.registerConfiguredFeatures();
+	}
+
+	private void updateConfig(ModConfig.ModConfigEvent event) {
+		if (event.getConfig().getModId().equals(MOD_ID)) {
+			BetterDivingModules.breakSpeedChanges = BetterDivingConfig.SERVER_CONFIG.breakSpeedChanges.get();
+			BetterDivingModules.movementChanges = BetterDivingConfig.SERVER_CONFIG.movementChanges.get();
+			BetterDivingModules.oxygenChanges = BetterDivingConfig.SERVER_CONFIG.oxygenChanges.get();
+		}
 	}
 
 }
