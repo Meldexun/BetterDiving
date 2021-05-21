@@ -33,8 +33,15 @@ public class GuiOxygen {
 		TextureManager textureManager = mc.getTextureManager();
 		FontRenderer fontRenderer = mc.fontRenderer;
 
-		int oxygen = (int) Math.round(OxygenPlayerHelper.getOxygenRespectEquipment(mc.player) / 20.0D / 3.0D) * 3;
-		double percent = (int) (OxygenPlayerHelper.getOxygenRespectEquipmentInPercent(mc.player) * 80.0D) / 80.0D;
+		int oxygen;
+		double percent;
+		if (BetterDivingConfig.SERVER_CONFIG.oxygenChanges.get()) {
+			oxygen = (int) Math.round(OxygenPlayerHelper.getOxygenRespectEquipment(mc.player) / 20.0D / 3.0D) * 3;
+			percent = (int) (OxygenPlayerHelper.getOxygenRespectEquipmentInPercent(mc.player) * 80.0D) / 80.0D;
+		} else {
+			oxygen = (int) Math.round(mc.player.getAir() / 20.0D / 3.0D) * 3;
+			percent = (int) ((double) mc.player.getAir() / (double) mc.player.getMaxAir() * 80.0D) / 80.0D;
+		}
 
 		int width = 105;
 		int height = 25;
