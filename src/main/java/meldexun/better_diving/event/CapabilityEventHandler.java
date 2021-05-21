@@ -8,7 +8,6 @@ import meldexun.better_diving.capability.oxygen.entity.CapabilityOxygenProvider;
 import meldexun.better_diving.capability.oxygen.entity.player.CapabilityOxygenPlayer;
 import meldexun.better_diving.capability.oxygen.item.CapabilityOxygenItem;
 import meldexun.better_diving.capability.oxygen.item.CapabilityOxygenItemProvider;
-import meldexun.better_diving.config.BetterDivingConfig;
 import meldexun.better_diving.entity.EntitySeamoth;
 import meldexun.better_diving.oxygenprovider.DivingGearManager;
 import meldexun.better_diving.oxygenprovider.OxygenProviderEntity;
@@ -28,7 +27,7 @@ public class CapabilityEventHandler {
 	public static void onAttachEntityCapabilitiesEvent(AttachCapabilitiesEvent<Entity> event) {
 		Entity entity = event.getObject();
 		if (entity instanceof PlayerEntity) {
-			event.addCapability(CapabilityOxygenProvider.REGISTRY_NAME, new CapabilityOxygenProvider(() -> new CapabilityOxygenPlayer((PlayerEntity) entity, BetterDivingConfig.SERVER_CONFIG.oxygen.oxygenCapacity.get())));
+			event.addCapability(CapabilityOxygenProvider.REGISTRY_NAME, new CapabilityOxygenProvider(() -> new CapabilityOxygenPlayer((PlayerEntity) entity)));
 		} else {
 			OxygenProviderEntity oxygenProviderEntity = DivingGearManager.getOxygenProviderEntity(entity);
 			if (oxygenProviderEntity != null) {

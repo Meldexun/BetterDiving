@@ -1,6 +1,6 @@
 package meldexun.better_diving.capability.oxygen.entity.player;
 
-import meldexun.better_diving.capability.oxygen.entity.CapabilityOxygen;
+import meldexun.better_diving.api.capability.ICapabilityOxygen;
 import meldexun.better_diving.config.BetterDivingConfig;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -9,13 +9,14 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 
-public class CapabilityOxygenPlayer extends CapabilityOxygen {
+public class CapabilityOxygenPlayer implements ICapabilityOxygen {
 
 	private final PlayerEntity player;
+	private int oxygen;
 
-	public CapabilityOxygenPlayer(PlayerEntity player, int oxygenCapacity) {
-		super(oxygenCapacity);
+	public CapabilityOxygenPlayer(PlayerEntity player) {
 		this.player = player;
+		this.setOxygen(this.getOxygenCapacity());
 	}
 
 	@Override
@@ -24,8 +25,13 @@ public class CapabilityOxygenPlayer extends CapabilityOxygen {
 	}
 
 	@Override
+	public int getOxygen() {
+		return this.oxygen;
+	}
+
+	@Override
 	public int getOxygenCapacity() {
-		int oxygenCap = super.getOxygenCapacity();
+		int oxygenCap = BetterDivingConfig.SERVER_CONFIG.oxygen.oxygenCapacity.get();
 		ItemStack stack = this.player.getItemStackFromSlot(EquipmentSlotType.HEAD);
 		if (!stack.isEmpty()) {
 			int respirationLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.RESPIRATION, stack);
@@ -39,7 +45,7 @@ public class CapabilityOxygenPlayer extends CapabilityOxygen {
 	@Override
 	public int extractOxygen(int amount) {
 		amount = MathHelper.clamp(amount, 0, this.getOxygen() + 20);
-		this.oxygen = this.oxygen - amount;
+		this.setOxygen(this.getOxygen() - amount);
 		return amount;
 	}
 
