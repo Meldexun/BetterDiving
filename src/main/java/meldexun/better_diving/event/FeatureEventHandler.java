@@ -27,9 +27,9 @@ public class FeatureEventHandler {
 	}
 
 	public static void registerConfiguredFeatures() {
-		limestoneOutcrop = register("", BetterDivingFeatures.LIMESTONE_OUTCROP.get(), 0, 2);
-		sandstoneOutcrop = register("", BetterDivingFeatures.SANDSTONE_OUTCROP.get(), 0, 1);
-		shaleOutcrop = register("", BetterDivingFeatures.SHALE_OUTCROP.get(), 3, 5);
+		limestoneOutcrop = register("limestone_outcrop", BetterDivingFeatures.LIMESTONE_OUTCROP.get(), 0, 2);
+		sandstoneOutcrop = register("sandstone_outcrop", BetterDivingFeatures.SANDSTONE_OUTCROP.get(), 0, 1);
+		shaleOutcrop = register("shalestone_outcrop", BetterDivingFeatures.SHALE_OUTCROP.get(), 3, 5);
 	}
 
 	@SubscribeEvent
