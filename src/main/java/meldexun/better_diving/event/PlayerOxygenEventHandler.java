@@ -32,7 +32,7 @@ public class PlayerOxygenEventHandler {
 		PlayerEntity player = event.player;
 		if (!BetterDivingConfig.SERVER_CONFIG.oxygenChanges.get()) {
 			if (!player.world.isRemote && player.getRidingEntity() instanceof EntitySeamoth) {
-				player.setAir(player.getAir() + 5);
+				player.setAir(Math.min(player.getAir() + 5, player.getMaxAir()));
 			}
 			return;
 		}
@@ -55,7 +55,7 @@ public class PlayerOxygenEventHandler {
 					OxygenPlayerHelper.receiveOxygenRespectEquipment(player, 25);
 				}
 
-				player.setAir((int) (OxygenPlayerHelper.getOxygenRespectEquipmentInPercent(player) * 300.0D));
+				player.setAir((int) (OxygenPlayerHelper.getOxygenRespectEquipmentInPercent(player) * player.getMaxAir()));
 
 				if (cap.getOxygen() <= -20) {
 					cap.setOxygen(0);
