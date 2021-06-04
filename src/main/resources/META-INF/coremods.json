@@ -1,3 +1,6 @@
 {
-	"LivingEntity Transformer": "assets/better_diving/LivingEntityTransformer.js"
+	"LivingEntity Transformer": "asm/better_diving/LivingEntityTransformer.js",
+	"ClientPlayerEntity Transformer": "asm/better_diving/ClientPlayerEntityTransformer.js",
+	"LightTexture Transformer": "asm/better_diving/LightTextureTransformer.js",
+	"FogRenderer Transformer": "asm/better_diving/FogRendererTransformer.js"
 }
