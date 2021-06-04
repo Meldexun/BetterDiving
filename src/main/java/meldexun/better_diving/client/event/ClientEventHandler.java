@@ -1,15 +1,7 @@
 package meldexun.better_diving.client.event;
 
-import static org.lwjgl.opengl.GL20C.glUniformMatrix4fv;
-
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
 import java.text.DecimalFormat;
 import java.util.List;
-
-import org.lwjgl.opengl.GL21C;
-import org.lwjgl.opengl.GL33C;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -17,38 +9,26 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import meldexun.better_diving.BetterDiving;
 import meldexun.better_diving.capability.oxygen.item.CapabilityOxygenItemProvider;
-import meldexun.better_diving.client.ResourceSupplier;
-import meldexun.better_diving.client.ShaderProgram;
 import meldexun.better_diving.client.gui.GuiOxygen;
 import meldexun.better_diving.client.gui.GuiSeamoth;
-import meldexun.better_diving.client.gui.HotbarSeamoth;
 import meldexun.better_diving.config.BetterDivingConfig;
 import meldexun.better_diving.entity.EntitySeamoth;
-import meldexun.better_diving.network.packet.client.CPacketOpenSeamothInventory;
 import meldexun.better_diving.oxygenprovider.DivingGearManager;
 import meldexun.better_diving.oxygenprovider.DivingMaskProviderItem;
 import meldexun.better_diving.oxygenprovider.MiningspeedProviderItem;
 import meldexun.better_diving.oxygenprovider.SwimspeedProviderItem;
 import meldexun.better_diving.util.OxygenPlayerHelper;
 import meldexun.better_diving.util.reflection.ReflectionField;
-import meldexun.better_diving.util.reflection.ReflectionMethod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.BetterDivingRenderUtil;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.FogRenderer;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.WorldVertexBufferUploader;
-import net.minecraft.client.renderer.chunk.ChunkRenderDispatcher.ChunkRender;
-import net.minecraft.client.renderer.culling.ClippingHelper;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexBuffer;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.client.world.DimensionRenderInfo;
 import net.minecraft.entity.Entity;
@@ -57,7 +37,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3d;
@@ -69,11 +48,8 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.ISkyRenderHandler;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
-import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
-import net.minecraftforge.client.event.InputEvent.MouseScrollEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -90,22 +66,22 @@ public class ClientEventHandler {
 		if (event.getType() == ElementType.AIR && BetterDivingConfig.CLIENT_CONFIG.oxygenGuiEnabled.get()) {
 			event.setCanceled(true);
 
-			if (mc.player.areEyesInFluid(FluidTags.WATER) || OxygenPlayerHelper.getOxygenRespectEquipment(mc.player) < OxygenPlayerHelper.getOxygenCapacityRespectEquipment(mc.player)) {
+			if (mc.player.isEyeInFluid(FluidTags.WATER) || OxygenPlayerHelper.getOxygenRespectEquipment(mc.player) < OxygenPlayerHelper.getOxygenCapacityRespectEquipment(mc.player)) {
 				GuiOxygen.render(event.getMatrixStack());
 			}
 		}
-		if (event.getType() == ElementType.ALL && BetterDivingConfig.CLIENT_CONFIG.seamothGuiEnabled.get() && mc.player.getRidingEntity() instanceof EntitySeamoth) {
+		if (event.getType() == ElementType.ALL && BetterDivingConfig.CLIENT_CONFIG.seamothGuiEnabled.get() && mc.player.getVehicle() instanceof EntitySeamoth) {
 			GuiSeamoth.render(event.getMatrixStack());
 		}
-		if (event.getType() == ElementType.HOTBAR && mc.player.getRidingEntity() instanceof EntitySeamoth) {
-			event.setCanceled(true);
-			HotbarSeamoth.render(event.getMatrixStack());
+		if (event.getType() == ElementType.HOTBAR && mc.player.getVehicle() instanceof EntitySeamoth) {
+			// event.setCanceled(true);
+			// HotbarSeamoth.render(event.getMatrixStack());
 		}
 	}
 
 	@SubscribeEvent
 	public static void onFOVModifierEvent(EntityViewRenderEvent.FOVModifier event) {
-		if (!event.getInfo().getFluidState().isEmpty()) {
+		if (!event.getInfo().getFluidInCamera().isEmpty()) {
 			event.setFOV(event.getFOV() * 7.0D / 6.0D);
 		}
 	}
@@ -135,19 +111,20 @@ public class ClientEventHandler {
 		}
 	}
 
+	/*
 	private static final ReflectionMethod<?> KEY_BINDING_UNPRESS_KEY = new ReflectionMethod<>(KeyBinding.class, "?", "unpressKey");
 
 	@SubscribeEvent
 	public static void onKeyInputEvent(KeyInputEvent event) {
 		Minecraft mc = Minecraft.getInstance();
-		if (mc.player != null && mc.player.getRidingEntity() instanceof EntitySeamoth && event.getAction() == 1) {
-			EntitySeamoth seamoth = (EntitySeamoth) mc.player.getRidingEntity();
-			if (event.getKey() == mc.gameSettings.keyBindInventory.getKey().getKeyCode() && event.getAction() == 1 && mc.currentScreen == null) {
+		if (mc.player != null && mc.player.getVehicle() instanceof EntitySeamoth && event.getAction() == 1) {
+			EntitySeamoth seamoth = (EntitySeamoth) mc.player.getVehicle();
+			if (event.getKey() == mc.options.keyInventory.getKey().getValue() && event.getAction() == 1 && mc.screen == null) {
 				BetterDiving.NETWORK.sendToServer(new CPacketOpenSeamothInventory());
 			}
-			for (int i = 0; i < mc.gameSettings.keyBindsHotbar.length; i++) {
-				if (event.getKey() == mc.gameSettings.keyBindsHotbar[i].getKey().getKeyCode()) {
-					KEY_BINDING_UNPRESS_KEY.invoke(mc.gameSettings.keyBindsHotbar[i]);
+			for (int i = 0; i < mc.options.keyHotbarSlots.length; i++) {
+				if (event.getKey() == mc.options.keyHotbarSlots[i].getKey().getValue()) {
+					KEY_BINDING_UNPRESS_KEY.invoke(mc.options.keyHotbarSlots[i]);
 					if (i < 4) {
 						ItemStack stack = seamoth.getModule(i);
 						if (!stack.isEmpty()) {
@@ -168,7 +145,7 @@ public class ClientEventHandler {
 	@SubscribeEvent
 	public static void on(MouseScrollEvent event) {
 		Minecraft mc = Minecraft.getInstance();
-		if (mc.player != null && mc.player.getRidingEntity() instanceof EntitySeamoth) {
+		if (mc.player != null && mc.player.getVehicle() instanceof EntitySeamoth) {
 			System.out.println(event.getScrollDelta());
 		}
 	}
@@ -251,7 +228,7 @@ public class ClientEventHandler {
 		//GlStateManager.disableTexture();
 
 		MatrixStack matrixStack = event.getMatrixStack();
-		RenderType[] blockLayers = { RenderType.getSolid()/*, RenderType.getCutoutMipped(), RenderType.getCutout()*/ };
+		RenderType[] blockLayers = { RenderType.getSolid()/*, RenderType.getCutoutMipped(), RenderType.getCutout()* / };
 		for (int i = 0; i < blockLayers.length; i++) {
 			RenderType blockLayer = blockLayers[i];
 			GL33C.glUniform4f(uniform_color, 1.0F, 0.0F, 0.0F, blockLayer == RenderType.getSolid() ? 1.0F : 0.5F);
@@ -463,7 +440,7 @@ public class ClientEventHandler {
 			GL21C.glBindBuffer(GL21C.GL_ARRAY_BUFFER, 0);
 		} finally {
 		}
-		*/
+		* /
 	}
 
 	/*
@@ -561,14 +538,14 @@ public class ClientEventHandler {
 	@SubscribeEvent
 	public static void onFogColorEvent(EntityViewRenderEvent.FogColors event) {
 		Minecraft mc = Minecraft.getInstance();
-		float partialTicks = mc.getRenderPartialTicks();
+		float partialTicks = mc.getFrameTime();
 		ActiveRenderInfo activeRenderInfo = event.getInfo();
-		FluidState fluidState = activeRenderInfo.getFluidState();
-		if (!fluidState.isTagged(FluidTags.WATER)) {
+		FluidState fluidState = activeRenderInfo.getFluidInCamera();
+		if (!fluidState.is(FluidTags.WATER)) {
 			return;
 		}
 		float minFogBrightness = 0.05F;
-		float f = mc.world.getSunBrightness(partialTicks);
+		float f = mc.level.getSkyDarken(partialTicks);
 		f = MathHelper.clamp((f - 0.2F) / 0.8F, 0.0F, 1.0F);
 		f = MathHelper.clamp(f * (1.0F - minFogBrightness) + minFogBrightness, 0.0F, 1.0F);
 		event.setRed(event.getRed() * f);
@@ -583,24 +560,24 @@ public class ClientEventHandler {
 	@SubscribeEvent
 	public static void onFogDensityEvent(EntityViewRenderEvent.FogDensity event) {
 		Minecraft mc = Minecraft.getInstance();
-		float partialTicks = mc.getRenderPartialTicks();
+		float partialTicks = mc.getFrameTime();
 		ActiveRenderInfo activeRenderInfo = event.getInfo();
-		FluidState fluidstate = activeRenderInfo.getFluidState();
-		if (!fluidstate.isTagged(FluidTags.WATER)) {
+		FluidState fluidstate = activeRenderInfo.getFluidInCamera();
+		if (!fluidstate.is(FluidTags.WATER)) {
 			fogBiomeLastUpdate = -1L;
 			return;
 		}
-		Entity entity = activeRenderInfo.getRenderViewEntity();
+		Entity entity = activeRenderInfo.getEntity();
 		float fogDensityBase = 0.025F;
 		float fogDensityNightBonus = 0.01F;
 		float f = fogDensityBase + 0.01F;
 		if (entity instanceof ClientPlayerEntity) {
 			ClientPlayerEntity clientplayerentity = (ClientPlayerEntity) entity;
-			f -= clientplayerentity.getWaterBrightness() * 0.01F;
+			f -= clientplayerentity.getWaterVision() * 0.01F;
 			
-			Biome biome = clientplayerentity.world.getBiome(clientplayerentity.getPosition());
-			long time = Util.milliTime();
-			float f1 = biome.getCategory() == Biome.Category.SWAMP ? 0.005F : 0.0F;
+			Biome biome = clientplayerentity.level.getBiome(clientplayerentity.blockPosition());
+			long time = Util.getMillis();
+			float f1 = biome.getBiomeCategory() == Biome.Category.SWAMP ? 0.005F : 0.0F;
 			if (fogBiomeLastUpdate < 0L) {
 				fogBiomeFactor = f1;
 				fogBiomeFactorTarget = f1;
@@ -617,7 +594,7 @@ public class ClientEventHandler {
 			}
 			f += f3;
 		}
-		float f1 = mc.world.getSunBrightness(partialTicks);
+		float f1 = mc.level.getSkyDarken(partialTicks);
 		f1 = MathHelper.clamp((f1 - 0.2F) / 0.8F, 0.0F, 1.0F);
 		f += (1.0F - f1) * fogDensityNightBonus;
 		
@@ -627,88 +604,88 @@ public class ClientEventHandler {
 
 	@SubscribeEvent
 	public static void t(WorldEvent.Load e) {
-		if (e.getWorld().isRemote()) {
-			((ClientWorld) e.getWorld()).getDimensionRenderInfo().setSkyRenderHandler(new ISkyRenderHandler() {
+		if (e.getWorld().isClientSide()) {
+			((ClientWorld) e.getWorld()).effects().setSkyRenderHandler(new ISkyRenderHandler() {
 				@SuppressWarnings("deprecation")
 				@Override
 				public void render(int ticks, float partialTicks, MatrixStack matrixStack, ClientWorld world, Minecraft mc) {
-					boolean vanilla = false || !mc.player.areEyesInFluid(FluidTags.WATER);
-					if (mc.world.getDimensionRenderInfo().getFogType() == DimensionRenderInfo.FogType.END) {
+					boolean vanilla = false || !mc.player.isEyeInFluid(FluidTags.WATER);
+					if (mc.level.effects().skyType() == DimensionRenderInfo.FogType.END) {
 						// renderSkyEnd(matrixStack);
-					} else if (mc.world.getDimensionRenderInfo().getFogType() == DimensionRenderInfo.FogType.NORMAL) {
+					} else if (mc.level.effects().skyType() == DimensionRenderInfo.FogType.NORMAL) {
 						RenderSystem.disableTexture();
-						Vector3d vector3d = world.getSkyColor(mc.gameRenderer.getActiveRenderInfo().getBlockPos(), partialTicks);
+						Vector3d vector3d = world.getSkyColor(mc.gameRenderer.getMainCamera().getBlockPosition(), partialTicks);
 						float f = (float) vector3d.x;
 						float f1 = (float) vector3d.y;
 						float f2 = (float) vector3d.z;
-						FogRenderer.applyFog();
-						BufferBuilder bufferbuilder = Tessellator.getInstance().getBuffer();
+						FogRenderer.levelFogColor();
+						BufferBuilder bufferbuilder = Tessellator.getInstance().getBuilder();
 						RenderSystem.depthMask(false);
 						RenderSystem.enableFog();
 						RenderSystem.color3f(f, f1, f2);
-						VertexBuffer skyVBO = new ReflectionField<VertexBuffer>(WorldRenderer.class, "?", "skyVBO").get(mc.worldRenderer);
-						skyVBO.bindBuffer();
+						VertexBuffer skyVBO = mc.levelRenderer.skyBuffer;
+						skyVBO.bind();
 						DefaultVertexFormats.POSITION.setupBufferState(0L);
-						skyVBO.draw(matrixStack.getLast().getMatrix(), 7);
-						VertexBuffer.unbindBuffer();
+						skyVBO.draw(matrixStack.last().pose(), 7);
+						VertexBuffer.unbind();
 						DefaultVertexFormats.POSITION.clearBufferState();
 						RenderSystem.disableFog();
 						RenderSystem.disableAlphaTest();
 						RenderSystem.enableBlend();
 						RenderSystem.defaultBlendFunc();
-						float[] afloat = world.getDimensionRenderInfo().func_230492_a_(world.func_242415_f(partialTicks), partialTicks);
+						float[] afloat = world.effects().getSunriseColor(world.getTimeOfDay(partialTicks), partialTicks);
 						if (vanilla && afloat != null) {
 							RenderSystem.disableTexture();
 							RenderSystem.shadeModel(7425);
-							matrixStack.push();
-							matrixStack.rotate(Vector3f.XP.rotationDegrees(90.0F));
-							float f3 = MathHelper.sin(world.getCelestialAngleRadians(partialTicks)) < 0.0F ? 180.0F : 0.0F;
-							matrixStack.rotate(Vector3f.ZP.rotationDegrees(f3));
-							matrixStack.rotate(Vector3f.ZP.rotationDegrees(90.0F));
+							matrixStack.pushPose();
+							matrixStack.mulPose(Vector3f.XP.rotationDegrees(90.0F));
+							float f3 = MathHelper.sin(world.getSunAngle(partialTicks)) < 0.0F ? 180.0F : 0.0F;
+							matrixStack.mulPose(Vector3f.ZP.rotationDegrees(f3));
+							matrixStack.mulPose(Vector3f.ZP.rotationDegrees(90.0F));
 							float f4 = afloat[0];
 							float f5 = afloat[1];
 							float f6 = afloat[2];
-							Matrix4f matrix4f = matrixStack.getLast().getMatrix();
+							Matrix4f matrix4f = matrixStack.last().pose();
 							bufferbuilder.begin(6, DefaultVertexFormats.POSITION_COLOR);
-							bufferbuilder.pos(matrix4f, 0.0F, 100.0F, 0.0F).color(f4, f5, f6, afloat[3]).endVertex();
+							bufferbuilder.vertex(matrix4f, 0.0F, 100.0F, 0.0F).color(f4, f5, f6, afloat[3]).endVertex();
 							int i = 16;
 
 							for (int j = 0; j <= 16; ++j) {
 								float f7 = (float) j * ((float) Math.PI * 2F) / 16.0F;
 								float f8 = MathHelper.sin(f7);
 								float f9 = MathHelper.cos(f7);
-								bufferbuilder.pos(matrix4f, f8 * 120.0F, f9 * 120.0F, -f9 * 40.0F * afloat[3]).color(afloat[0], afloat[1], afloat[2], 0.0F).endVertex();
+								bufferbuilder.vertex(matrix4f, f8 * 120.0F, f9 * 120.0F, -f9 * 40.0F * afloat[3]).color(afloat[0], afloat[1], afloat[2], 0.0F).endVertex();
 							}
 
-							bufferbuilder.finishDrawing();
-							WorldVertexBufferUploader.draw(bufferbuilder);
-							matrixStack.pop();
+							bufferbuilder.end();
+							WorldVertexBufferUploader.end(bufferbuilder);
+							matrixStack.popPose();
 							RenderSystem.shadeModel(7424);
 						}
 
 						RenderSystem.enableTexture();
 						RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-						matrixStack.push();
-						float f11 = 1.0F - world.getRainStrength(partialTicks);
+						matrixStack.pushPose();
+						float f11 = 1.0F - world.getRainLevel(partialTicks);
 						RenderSystem.color4f(1.0F, 1.0F, 1.0F, f11);
-						matrixStack.rotate(Vector3f.YP.rotationDegrees(-90.0F));
-						matrixStack.rotate(Vector3f.XP.rotationDegrees(world.func_242415_f(partialTicks) * 360.0F));
-						Matrix4f matrix4f1 = matrixStack.getLast().getMatrix();
+						matrixStack.mulPose(Vector3f.YP.rotationDegrees(-90.0F));
+						matrixStack.mulPose(Vector3f.XP.rotationDegrees(world.getTimeOfDay(partialTicks) * 360.0F));
+						Matrix4f matrix4f1 = matrixStack.last().pose();
 						float f12 = 30.0F;
-						mc.textureManager.bindTexture(new ResourceLocation("textures/environment/sun.png"));
+						mc.textureManager.bind(new ResourceLocation("textures/environment/sun.png"));
 						bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-						bufferbuilder.pos(matrix4f1, -f12, 100.0F, -f12).tex(0.0F, 0.0F).endVertex();
-						bufferbuilder.pos(matrix4f1, f12, 100.0F, -f12).tex(1.0F, 0.0F).endVertex();
-						bufferbuilder.pos(matrix4f1, f12, 100.0F, f12).tex(1.0F, 1.0F).endVertex();
-						bufferbuilder.pos(matrix4f1, -f12, 100.0F, f12).tex(0.0F, 1.0F).endVertex();
-						bufferbuilder.finishDrawing();
+						bufferbuilder.vertex(matrix4f1, -f12, 100.0F, -f12).uv(0.0F, 0.0F).endVertex();
+						bufferbuilder.vertex(matrix4f1, f12, 100.0F, -f12).uv(1.0F, 0.0F).endVertex();
+						bufferbuilder.vertex(matrix4f1, f12, 100.0F, f12).uv(1.0F, 1.0F).endVertex();
+						bufferbuilder.vertex(matrix4f1, -f12, 100.0F, f12).uv(0.0F, 1.0F).endVertex();
+						bufferbuilder.end();
 						if (vanilla) {
-							WorldVertexBufferUploader.draw(bufferbuilder);
+							WorldVertexBufferUploader.end(bufferbuilder);
 						} else {
-							bufferbuilder.getNextBuffer().getSecond().clear();
+							bufferbuilder.popNextBuffer().getSecond().clear();
 						}
 						f12 = 20.0F;
-						mc.textureManager.bindTexture(new ResourceLocation("textures/environment/moon_phases.png"));
+						mc.textureManager.bind(new ResourceLocation("textures/environment/moon_phases.png"));
 						int k = world.getMoonPhase();
 						int l = k % 4;
 						int i1 = k / 4 % 2;
@@ -717,25 +694,25 @@ public class ClientEventHandler {
 						float f15 = (float) (l + 1) / 4.0F;
 						float f16 = (float) (i1 + 1) / 2.0F;
 						bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-						bufferbuilder.pos(matrix4f1, -f12, -100.0F, f12).tex(f15, f16).endVertex();
-						bufferbuilder.pos(matrix4f1, f12, -100.0F, f12).tex(f13, f16).endVertex();
-						bufferbuilder.pos(matrix4f1, f12, -100.0F, -f12).tex(f13, f14).endVertex();
-						bufferbuilder.pos(matrix4f1, -f12, -100.0F, -f12).tex(f15, f14).endVertex();
-						bufferbuilder.finishDrawing();
+						bufferbuilder.vertex(matrix4f1, -f12, -100.0F, f12).uv(f15, f16).endVertex();
+						bufferbuilder.vertex(matrix4f1, f12, -100.0F, f12).uv(f13, f16).endVertex();
+						bufferbuilder.vertex(matrix4f1, f12, -100.0F, -f12).uv(f13, f14).endVertex();
+						bufferbuilder.vertex(matrix4f1, -f12, -100.0F, -f12).uv(f15, f14).endVertex();
+						bufferbuilder.end();
 						if (vanilla) {
-							WorldVertexBufferUploader.draw(bufferbuilder);
+							WorldVertexBufferUploader.end(bufferbuilder);
 						} else {
-							bufferbuilder.getNextBuffer().getSecond().clear();
+							bufferbuilder.popNextBuffer().getSecond().clear();
 						}
 						RenderSystem.disableTexture();
 						float f10 = world.getStarBrightness(partialTicks) * f11;
 						if (vanilla && f10 > 0.0F) {
 							RenderSystem.color4f(f10, f10, f10, f10);
-							VertexBuffer starVBO = new ReflectionField<VertexBuffer>(WorldRenderer.class, "?", "starVBO").get(mc.worldRenderer);
-							starVBO.bindBuffer();
+							VertexBuffer starVBO = mc.levelRenderer.starBuffer;
+							starVBO.bind();
 							DefaultVertexFormats.POSITION.setupBufferState(0L);
-							starVBO.draw(matrixStack.getLast().getMatrix(), 7);
-							VertexBuffer.unbindBuffer();
+							starVBO.draw(matrixStack.last().pose(), 7);
+							VertexBuffer.unbind();
 							DefaultVertexFormats.POSITION.clearBufferState();
 						}
 
@@ -743,23 +720,23 @@ public class ClientEventHandler {
 						RenderSystem.disableBlend();
 						RenderSystem.enableAlphaTest();
 						RenderSystem.enableFog();
-						matrixStack.pop();
+						matrixStack.popPose();
 						RenderSystem.disableTexture();
 						RenderSystem.color3f(0.0F, 0.0F, 0.0F);
-						double d0 = mc.player.getEyePosition(partialTicks).y - world.getWorldInfo().getVoidFogHeight();
+						double d0 = mc.player.getEyePosition(partialTicks).y - world.getLevelData().getHorizonHeight();
 						if (vanilla && d0 < 0.0D) {
-							matrixStack.push();
+							matrixStack.pushPose();
 							matrixStack.translate(0.0D, 12.0D, 0.0D);
-							VertexBuffer sky2VBO = new ReflectionField<VertexBuffer>(WorldRenderer.class, "?", "sky2VBO").get(mc.worldRenderer);
-							sky2VBO.bindBuffer();
+							VertexBuffer sky2VBO = mc.levelRenderer.darkBuffer;
+							sky2VBO.bind();
 							DefaultVertexFormats.POSITION.setupBufferState(0L);
-							sky2VBO.draw(matrixStack.getLast().getMatrix(), 7);
-							VertexBuffer.unbindBuffer();
+							sky2VBO.draw(matrixStack.last().pose(), 7);
+							VertexBuffer.unbind();
 							DefaultVertexFormats.POSITION.clearBufferState();
-							matrixStack.pop();
+							matrixStack.popPose();
 						}
 
-						if (world.getDimensionRenderInfo().func_239216_b_()) {
+						if (world.effects().hasGround()) {
 							RenderSystem.color3f(f * 0.2F + 0.04F, f1 * 0.2F + 0.04F, f2 * 0.6F + 0.1F);
 						} else {
 							RenderSystem.color3f(f, f1, f2);

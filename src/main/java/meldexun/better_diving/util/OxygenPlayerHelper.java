@@ -19,13 +19,13 @@ public class OxygenPlayerHelper {
 		ICapabilityOxygen oxygenCap = optionalOxygenCap.orElseThrow(NullPointerException::new);
 		int oxygenOfPlayer = oxygenCap.getOxygen();
 
-		Entity ridingEntity = player.getRidingEntity();
+		Entity ridingEntity = player.getVehicle();
 		if (ridingEntity != null) {
 			oxygenOfPlayer += OxygenEntityHelper.getOxygen(ridingEntity);
 		}
 
 		for (EquipmentSlotType slot : EquipmentSlotType.values()) {
-			ItemStack stack = player.getItemStackFromSlot(slot);
+			ItemStack stack = player.getItemBySlot(slot);
 			oxygenOfPlayer += OxygenItemHelper.getOxygen(stack, player, slot);
 		}
 
@@ -40,13 +40,13 @@ public class OxygenPlayerHelper {
 		ICapabilityOxygen oxygenCap = optionalOxygenCap.orElseThrow(NullPointerException::new);
 		int oxygenCapacity = oxygenCap.getOxygenCapacity();
 
-		Entity ridingEntity = player.getRidingEntity();
+		Entity ridingEntity = player.getVehicle();
 		if (ridingEntity != null) {
 			oxygenCapacity += OxygenEntityHelper.getOxygenCapacity(ridingEntity);
 		}
 
 		for (EquipmentSlotType slot : EquipmentSlotType.values()) {
-			ItemStack stack = player.getItemStackFromSlot(slot);
+			ItemStack stack = player.getItemBySlot(slot);
 			oxygenCapacity += OxygenItemHelper.getOxygenCapacity(stack, player, slot);
 		}
 
@@ -71,13 +71,13 @@ public class OxygenPlayerHelper {
 		amount -= i;
 
 		for (EquipmentSlotType slot : EquipmentSlotType.values()) {
-			ItemStack stack = player.getItemStackFromSlot(slot);
+			ItemStack stack = player.getItemBySlot(slot);
 			int j = OxygenItemHelper.receiveOxygen(stack, amount, player, slot);
 			amountReceived += j;
 			amount -= j;
 		}
 
-		Entity ridingEntity = player.getRidingEntity();
+		Entity ridingEntity = player.getVehicle();
 		if (ridingEntity != null) {
 			int j = OxygenEntityHelper.receiveOxygen(ridingEntity, amount);
 			amountReceived += j;
@@ -96,7 +96,7 @@ public class OxygenPlayerHelper {
 		ICapabilityOxygen oxygenCap = optionalOxygenCap.orElseThrow(NullPointerException::new);
 		int amountExtracted = 0;
 
-		Entity ridingEntity = player.getRidingEntity();
+		Entity ridingEntity = player.getVehicle();
 		if (ridingEntity != null) {
 			int j = OxygenEntityHelper.extractOxygen(ridingEntity, amount);
 			amountExtracted += j;
@@ -104,7 +104,7 @@ public class OxygenPlayerHelper {
 		}
 
 		for (EquipmentSlotType slot : EquipmentSlotType.values()) {
-			ItemStack stack = player.getItemStackFromSlot(slot);
+			ItemStack stack = player.getItemBySlot(slot);
 			int j = OxygenItemHelper.extractOxygen(stack, amount, player, slot);
 			amountExtracted += j;
 			amount -= j;

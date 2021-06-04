@@ -31,20 +31,20 @@ public class RavineOutcropFeature extends Feature<FeatureSpreadConfig> {
 	}
 
 	@Override
-	public boolean generate(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, FeatureSpreadConfig config) {
+	public boolean place(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, FeatureSpreadConfig config) {
 		int i = 0;
-		int j = config.getSpread().getSpread(rand);
+		int j = config.count().sample(rand);
 		for (int k = 0; k < j; k++) {
 			for (int l = 0; l < 16; l++) {
 				int x = rand.nextInt(8) - rand.nextInt(8);
 				int z = rand.nextInt(8) - rand.nextInt(8);
-				int height = generator.getHeight(pos.getX() + x, pos.getZ() + z, Type.OCEAN_FLOOR);
+				int height = generator.getBaseHeight(pos.getX() + x, pos.getZ() + z, Type.OCEAN_FLOOR);
 				if (height <= 1) {
 					continue;
 				}
 				int y = 1 + rand.nextInt(height - 1);
 				BlockPos p = new BlockPos(pos.getX() + x, y, pos.getZ() + z);
-				if (!reader.getBlockState(p).matchesBlock(Blocks.WATER)) {
+				if (!reader.getBlockState(p).is(Blocks.WATER)) {
 					continue;
 				}
 				boolean flag = false;
@@ -70,9 +70,9 @@ public class RavineOutcropFeature extends Feature<FeatureSpreadConfig> {
 				list.add(Direction.WEST);
 				Collections.shuffle(list);
 				for (Direction d : list) {
-					BlockState state = this.block.getDefaultState().with(BlockStateProperties.FACING, d);
-					if (state.isValidPosition((IWorldReader) reader, p)) {
-						reader.setBlockState(p, state, 2);
+					BlockState state = this.block.defaultBlockState().setValue(BlockStateProperties.FACING, d);
+					if (state.canSurvive((IWorldReader) reader, p)) {
+						reader.setBlock(p, state, 2);
 						i++;
 						break;
 					}

@@ -9,21 +9,21 @@ import net.minecraftforge.items.CapabilityItemHandler;
 public class ContainerSeamothEntity extends ContainerSeamoth {
 
 	private final EntitySeamoth seamoth;
-	private final IntReferenceHolder entity = IntReferenceHolder.single();
+	private final IntReferenceHolder entity = IntReferenceHolder.standalone();
 
 	/** Server */
 	public ContainerSeamothEntity(int id, PlayerInventory playerInv, EntitySeamoth seamoth) {
 		super(BetterDivingContainers.SEAMOTH_ENTITY.get(), id, playerInv, seamoth.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElseThrow(NullPointerException::new));
 		this.seamoth = seamoth;
-		this.trackInt(this.entity);
-		this.entity.set(seamoth.getEntityId());
+		this.addDataSlot(this.entity);
+		this.entity.set(seamoth.getId());
 	}
 
 	/** Client */
 	public ContainerSeamothEntity(int id, PlayerInventory playerInv) {
 		super(BetterDivingContainers.SEAMOTH_ENTITY.get(), id, playerInv);
 		this.seamoth = null;
-		this.trackInt(this.entity);
+		this.addDataSlot(this.entity);
 	}
 
 	public int getEntityId() {

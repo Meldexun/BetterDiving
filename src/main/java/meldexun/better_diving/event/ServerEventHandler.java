@@ -16,7 +16,7 @@ public class ServerEventHandler {
 
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public static void onEntitySizeEvent(EntityEvent.Size event) {
-		if (event.getEntity() instanceof PlayerEntity && event.getEntity().getRidingEntity() instanceof EntitySeamoth) {
+		if (event.getEntity() instanceof PlayerEntity && event.getEntity().getVehicle() instanceof EntitySeamoth) {
 			event.setNewEyeHeight(event.getNewEyeHeight() * 1.164375F / 1.62F);
 		}
 	}
@@ -28,7 +28,7 @@ public class ServerEventHandler {
 
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public static void onPlayerWaterBreathingEvent(PlayerCanBreathEvent event) {
-		if (event.getPlayer().getRidingEntity() instanceof EntitySeamoth && ((EntitySeamoth) event.getPlayer().getRidingEntity()).hasEnergy()) {
+		if (event.getPlayer().getVehicle() instanceof EntitySeamoth && ((EntitySeamoth) event.getPlayer().getVehicle()).hasEnergy()) {
 			event.setCanBreath(true);
 		}
 	}

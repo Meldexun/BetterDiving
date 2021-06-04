@@ -35,7 +35,7 @@ public class ClientBetterDiving {
 
 	@SuppressWarnings("resource")
 	public static World getWorld() {
-		return Minecraft.getInstance().world;
+		return Minecraft.getInstance().level;
 	}
 
 	@SubscribeEvent
@@ -44,13 +44,13 @@ public class ClientBetterDiving {
 
 		RenderingRegistry.registerEntityRenderingHandler(BetterDivingEntities.SEAMOTH.get(), RenderSeamoth::new);
 
-		ScreenManager.registerFactory(BetterDivingContainers.SEAMOTH_ENTITY.get(), ScreenSeamoth::new);
-		ScreenManager.registerFactory(BetterDivingContainers.SEAMOTH_ITEM.get(), ScreenSeamoth::new);
+		ScreenManager.register(BetterDivingContainers.SEAMOTH_ENTITY.get(), ScreenSeamoth::new);
+		ScreenManager.register(BetterDivingContainers.SEAMOTH_ITEM.get(), ScreenSeamoth::new);
 	}
 
 	@SubscribeEvent
 	public static void onTextureStitchPreEvent(TextureStitchEvent.Pre event) {
-		if (event.getMap().getTextureLocation().equals(PlayerContainer.LOCATION_BLOCKS_TEXTURE)) {
+		if (event.getMap().location().equals(PlayerContainer.BLOCK_ATLAS)) {
 			event.addSprite(new ResourceLocation(BetterDiving.MOD_ID, "item/empty_power_cell"));
 		}
 	}

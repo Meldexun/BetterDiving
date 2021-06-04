@@ -12,36 +12,29 @@ import net.minecraft.util.math.MathHelper;
 
 public class Hook {
 
-	private static final ReflectionField<Integer> CLIENT_PLAYER_ENTITY_COUNTER_IN_WATER = new ReflectionField<>(ClientPlayerEntity.class, "?", "counterInWater");
-
 	public static float getWaterBrightness(ClientPlayerEntity player) {
-		if (!player.areEyesInFluid(FluidTags.WATER)) {
+		if (!player.isEyeInFluid(FluidTags.WATER)) {
 			return 0.0F;
 		}
 		Minecraft mc = Minecraft.getInstance();
-		return MathHelper.clamp((CLIENT_PLAYER_ENTITY_COUNTER_IN_WATER.get(player) + mc.getRenderPartialTicks()) / 60.0F, 0.0F, 1.0F);
+		return MathHelper.clamp((player.waterVisionTime + mc.getFrameTime()) / 60.0F, 0.0F, 1.0F);
 	}
 
 	public static float getLightmapBrightness() {
 		Minecraft mc = Minecraft.getInstance();
-		float partialTicks = mc.getRenderPartialTicks();
-		float f = mc.world.getSunBrightness(partialTicks);
+		float partialTicks = mc.getFrameTime();
+		float f = mc.level.getSkyDarken(partialTicks);
 		f = MathHelper.clamp((f - 0.2F) / 0.8F, 0.0F, 1.0F);
 		return f * 0.2F + 0.1F;
 	}
-
-	private static final ReflectionField<Long> FOG_RENDERER_WATER_FOG_UPDATE_TIME = new ReflectionField<>(FogRenderer.class, "?", "waterFogUpdateTime");
-	private static final ReflectionField<Float> FOG_RENDERER_RED = new ReflectionField<>(FogRenderer.class, "?", "red");
-	private static final ReflectionField<Float> FOG_RENDERER_GREEN = new ReflectionField<>(FogRenderer.class, "?", "green");
-	private static final ReflectionField<Float> FOG_RENDERER_BLUE = new ReflectionField<>(FogRenderer.class, "?", "blue");
 
 	private static float[] fogColor = new float[3];
 	private static float[] fogColorTarget = new float[3];
 
 	public static void updateFogColor(ActiveRenderInfo activeRenderInfo) {
 		Minecraft mc = Minecraft.getInstance();
-		long time = Util.milliTime();
-		int color = mc.world.getBiome(new BlockPos(activeRenderInfo.getProjectedView())).getWaterFogColor();
+		long time = Util.getMillis();
+		int color = mc.level.getBiome(new BlockPos(activeRenderInfo.getPosition())).getWaterFogColor();
 		float red = (color >> 16 & 255) / 255.0F;
 		float green = (color >> 8 & 255) / 255.0F;
 		float blue = (color & 255) / 255.0F;
@@ -51,17 +44,17 @@ public class Hook {
 		green *= f;
 		blue *= f;
 
-		if (FOG_RENDERER_WATER_FOG_UPDATE_TIME.get(null) < 0L) {
+		if (FogRenderer.biomeChangedTime < 0L) {
 			fogColor[0] = red;
 			fogColor[1] = green;
 			fogColor[2] = blue;
 			fogColorTarget[0] = red;
 			fogColorTarget[1] = green;
 			fogColorTarget[2] = blue;
-			FOG_RENDERER_WATER_FOG_UPDATE_TIME.set(null, time);
+			FogRenderer.biomeChangedTime = time;
 		}
 
-		float f1 = MathHelper.clamp((float) (time - FOG_RENDERER_WATER_FOG_UPDATE_TIME.get(null)) / 3000.0F, 0.0F, 1.0F);
+		float f1 = MathHelper.clamp((float) (time - FogRenderer.biomeChangedTime) / 3000.0F, 0.0F, 1.0F);
 		float red1 = MathHelper.lerp(f1, fogColor[0], fogColorTarget[0]);
 		float green1 = MathHelper.lerp(f1, fogColor[1], fogColorTarget[1]);
 		float blue1 = MathHelper.lerp(f1, fogColor[2], fogColorTarget[2]);
@@ -73,12 +66,12 @@ public class Hook {
 			fogColorTarget[0] = red;
 			fogColorTarget[1] = green;
 			fogColorTarget[2] = blue;
-			FOG_RENDERER_WATER_FOG_UPDATE_TIME.set(null, time);
+			FogRenderer.biomeChangedTime = time;
 		}
 
-		FOG_RENDERER_RED.set(null, red1);
-		FOG_RENDERER_GREEN.set(null, green1);
-		FOG_RENDERER_BLUE.set(null, blue1);
+		FogRenderer.fogRed = red1;
+		FogRenderer.fogRed = green1;
+		FogRenderer.fogRed = blue1;
 	}
 
 }

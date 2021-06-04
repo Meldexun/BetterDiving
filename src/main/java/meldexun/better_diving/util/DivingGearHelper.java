@@ -12,14 +12,14 @@ import net.minecraft.item.ItemStack;
 public class DivingGearHelper {
 
 	public static int getMaxDivingDepth(PlayerEntity player) {
-		ItemStack stack = player.getItemStackFromSlot(EquipmentSlotType.HEAD);
+		ItemStack stack = player.getItemBySlot(EquipmentSlotType.HEAD);
 		DivingMaskProviderItem divingMaskProviderItem = DivingGearManager.getDivingMaskProviderItem(stack);
 		int i = BetterDivingConfig.SERVER_CONFIG.oxygen.oxygenBaseDivingDepth.get();
 		return divingMaskProviderItem != null ? Math.max(i, divingMaskProviderItem.maxDivingDepth) : i;
 	}
 
 	public static boolean isWearingDivingMask(PlayerEntity player) {
-		ItemStack stack = player.getItemStackFromSlot(EquipmentSlotType.HEAD);
+		ItemStack stack = player.getItemBySlot(EquipmentSlotType.HEAD);
 		DivingMaskProviderItem divingMaskProviderItem = DivingGearManager.getDivingMaskProviderItem(stack);
 		return divingMaskProviderItem != null;
 	}
@@ -32,7 +32,7 @@ public class DivingGearHelper {
 	public static double getSwimspeedBonus(PlayerEntity player) {
 		double d = 0.0;
 		for (EquipmentSlotType slot : EquipmentSlotType.values()) {
-			d += getSwimspeedBonus(player.getItemStackFromSlot(slot));
+			d += getSwimspeedBonus(player.getItemBySlot(slot));
 		}
 		return d;
 	}
@@ -45,7 +45,7 @@ public class DivingGearHelper {
 	public static double getMiningspeedBonus(PlayerEntity player) {
 		double d = 0.0;
 		for (EquipmentSlotType slot : EquipmentSlotType.values()) {
-			d += getMiningspeedBonus(player.getItemStackFromSlot(slot));
+			d += getMiningspeedBonus(player.getItemBySlot(slot));
 		}
 		return d;
 	}

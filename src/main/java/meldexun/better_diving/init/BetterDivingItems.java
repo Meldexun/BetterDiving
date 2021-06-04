@@ -18,27 +18,27 @@ public class BetterDivingItems {
 
 	private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, BetterDiving.MOD_ID);
 
-	public static final RegistryObject<Item> TITANIUM_CHUNK = ITEMS.register("titanium_chunk", () -> new Item(new Item.Properties().group(BetterDivingItemGroups.BETTER_DIVING)));
-	public static final RegistryObject<Item> COPPER_CHUNK = ITEMS.register("copper_chunk", () -> new Item(new Item.Properties().group(BetterDivingItemGroups.BETTER_DIVING)));
-	public static final RegistryObject<Item> SILVER_CHUNK = ITEMS.register("silver_chunk", () -> new Item(new Item.Properties().group(BetterDivingItemGroups.BETTER_DIVING)));
-	public static final RegistryObject<Item> LEAD_CHUNK = ITEMS.register("lead_chunk", () -> new Item(new Item.Properties().group(BetterDivingItemGroups.BETTER_DIVING)));
-	public static final RegistryObject<Item> LITHIUM_CHUNK = ITEMS.register("lithium_chunk", () -> new Item(new Item.Properties().group(BetterDivingItemGroups.BETTER_DIVING)));
+	public static final RegistryObject<Item> TITANIUM_CHUNK = ITEMS.register("titanium_chunk", () -> new Item(new Item.Properties().tab(BetterDivingItemGroups.BETTER_DIVING)));
+	public static final RegistryObject<Item> COPPER_CHUNK = ITEMS.register("copper_chunk", () -> new Item(new Item.Properties().tab(BetterDivingItemGroups.BETTER_DIVING)));
+	public static final RegistryObject<Item> SILVER_CHUNK = ITEMS.register("silver_chunk", () -> new Item(new Item.Properties().tab(BetterDivingItemGroups.BETTER_DIVING)));
+	public static final RegistryObject<Item> LEAD_CHUNK = ITEMS.register("lead_chunk", () -> new Item(new Item.Properties().tab(BetterDivingItemGroups.BETTER_DIVING)));
+	public static final RegistryObject<Item> LITHIUM_CHUNK = ITEMS.register("lithium_chunk", () -> new Item(new Item.Properties().tab(BetterDivingItemGroups.BETTER_DIVING)));
 
-	public static final RegistryObject<Item> COAL_CHUNK = ITEMS.register("coal_chunk", () -> new Item(new Item.Properties().group(BetterDivingItemGroups.BETTER_DIVING)));
-	public static final RegistryObject<Item> IRON_CHUNK = ITEMS.register("iron_chunk", () -> new Item(new Item.Properties().group(BetterDivingItemGroups.BETTER_DIVING)));
-	public static final RegistryObject<Item> GOLD_CHUNK = ITEMS.register("gold_chunk", () -> new Item(new Item.Properties().group(BetterDivingItemGroups.BETTER_DIVING)));
-	public static final RegistryObject<Item> REDSTONE_CHUNK = ITEMS.register("redstone_chunk", () -> new Item(new Item.Properties().group(BetterDivingItemGroups.BETTER_DIVING)));
-	public static final RegistryObject<Item> LAPIS_CHUNK = ITEMS.register("lapis_chunk", () -> new Item(new Item.Properties().group(BetterDivingItemGroups.BETTER_DIVING)));
-	public static final RegistryObject<Item> EMERALD_CHUNK = ITEMS.register("emerald_chunk", () -> new Item(new Item.Properties().group(BetterDivingItemGroups.BETTER_DIVING)));
-	public static final RegistryObject<Item> DIAMOND_CHUNK = ITEMS.register("diamond_chunk", () -> new Item(new Item.Properties().group(BetterDivingItemGroups.BETTER_DIVING)));
+	public static final RegistryObject<Item> COAL_CHUNK = ITEMS.register("coal_chunk", () -> new Item(new Item.Properties().tab(BetterDivingItemGroups.BETTER_DIVING)));
+	public static final RegistryObject<Item> IRON_CHUNK = ITEMS.register("iron_chunk", () -> new Item(new Item.Properties().tab(BetterDivingItemGroups.BETTER_DIVING)));
+	public static final RegistryObject<Item> GOLD_CHUNK = ITEMS.register("gold_chunk", () -> new Item(new Item.Properties().tab(BetterDivingItemGroups.BETTER_DIVING)));
+	public static final RegistryObject<Item> REDSTONE_CHUNK = ITEMS.register("redstone_chunk", () -> new Item(new Item.Properties().tab(BetterDivingItemGroups.BETTER_DIVING)));
+	public static final RegistryObject<Item> LAPIS_CHUNK = ITEMS.register("lapis_chunk", () -> new Item(new Item.Properties().tab(BetterDivingItemGroups.BETTER_DIVING)));
+	public static final RegistryObject<Item> EMERALD_CHUNK = ITEMS.register("emerald_chunk", () -> new Item(new Item.Properties().tab(BetterDivingItemGroups.BETTER_DIVING)));
+	public static final RegistryObject<Item> DIAMOND_CHUNK = ITEMS.register("diamond_chunk", () -> new Item(new Item.Properties().tab(BetterDivingItemGroups.BETTER_DIVING)));
 
-	public static final RegistryObject<Item> TITANIUM_INGOT = ITEMS.register("titanium_ingot", () -> new Item(new Item.Properties().group(BetterDivingItemGroups.BETTER_DIVING)));
-	public static final RegistryObject<Item> COPPER_INGOT = ITEMS.register("copper_ingot", () -> new Item(new Item.Properties().group(BetterDivingItemGroups.BETTER_DIVING)));
-	public static final RegistryObject<Item> SILVER_INGOT = ITEMS.register("silver_ingot", () -> new Item(new Item.Properties().group(BetterDivingItemGroups.BETTER_DIVING)));
-	public static final RegistryObject<Item> LEAD_INGOT = ITEMS.register("lead_ingot", () -> new Item(new Item.Properties().group(BetterDivingItemGroups.BETTER_DIVING)));
-	public static final RegistryObject<Item> LITHIUM_INGOT = ITEMS.register("lithium_ingot", () -> new Item(new Item.Properties().group(BetterDivingItemGroups.BETTER_DIVING)));
+	public static final RegistryObject<Item> TITANIUM_INGOT = ITEMS.register("titanium_ingot", () -> new Item(new Item.Properties().tab(BetterDivingItemGroups.BETTER_DIVING)));
+	public static final RegistryObject<Item> COPPER_INGOT = ITEMS.register("copper_ingot", () -> new Item(new Item.Properties().tab(BetterDivingItemGroups.BETTER_DIVING)));
+	public static final RegistryObject<Item> SILVER_INGOT = ITEMS.register("silver_ingot", () -> new Item(new Item.Properties().tab(BetterDivingItemGroups.BETTER_DIVING)));
+	public static final RegistryObject<Item> LEAD_INGOT = ITEMS.register("lead_ingot", () -> new Item(new Item.Properties().tab(BetterDivingItemGroups.BETTER_DIVING)));
+	public static final RegistryObject<Item> LITHIUM_INGOT = ITEMS.register("lithium_ingot", () -> new Item(new Item.Properties().tab(BetterDivingItemGroups.BETTER_DIVING)));
 
-	public static final RegistryObject<Item> FIBER_MESH = ITEMS.register("fiber_mesh", () -> new Item(new Item.Properties().group(BetterDivingItemGroups.BETTER_DIVING)));
+	public static final RegistryObject<Item> FIBER_MESH = ITEMS.register("fiber_mesh", () -> new Item(new Item.Properties().tab(BetterDivingItemGroups.BETTER_DIVING)));
 
 	public static final RegistryObject<ItemPowerCell> POWER_CELL = ITEMS.register("power_cell", () -> new ItemPowerCell(BetterDivingConfig.SERVER_CONFIG.powerCell));
 
@@ -61,7 +61,7 @@ public class BetterDivingItems {
 
 	public static void registerItems() {
 		for (RegistryObject<Block> block : BetterDivingBlocks.BLOCKS.getEntries()) {
-			ITEMS.register(block.getId().getPath(), () -> new BlockItem(block.get(), new Item.Properties().group(BetterDivingItemGroups.BETTER_DIVING)));
+			ITEMS.register(block.getId().getPath(), () -> new BlockItem(block.get(), new Item.Properties().tab(BetterDivingItemGroups.BETTER_DIVING)));
 		}
 		ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}

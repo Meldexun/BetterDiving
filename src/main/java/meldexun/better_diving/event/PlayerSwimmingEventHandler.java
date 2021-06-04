@@ -43,29 +43,26 @@ public class PlayerSwimmingEventHandler {
 	private static final UUID OFFHAND_MODIFIER = UUID.fromString("f4d92ce8-ef22-4bad-bdc2-9beec0a79b85");
 	private static final UUID OVERWATER_MODIFIER = UUID.fromString("002df552-8d60-42b0-9dce-1bdaaefddec0");
 
-	private static final ReflectionField<Boolean> FIELD_IS_JUMPING = new ReflectionField<>(LivingEntity.class, "field_70703_bu", "isJumping");
-	private static final ReflectionMethod<Float> METHOD_GET_WATER_SLOW_DOWN = new ReflectionMethod<>(LivingEntity.class, "func_189749_co", "getWaterSlowDown");
-
 	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void onInputUpdateEvent(InputUpdateEvent event) {
 		PlayerEntity player = event.getPlayer();
 
-		if (player.world.isRemote) {
-			player.moveVertical = 0.0F;
+		if (player.level.isClientSide()) {
+			player.yya = 0.0F;
 
 			if (BetterDivingConfig.SERVER_CONFIG.movementChanges.get()) {
 				if (player.isInWater()) {
-					MovementInput input = ((ClientPlayerEntity) player).movementInput;
-					if (input.jump) {
-						player.moveVertical += 1.0F;
+					MovementInput input = ((ClientPlayerEntity) player).input;
+					if (input.jumping) {
+						player.yya += 1.0F;
 					}
-					if (ClientBetterDiving.KEY_BIND_DESCEND.isKeyDown()) {
-                        player.moveVertical -= 1.0F;
-                    } else if (input.sneaking) {
-						player.moveVertical -= BetterDivingConfig.SERVER_CONFIG.movement.weakerSneakDescending.get() ? 0.15F : 1.0F;
+					if (ClientBetterDiving.KEY_BIND_DESCEND.isDown()) {
+                        player.yya -= 1.0F;
+                    } else if (input.shiftKeyDown) {
+						player.yya -= BetterDivingConfig.SERVER_CONFIG.movement.weakerSneakDescending.get() ? 0.15F : 1.0F;
 					}
-					player.moveVertical *= 0.98F;
+					player.yya *= 0.98F;
 				}
 			}
 		}
@@ -86,41 +83,41 @@ public class PlayerSwimmingEventHandler {
 
 		// subtract jump factor applied in PlayerEntity#travel(Vector3d)
 		if (player.isSwimming() && !player.isPassenger()) {
-			double d3 = player.getLookVec().y;
+			double d3 = player.getLookAngle().y;
 			double d4 = d3 < -0.2D ? 0.085D : 0.06D;
-			if (d3 <= 0.0D || FIELD_IS_JUMPING.get(player) || !player.world.getBlockState(new BlockPos(player.getPosX(), player.getPosY() + 1.0D - 0.1D, player.getPosZ())).getFluidState().isEmpty()) {
-				Vector3d vector3d1 = player.getMotion();
-				player.setMotion(new Vector3d(vector3d1.x, (vector3d1.y - d4 * d3) / (1 - d4), vector3d1.z));
+			if (d3 <= 0.0D || player.jumping || !player.level.getBlockState(new BlockPos(player.getX(), player.getY() + 1.0D - 0.1D, player.getZ())).getFluidState().isEmpty()) {
+				Vector3d vector3d1 = player.getDeltaMovement();
+				player.setDeltaMovement(new Vector3d(vector3d1.x, (vector3d1.y - d4 * d3) / (1 - d4), vector3d1.z));
 			}
 		}
 
 		// subtract jump factor applied in LivingEntity#handleFluidJump(ITag)
-		if (FIELD_IS_JUMPING.get(player)) {
-			player.setMotion(player.getMotion().subtract(0.0D, (double) 0.04F * player.getAttribute(ForgeMod.SWIM_SPEED.get()).getValue(), 0.0D));
+		if (player.jumping) {
+			player.setDeltaMovement(player.getDeltaMovement().subtract(0.0D, (double) 0.04F * player.getAttribute(ForgeMod.SWIM_SPEED.get()).getValue(), 0.0D));
 		}
 
 		// subtract sneak factor applied in LivingEntity#handleFluidSneak()
-		if (player.world.isRemote) {
+		if (player.level.isClientSide()) {
 			handleFluidSneak(player);
 		}
 
 		// handle movement in water
-		double oldY = player.getPosY();
-		double slowdown = (double) METHOD_GET_WATER_SLOW_DOWN.invoke(player);
+		double oldY = player.getY();
+		double slowdown = (double) player.getWaterSlowDown();
 		double swimSpeed = BetterDivingHelper.getSwimSpeedRespectEquipment(player);
 
-		Vector3d vec = BetterDivingHelper.getMoveVec(player.moveForward, player.moveVertical, player.moveStrafing, swimSpeed, player.rotationYaw, player.rotationPitch);
-		player.setMotion(player.getMotion().add(vec));
-		player.move(MoverType.SELF, player.getMotion());
-		Vector3d vec1 = player.getMotion();
-		if (player.collidedHorizontally && player.isOnLadder()) {
+		Vector3d vec = BetterDivingHelper.getMoveVec(player.zza, player.yya, player.xxa, swimSpeed, player.yRot, player.xRot);
+		player.setDeltaMovement(player.getDeltaMovement().add(vec));
+		player.move(MoverType.SELF, player.getDeltaMovement());
+		Vector3d vec1 = player.getDeltaMovement();
+		if (player.verticalCollision && player.onClimbable()) {
 			vec1 = new Vector3d(vec1.x, 0.2D, vec1.z);
 		}
 
-		Vector3d vec2 = vec1.mul(slowdown, slowdown, slowdown);
-		player.setMotion(vec2);
-		if (player.collidedHorizontally && player.isOffsetPositionInLiquid(vec2.x, vec2.y + (double) 0.6F - player.getPosY() + oldY, vec2.z)) {
-			player.setMotion(vec2.x, (double) 0.3F, vec2.z);
+		Vector3d vec2 = vec1.multiply(slowdown, slowdown, slowdown);
+		player.setDeltaMovement(vec2);
+		if (player.horizontalCollision && player.isFree(vec2.x, vec2.y + (double) 0.6F - player.getY() + oldY, vec2.z)) {
+			player.setDeltaMovement(vec2.x, (double) 0.3F, vec2.z);
 		}
 
 		return true;
@@ -134,8 +131,8 @@ public class PlayerSwimmingEventHandler {
 		if (BetterDivingConfig.SERVER_CONFIG.movementChanges.get()) {
 			BetterDivingConfig.ServerConfig.Movement config = BetterDivingConfig.SERVER_CONFIG.movement;
 
-			ItemStack feet = player.getItemStackFromSlot(EquipmentSlotType.FEET);
-			int depthStriderLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.DEPTH_STRIDER, feet);
+			ItemStack feet = player.getItemBySlot(EquipmentSlotType.FEET);
+			int depthStriderLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.DEPTH_STRIDER, feet);
 			if (depthStriderLevel > 0) {
 				double amount = config.depthStriderAmount.get() * depthStriderLevel;
 				applyModifier(attribute, DEPTH_STRIDER_MODIFIER, "Depth Strider Modifier", amount, config.depthStriderOperation.get());
@@ -149,14 +146,14 @@ public class PlayerSwimmingEventHandler {
 				attribute.removeModifier(DIVING_MODIFIER);
 			}
 
-			if (player.isPotionActive(Effects.DOLPHINS_GRACE)) {
+			if (player.hasEffect(Effects.DOLPHINS_GRACE)) {
 				applyModifier(attribute, DOLPHINS_GRACE_MODIFIER, "Dolphins Grace Modifier", config.dolphinsGraceAmount.get(), config.dolphinsGraceOperation.get());
 			} else {
 				attribute.removeModifier(DOLPHINS_GRACE_MODIFIER);
 			}
 
 			if (config.hungerModifier.get()) {
-				double hunger = player.getFoodStats().getFoodLevel() / 20.0D;
+				double hunger = player.getFoodData().getFoodLevel() / 20.0D;
 				if (!player.isCreative() && hunger < config.hungerThreshold.get()) {
 					double amount = (1.0D - hunger / config.hungerThreshold.get()) * config.hungerAmount.get();
 					applyModifier(attribute, HUNGER_MODIFIER, "Hunger Modifier", amount, config.hungerOperation.get());
@@ -166,7 +163,7 @@ public class PlayerSwimmingEventHandler {
 			}
 
 			if (config.mainhandModifier.get()) {
-				if (!player.getHeldItemMainhand().isEmpty()) {
+				if (!player.getMainHandItem().isEmpty()) {
 					applyModifier(attribute, MAINHAND_MODIFIER, "Mainhand Modifier", config.mainhandAmount.get(), config.mainhandOperation.get());
 				} else {
 					attribute.removeModifier(MAINHAND_MODIFIER);
@@ -174,7 +171,7 @@ public class PlayerSwimmingEventHandler {
 			}
 
 			if (config.offhandModifier.get()) {
-				if (!player.getHeldItemOffhand().isEmpty()) {
+				if (!player.getOffhandItem().isEmpty()) {
 					applyModifier(attribute, OFFHAND_MODIFIER, "Offhand Modifier", config.offhandAmount.get(), config.offhandOperation.get());
 				} else {
 					attribute.removeModifier(OFFHAND_MODIFIER);
@@ -182,7 +179,7 @@ public class PlayerSwimmingEventHandler {
 			}
 
 			if (config.overwaterModifier.get()) {
-				if (!player.areEyesInFluid(FluidTags.WATER)) {
+				if (!player.isEyeInFluid(FluidTags.WATER)) {
 					applyModifier(attribute, OVERWATER_MODIFIER, "Overwater Modifier", config.overwaterAmount.get(), config.overwaterOperation.get());
 				} else {
 					attribute.removeModifier(OVERWATER_MODIFIER);
@@ -200,13 +197,13 @@ public class PlayerSwimmingEventHandler {
 	}
 
 	private static void applyModifier(ModifiableAttributeInstance attribute, UUID modifierId, String modifierName, double modifierAmount, int modifierOperation) {
-		AttributeModifier.Operation operation = AttributeModifier.Operation.byId(modifierOperation);
+		AttributeModifier.Operation operation = AttributeModifier.Operation.fromValue(modifierOperation);
 		AttributeModifier oldModifier = attribute.getModifier(modifierId);
 		if (oldModifier == null) {
-			attribute.applyNonPersistentModifier(new AttributeModifier(modifierId, modifierName, modifierAmount, operation));
+			attribute.addTransientModifier(new AttributeModifier(modifierId, modifierName, modifierAmount, operation));
 		} else if (oldModifier.getAmount() != modifierAmount || oldModifier.getOperation() != operation) {
 			attribute.removeModifier(oldModifier);
-			attribute.applyNonPersistentModifier(new AttributeModifier(modifierId, modifierName, modifierAmount, operation));
+			attribute.addTransientModifier(new AttributeModifier(modifierId, modifierName, modifierAmount, operation));
 		}
 	}
 
@@ -215,10 +212,10 @@ public class PlayerSwimmingEventHandler {
 		if (!(player instanceof ClientPlayerEntity)) {
 			return;
 		}
-		if (!((ClientPlayerEntity) player).movementInput.sneaking) {
+		if (!((ClientPlayerEntity) player).input.shiftKeyDown) {
 			return;
 		}
-		player.setMotion(player.getMotion().subtract(0.0D, (double) -0.04F * player.getAttribute(ForgeMod.SWIM_SPEED.get()).getValue(), 0.0D));
+		player.setDeltaMovement(player.getDeltaMovement().subtract(0.0D, (double) -0.04F * player.getAttribute(ForgeMod.SWIM_SPEED.get()).getValue(), 0.0D));
 	}
 
 }

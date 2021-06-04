@@ -17,25 +17,25 @@ public class BetterDivingGuiHelper {
 	}
 
 	public static int getAnchorX(int width, int anchor, int offsetX) {
-		MainWindow mainWindow = Minecraft.getInstance().getMainWindow();
+		MainWindow mainWindow = Minecraft.getInstance().getWindow();
 
 		if (anchor == 1 || anchor == 4) {
 			// top mid or bot mid
-			return offsetX + mainWindow.getScaledWidth() / 2 - width / 2;
+			return offsetX + mainWindow.getGuiScaledWidth() / 2 - width / 2;
 		} else if (anchor == 2 || anchor == 3) {
 			// top right or bot right
-			return offsetX + mainWindow.getScaledWidth() - width;
+			return offsetX + mainWindow.getGuiScaledWidth() - width;
 		}
 
 		return offsetX;
 	}
 
 	public static int getAnchorY(int height, int anchor, int offsetY) {
-		MainWindow mainWindow = Minecraft.getInstance().getMainWindow();
+		MainWindow mainWindow = Minecraft.getInstance().getWindow();
 
 		if (anchor == 3 || anchor == 4 || anchor == 5) {
 			// bot right or bot mid or bot left
-			return offsetY + mainWindow.getScaledHeight() - height;
+			return offsetY + mainWindow.getGuiScaledHeight() - height;
 		}
 
 		return offsetY;

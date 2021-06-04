@@ -27,7 +27,7 @@ public class RenderSeamoth extends EntityRenderer<EntitySeamoth> {
 
 	public RenderSeamoth(EntityRendererManager renderManager) {
 		super(renderManager);
-		this.shadowSize = 0.5F;
+		this.shadowRadius = 0.5F;
 	}
 
 	@Override
@@ -35,9 +35,9 @@ public class RenderSeamoth extends EntityRenderer<EntitySeamoth> {
 		Minecraft mc = Minecraft.getInstance();
 		PlayerEntity player = mc.player;
 
-		matrixStackIn.push();
+		matrixStackIn.pushPose();
 
-		if (mc.gameSettings.getPointOfView() == PointOfView.FIRST_PERSON) {
+		if (mc.options.getCameraType() == PointOfView.FIRST_PERSON) {
 			matrixStackIn.translate(0.0D, player.getEyeHeight(), 0.0D);
 			this.setupRotation(entityIn, matrixStackIn);
 			matrixStackIn.translate(0.0D, 0.8125D - player.getEyeHeight(), -0.16D);
@@ -47,22 +47,22 @@ public class RenderSeamoth extends EntityRenderer<EntitySeamoth> {
 		}
 
 		matrixStackIn.scale(-1.0F, -1.0F, 1.0F);
-		MODEL.render(matrixStackIn, bufferIn.getBuffer(RenderType.getEntityTranslucentCull(TEXTURE)), packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-		matrixStackIn.pop();
+		MODEL.renderToBuffer(matrixStackIn, bufferIn.getBuffer(RenderType.entityTranslucentCull(TEXTURE)), packedLightIn, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+		matrixStackIn.popPose();
 
 		super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
 
 		// otherwise entity will be invisible when player is outside of the water and entity is underwater
-		((IRenderTypeBuffer.Impl) bufferIn).finish(RenderType.getEntityTranslucentCull(TEXTURE));
+		((IRenderTypeBuffer.Impl) bufferIn).endBatch(RenderType.entityTranslucentCull(TEXTURE));
 	}
 
 	protected void setupRotation(EntitySeamoth entity, MatrixStack matrixStackIn) {
-		matrixStackIn.rotate(Vector3f.YP.rotationDegrees(180.0F - entity.rotationYaw));
-		matrixStackIn.rotate(Vector3f.XP.rotationDegrees(-entity.rotationPitch));
+		matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(180.0F - entity.yRot));
+		matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(-entity.xRot));
 	}
 
 	@Override
-	public ResourceLocation getEntityTexture(EntitySeamoth entity) {
+	public ResourceLocation getTextureLocation(EntitySeamoth entity) {
 		return TEXTURE;
 	}
 

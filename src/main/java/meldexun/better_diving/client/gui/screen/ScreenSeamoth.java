@@ -30,7 +30,7 @@ public class ScreenSeamoth extends ContainerScreen<ContainerSeamoth> {
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation(BetterDiving.MOD_ID, "textures/gui/seamoth_container.png");
 
-	private final EntitySeamoth seamoth = new EntitySeamoth(BetterDivingEntities.SEAMOTH.get(), Minecraft.getInstance().world);
+	private final EntitySeamoth seamoth = new EntitySeamoth(BetterDivingEntities.SEAMOTH.get(), Minecraft.getInstance().level);
 
 	public ScreenSeamoth(ContainerSeamoth screenContainer, PlayerInventory inv, ITextComponent titleIn) {
 		super(screenContainer, inv, titleIn);
@@ -40,29 +40,29 @@ public class ScreenSeamoth extends ContainerScreen<ContainerSeamoth> {
 	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		this.renderBackground(matrixStack);
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
-		this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
+		this.renderTooltip(matrixStack, mouseX, mouseY);
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
-		super.drawGuiContainerForegroundLayer(matrixStack, x, y);
-		ItemStack powerCell = this.container.getSlot(36).getStack();
+	protected void renderLabels(MatrixStack matrixStack, int x, int y) {
+		super.renderLabels(matrixStack, x, y);
+		ItemStack powerCell = this.menu.getSlot(36).getItem();
 		if (powerCell.getItem() instanceof ItemPowerCell) {
 			IEnergyStorage ienergy = powerCell.getCapability(CapabilityEnergy.ENERGY).orElseThrow(NullPointerException::new);
 			int energy = MathHelper.ceil((double) ienergy.getEnergyStored() / (double) ienergy.getMaxEnergyStored() * 100.0D);
-			this.font.drawString(matrixStack, "Energy: " + energy + "%", 8, 16, 4210752);
+			this.font.draw(matrixStack, "Energy: " + energy + "%", 8, 16, 4210752);
 		} else {
-			this.font.drawString(matrixStack, "No power cell", 8, 16, 4210752);
+			this.font.draw(matrixStack, "No power cell", 8, 16, 4210752);
 		}
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.minecraft.getTextureManager().bindTexture(TEXTURE);
-		this.blit(matrixStack, (this.width - this.xSize) / 2, (this.height - this.ySize) / 2, 0, 0, this.xSize, this.ySize);
-		this.drawEntity(this.seamoth, (this.width - this.xSize) / 2 + 118, (this.height - this.ySize) / 2 + 60, 16, x, y);
+	protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
+		GlStateManager._color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		this.minecraft.getTextureManager().bind(TEXTURE);
+		this.blit(matrixStack, (this.width - this.imageWidth) / 2, (this.height - this.imageHeight) / 2, 0, 0, this.imageWidth, this.imageHeight);
+		this.drawEntity(this.seamoth, (this.width - this.imageWidth) / 2 + 118, (this.height - this.imageHeight) / 2 + 60, 16, x, y);
 	}
 
 	private void drawEntity(Entity entity, int x, int y, int scale, float mouseX, float mouseY) {
@@ -83,24 +83,24 @@ public class ScreenSeamoth extends ContainerScreen<ContainerSeamoth> {
 		matrixstack.scale((float) scale, (float) scale, (float) scale);
 		Quaternion quaternion = Vector3f.ZP.rotationDegrees(180.0F);
 		Quaternion quaternion1 = Vector3f.XP.rotationDegrees(f1 * 20.0F);
-		quaternion.multiply(quaternion1);
-		matrixstack.rotate(quaternion);
-		float f3 = entity.rotationYaw;
-		float f4 = entity.rotationPitch;
-		entity.rotationYaw = 180.0F + f * 40.0F;
-		entity.rotationPitch = -f1 * 20.0F;
-		EntityRendererManager entityrenderermanager = Minecraft.getInstance().getRenderManager();
-		quaternion1.conjugate();
-		entityrenderermanager.setCameraOrientation(quaternion1);
+		quaternion.mul(quaternion1);
+		matrixstack.mulPose(quaternion);
+		float f3 = entity.yRot;
+		float f4 = entity.xRot;
+		entity.yRot = 180.0F + f * 40.0F;
+		entity.xRot = -f1 * 20.0F;
+		EntityRendererManager entityrenderermanager = Minecraft.getInstance().getEntityRenderDispatcher();
+		quaternion1.conj();
+		entityrenderermanager.overrideCameraOrientation(quaternion1);
 		entityrenderermanager.setRenderShadow(false);
-		IRenderTypeBuffer.Impl irendertypebuffer$impl = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
+		IRenderTypeBuffer.Impl irendertypebuffer$impl = Minecraft.getInstance().renderBuffers().bufferSource();
 		RenderSystem.runAsFancy(() -> {
-			entityrenderermanager.renderEntityStatic(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixstack, irendertypebuffer$impl, 15728880);
+			entityrenderermanager.render(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixstack, irendertypebuffer$impl, 15728880);
 		});
-		irendertypebuffer$impl.finish();
+		irendertypebuffer$impl.endBatch();
 		entityrenderermanager.setRenderShadow(true);
-		entity.rotationYaw = f3;
-		entity.rotationPitch = f4;
+		entity.yRot = f3;
+		entity.xRot = f4;
 		RenderSystem.popMatrix();
 	}
 

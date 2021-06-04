@@ -27,27 +27,27 @@ public class CustomArmorMaterial implements IArmorMaterial {
 	}
 
 	@Override
-	public int getDurability(EquipmentSlotType var1) {
+	public int getDurabilityForSlot(EquipmentSlotType var1) {
 		return this.config.durability.get();
 	}
 
 	@Override
-	public int getDamageReductionAmount(EquipmentSlotType var1) {
+	public int getDefenseForSlot(EquipmentSlotType var1) {
 		return this.config.protection.get().get(var1.getIndex());
 	}
 
 	@Override
-	public int getEnchantability() {
+	public int getEnchantmentValue() {
 		return this.config.enchantability.get();
 	}
 
 	@Override
-	public SoundEvent getSoundEvent() {
-		return SoundEvents.ITEM_ARMOR_EQUIP_GENERIC;
+	public SoundEvent getEquipSound() {
+		return SoundEvents.ARMOR_EQUIP_GENERIC;
 	}
 
 	@Override
-	public Ingredient getRepairMaterial() {
+	public Ingredient getRepairIngredient() {
 		return this.ingredient;
 	}
 

@@ -31,7 +31,7 @@ public class GuiOxygen {
 		updatePartialTicks();
 		Minecraft mc = Minecraft.getInstance();
 		TextureManager textureManager = mc.getTextureManager();
-		FontRenderer fontRenderer = mc.fontRenderer;
+		FontRenderer fontRenderer = mc.font;
 
 		int oxygen;
 		double percent;
@@ -39,8 +39,8 @@ public class GuiOxygen {
 			oxygen = (int) Math.round(OxygenPlayerHelper.getOxygenRespectEquipment(mc.player) / 20.0D / 3.0D) * 3;
 			percent = (int) (OxygenPlayerHelper.getOxygenRespectEquipmentInPercent(mc.player) * 80.0D) / 80.0D;
 		} else {
-			oxygen = (int) Math.round(mc.player.getAir() / 20.0D / 3.0D) * 3;
-			percent = (int) ((double) mc.player.getAir() / (double) mc.player.getMaxAir() * 80.0D) / 80.0D;
+			oxygen = (int) Math.round(mc.player.getAirSupply() / 20.0D / 3.0D) * 3;
+			percent = (int) ((double) mc.player.getAirSupply() / (double) mc.player.getMaxAirSupply() * 80.0D) / 80.0D;
 		}
 
 		int width = 105;
@@ -49,17 +49,17 @@ public class GuiOxygen {
 		int y = BetterDivingGuiHelper.getAnchorY(height, BetterDivingConfig.CLIENT_CONFIG.oxygenGuiAnchor.get(), BetterDivingConfig.CLIENT_CONFIG.oxygenGuiOffsetY.get());
 
 		boolean blend = GL11.glGetBoolean(GL11.GL_BLEND);
-		GlStateManager.enableBlend();
-		GlStateManager.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
-		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.00390625F);
+		GlStateManager._enableBlend();
+		GlStateManager._blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+		GlStateManager._alphaFunc(GL11.GL_GREATER, 0.00390625F);
 
-		textureManager.bindTexture(BACKGROUND);
+		textureManager.bind(BACKGROUND);
 		BetterDivingGuiHelper.drawTexture(x, y, 0.0D, 0.0D, width, height, width / 128.0D, height / 32.0D);
 
-		textureManager.bindTexture(BAR);
-		BetterDivingGuiHelper.drawTexture(x + 1.0D + 80.0D * (1.0D - percent), y + 9.0D, 1.0D - percent, mc.world.getGameTime() * 9.0D / 576.0D, 80.0D * percent, 7.0D, percent, 9.0D / 576.0D);
+		textureManager.bind(BAR);
+		BetterDivingGuiHelper.drawTexture(x + 1.0D + 80.0D * (1.0D - percent), y + 9.0D, 1.0D - percent, mc.level.getGameTime() * 9.0D / 576.0D, 80.0D * percent, 7.0D, percent, 9.0D / 576.0D);
 
-		textureManager.bindTexture(BUBBLES);
+		textureManager.bind(BUBBLES);
 		double bubbleOffset = 2.0D * (tick + partialTicks) % 128 / 128.0D;
 		drawBubbles(x + 1.0D, y + 9.0D, 0.0D, bubbleOffset, percent);
 		bubbleOffset = 2.5D * (tick + partialTicks) % 128 / 128.0D;
@@ -69,15 +69,15 @@ public class GuiOxygen {
 		bubbleOffset = 2.0D * (tick + partialTicks) % 128 / 128.0D;
 		drawBubbles(x + 1.0D, y + 9.0D, 55.0D, bubbleOffset + 0.68D, percent);
 
-		textureManager.bindTexture(FRAME);
+		textureManager.bind(FRAME);
 		BetterDivingGuiHelper.drawTexture(x, y, 0.0D, 0.0D, width, height, width / 128.0D, height / 32.0D);
 
 		String s1 = Integer.toString(oxygen);
-		fontRenderer.drawString(matrixStack, s1, x + 93 - fontRenderer.getStringWidth(s1) / 2, y + 14, 0xFFFFFF);
+		fontRenderer.draw(matrixStack, s1, x + 93 - fontRenderer.width(s1) / 2, y + 14, 0xFFFFFF);
 		String s2 = "O\u2082";
-		fontRenderer.drawString(matrixStack, s2, x + 93 - fontRenderer.getStringWidth(s2) / 2, y + 4, 0xFFFFFF);
+		fontRenderer.draw(matrixStack, s2, x + 93 - fontRenderer.width(s2) / 2, y + 4, 0xFFFFFF);
 
-		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+		GlStateManager._alphaFunc(GL11.GL_GREATER, 0.1F);
 		if (!blend) {
 			GL11.glDisable(GL11.GL_BLEND);
 		}
@@ -85,14 +85,14 @@ public class GuiOxygen {
 
 	private static void updatePartialTicks() {
 		Minecraft mc = Minecraft.getInstance();
-		float f = mc.getRenderPartialTicks() - prevPartialTicks;
+		float f = mc.getFrameTime() - prevPartialTicks;
 		if (f <= 0.0F) {
 			f++;
 		}
 		partialTicks += f;
-		tick += partialTicks / 1.0F;
-		partialTicks = partialTicks % 1.0F;
-		prevPartialTicks = mc.getRenderPartialTicks();
+		tick += (int) partialTicks;
+		partialTicks %= 1.0F;
+		prevPartialTicks = mc.getFrameTime();
 	}
 
 	private static void drawBubbles(double x, double y, double xOffset, double vOffset, double percent) {

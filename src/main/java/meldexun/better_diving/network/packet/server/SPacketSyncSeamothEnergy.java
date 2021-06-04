@@ -24,7 +24,7 @@ public class SPacketSyncSeamothEnergy implements IPacket {
 	}
 
 	public SPacketSyncSeamothEnergy(EntitySeamoth seamoth) {
-		this.entityId = seamoth.getEntityId();
+		this.entityId = seamoth.getId();
 		LazyOptional<IItemHandler> optionalItemHandler = seamoth.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
 		if (optionalItemHandler.isPresent()) {
 			IItemHandler itemHandler = optionalItemHandler.orElseThrow(NullPointerException::new);
@@ -48,7 +48,7 @@ public class SPacketSyncSeamothEnergy implements IPacket {
 	public boolean handle(Supplier<Context> ctxSupplier) {
 		ctxSupplier.get().enqueueWork(() -> {
 			World world = ClientBetterDiving.getWorld();
-			Entity entity = world.getEntityByID(this.entityId);
+			Entity entity = world.getEntity(this.entityId);
 			if (entity instanceof EntitySeamoth) {
 				EntitySeamoth seamoth = (EntitySeamoth) entity;
 

@@ -32,9 +32,9 @@ public class CapabilityOxygenPlayer implements ICapabilityOxygen {
 	@Override
 	public int getOxygenCapacity() {
 		int oxygenCap = BetterDivingConfig.SERVER_CONFIG.oxygen.oxygenCapacity.get();
-		ItemStack stack = this.player.getItemStackFromSlot(EquipmentSlotType.HEAD);
+		ItemStack stack = this.player.getItemBySlot(EquipmentSlotType.HEAD);
 		if (!stack.isEmpty()) {
-			int respirationLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.RESPIRATION, stack);
+			int respirationLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.RESPIRATION, stack);
 			if (respirationLevel > 0) {
 				oxygenCap += BetterDivingConfig.SERVER_CONFIG.oxygen.oxygenCapacityRespiration.get() * respirationLevel;
 			}

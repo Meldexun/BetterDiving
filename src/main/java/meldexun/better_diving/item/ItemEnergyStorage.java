@@ -28,7 +28,7 @@ public class ItemEnergyStorage extends Item {
 	protected final BetterDivingConfig.ServerConfig.EnergyStorageItem config;
 
 	public ItemEnergyStorage(BetterDivingConfig.ServerConfig.EnergyStorageItem config) {
-		super(new Item.Properties().maxStackSize(1).group(BetterDivingItemGroups.BETTER_DIVING));
+		super(new Item.Properties().stacksTo(1).tab(BetterDivingItemGroups.BETTER_DIVING));
 		this.config = config;
 	}
 
@@ -38,8 +38,8 @@ public class ItemEnergyStorage extends Item {
 	}
 
 	@Override
-	public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-		if (this.isInGroup(group)) {
+	public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+		if (this.allowdedIn(group)) {
 			items.add(new ItemStack(this));
 			ItemStack stack = new ItemStack(this);
 			stack.getCapability(CapabilityEnergy.ENERGY).ifPresent(c -> {
@@ -65,14 +65,14 @@ public class ItemEnergyStorage extends Item {
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		int energy = MathHelper.ceil(getEnergyPercent(stack) * 100.0D);
 		if (flagIn.isAdvanced()) {
 			tooltip.add(new StringTextComponent(TextFormatting.GRAY + String.format("Energy %d%% (%d/%d)", energy, getEnergy(stack), getEnergyCapacity(stack))));
 		} else {
 			tooltip.add(new StringTextComponent(TextFormatting.GRAY + String.format("Energy %d%%", energy)));
 		}
-		super.addInformation(stack, worldIn, tooltip, flagIn);
+		super.appendHoverText(stack, worldIn, tooltip, flagIn);
 	}
 
 	public static boolean hasEnergy(ItemStack stack) {

@@ -15,7 +15,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class AbstractItemDivingGear extends ArmorItem {
 
 	public AbstractItemDivingGear(IArmorMaterial materialIn, EquipmentSlotType slot) {
-		super(materialIn, slot, new Properties().group(BetterDivingItemGroups.BETTER_DIVING));
+		super(materialIn, slot, new Properties().tab(BetterDivingItemGroups.BETTER_DIVING));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -25,7 +25,7 @@ public class AbstractItemDivingGear extends ArmorItem {
 		if (armorSlot == EquipmentSlotType.LEGS) {
 			return (A) ArmorModels.modelLegs;
 		}
-		if (entityLiving instanceof ClientPlayerEntity && ((ClientPlayerEntity) entityLiving).getSkinType().equals("slim")) {
+		if (entityLiving instanceof ClientPlayerEntity && ((ClientPlayerEntity) entityLiving).getModelName().equals("slim")) {
 			return (A) ArmorModels.modelSlim;
 		}
 		return (A) ArmorModels.model;

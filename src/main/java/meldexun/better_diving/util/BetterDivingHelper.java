@@ -27,11 +27,11 @@ public class BetterDivingHelper {
 	}
 
 	public static boolean canBreath(PlayerEntity player) {
-		boolean canBreath = !player.areEyesInFluid(FluidTags.WATER);
-		canBreath |= player.world.getBlockState(player.getPosition()).matchesBlock(Blocks.BUBBLE_COLUMN);
+		boolean canBreath = !player.isEyeInFluid(FluidTags.WATER);
+		canBreath |= player.level.getBlockState(player.blockPosition()).is(Blocks.BUBBLE_COLUMN);
 		canBreath |= player.isCreative();
 		canBreath |= player.canBreatheUnderwater();
-		canBreath |= EffectUtils.canBreatheUnderwater(player);
+		canBreath |= EffectUtils.hasWaterBreathing(player);
 
 		PlayerCanBreathEvent event = new PlayerCanBreathEvent(player, canBreath);
 		MinecraftForge.EVENT_BUS.post(event);
@@ -39,13 +39,13 @@ public class BetterDivingHelper {
 	}
 
 	public static int blocksUnderWater(Entity entity) {
-		return blocksUnderWater(entity.world, new BlockPos(entity.getPosX(), entity.getPosY() + entity.getEyeHeight(), entity.getPosZ()));
+		return blocksUnderWater(entity.level, new BlockPos(entity.getX(), entity.getY() + entity.getEyeHeight(), entity.getZ()));
 	}
 
 	public static int blocksUnderWater(World world, BlockPos pos) {
 		int i = 0;
 		if (world.getBlockState(pos).getMaterial() == Material.WATER) {
-			while (world.getBlockState(pos.up(i)).getMaterial() != Material.AIR) {
+			while (world.getBlockState(pos.above(i)).getMaterial() != Material.AIR) {
 				i++;
 			}
 		}

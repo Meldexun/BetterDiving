@@ -28,10 +28,10 @@ public class CPacketOpenSeamothInventory implements IPacket {
 	public boolean handle(Supplier<Context> ctxSupplier) {
 		ctxSupplier.get().enqueueWork(() -> {
 			PlayerEntity player = ctxSupplier.get().getSender();
-			Entity entity = player.getRidingEntity();
+			Entity entity = player.getVehicle();
 
 			if (entity instanceof EntitySeamoth) {
-				player.openContainer(new SimpleNamedContainerProvider((id, playerInv, player1) -> {
+				player.openMenu(new SimpleNamedContainerProvider((id, playerInv, player1) -> {
 					return new ContainerSeamothEntity(id, playerInv, (EntitySeamoth) entity);
 				}, new TranslationTextComponent("Seamoth")));
 			}

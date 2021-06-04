@@ -52,8 +52,6 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class EntitySeamoth extends Entity implements IEntityAdditionalSpawnData {
 
-	private static final ReflectionMethod<?> METHOD_UPDATE_POSE = new ReflectionMethod<>(PlayerEntity.class, "func_213832_dB", "updatePose");
-
 	private int damage = 0;
 
 	private boolean controlled = false;
@@ -85,17 +83,17 @@ public class EntitySeamoth extends Entity implements IEntityAdditionalSpawnData 
 	}
 
 	@Override
-	protected void registerData() {
+	protected void defineSynchedData() {
 
 	}
-
+	
 	@Override
-	protected void readAdditional(CompoundNBT compound) {
+	protected void readAdditionalSaveData(CompoundNBT p_70037_1_) {
 
 	}
-
+	
 	@Override
-	protected void writeAdditional(CompoundNBT compound) {
+	protected void addAdditionalSaveData(CompoundNBT p_213281_1_) {
 
 	}
 
@@ -106,11 +104,11 @@ public class EntitySeamoth extends Entity implements IEntityAdditionalSpawnData 
 
 	@Override
 	public void readSpawnData(PacketBuffer additionalData) {
-		this.setPowerCell(additionalData.readItemStack());
+		this.setPowerCell(additionalData.readItem());
 	}
 
 	@Override
-	public IPacket<?> createSpawnPacket() {
+	public IPacket<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
@@ -123,11 +121,11 @@ public class EntitySeamoth extends Entity implements IEntityAdditionalSpawnData 
 	public void updateEngineSound() {
 		Minecraft mc = Minecraft.getInstance();
 
-		if (mc.gameSettings.getSoundLevel(SoundCategory.MASTER) > 0.0F) {
-			SoundHandler soundHandler = mc.getSoundHandler();
+		if (mc.options.getSoundSourceVolume(SoundCategory.MASTER) > 0.0F) {
+			SoundHandler soundHandler = mc.getSoundManager();
 
-			if (!soundHandler.isPlaying(this.startSound)) {
-				if (!this.prevSteered && this.isPlayerSteering() && this.hasEnergy() && !soundHandler.isPlaying(this.engineLoopSound)) {
+			if (!soundHandler.isActive(this.startSound)) {
+				if (!this.prevSteered && this.isPlayerSteering() && this.hasEnergy() && !soundHandler.isActive(this.engineLoopSound)) {
 					this.startSound = new SeamothStartSound(this);
 					soundHandler.play(this.startSound);
 				} else if (this.startSound != null) {
@@ -135,7 +133,7 @@ public class EntitySeamoth extends Entity implements IEntityAdditionalSpawnData 
 				}
 			}
 
-			if (!soundHandler.isPlaying(this.engineLoopSound)) {
+			if (!soundHandler.isActive(this.engineLoopSound)) {
 				if (this.isPlayerSteering() && this.hasEnergy()) {
 					int tick = this.engineLoopSound != null && this.engineLoopSound.getTick() > 0 ? this.engineLoopSound.getTick() : 0;
 					this.engineLoopSound = new SeamothEngineLoopSound(this);
@@ -157,14 +155,14 @@ public class EntitySeamoth extends Entity implements IEntityAdditionalSpawnData 
 		this.prevSteered = this.isPlayerSteering();
 
 		if (this.controlled) {
-			GameSettings settings = mc.gameSettings;
+			GameSettings settings = mc.options;
 
-			this.inputForward = settings.keyBindForward.isKeyDown();
-			this.inputRight = settings.keyBindRight.isKeyDown();
-			this.inputBack = settings.keyBindBack.isKeyDown();
-			this.inputLeft = settings.keyBindLeft.isKeyDown();
-			this.inputUp = settings.keyBindJump.isKeyDown();
-			this.inputDown = ClientBetterDiving.KEY_BIND_DESCEND.isKeyDown();
+			this.inputForward = settings.keyUp.isDown();
+			this.inputRight = settings.keyRight.isDown();
+			this.inputBack = settings.keyDown.isDown();
+			this.inputLeft = settings.keyLeft.isDown();
+			this.inputUp = settings.keyJump.isDown();
+			this.inputDown = ClientBetterDiving.KEY_BIND_DESCEND.isDown();
 
 			BetterDiving.NETWORK.sendToServer(new CPacketSyncSeamothInput(this));
 		} else if (this.prevControlled) {
@@ -181,29 +179,29 @@ public class EntitySeamoth extends Entity implements IEntityAdditionalSpawnData 
 
 	@Override
 	public void tick() {
-		if (this.world.isRemote && this.getControllingPassenger() instanceof PlayerEntity && ((PlayerEntity) this.getControllingPassenger()).isUser()) {
-			this.func_242277_a(this.getPositionVec());
+		if (this.level.isClientSide() && this.getControllingPassenger() instanceof PlayerEntity && ((PlayerEntity) this.getControllingPassenger()).isLocalPlayer()) {
+			this.setPacketCoordinates(this.position());
 		}
 
 		super.tick();
 
 		this.onGround = false;
-		this.insideWater = this.areEyesInFluid(FluidTags.WATER);
+		this.insideWater = this.isEyeInFluid(FluidTags.WATER);
 
 		if (this.damage > 0) {
 			this.damage--;
 		}
 
-		if (this.world.isRemote) {
+		if (this.level.isClientSide()) {
 			this.updateControls();
 			this.updateEngineSound();
 		}
 
 		this.updateMotion();
 
-		this.move(MoverType.SELF, this.getMotion());
+		this.move(MoverType.SELF, this.getDeltaMovement());
 
-		if (!this.world.isRemote) {
+		if (!this.level.isClientSide()) {
 			if (this.getEnergy() != this.prevEnergy) {
 				this.syncEnergy();
 			}
@@ -212,38 +210,33 @@ public class EntitySeamoth extends Entity implements IEntityAdditionalSpawnData 
 	}
 
 	@Override
-	protected boolean canTriggerWalking() {
+	protected boolean isMovementNoisy() {
 		return false;
 	}
-
+	
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if (!this.world.isRemote && !this.removed && source.getTrueSource() instanceof PlayerEntity) {
-			PlayerEntity player = (PlayerEntity) source.getTrueSource();
+	public boolean hurt(DamageSource source, float amount) {
+		if (!this.level.isClientSide() && !this.removed && source.getEntity() instanceof PlayerEntity) {
+			PlayerEntity player = (PlayerEntity) source.getEntity();
 
 			if (player.isCreative()) {
-				this.setDead();
+				this.kill();
 				return true;
-			} else if (!this.isBeingRidden()) {
+			} else if (!this.isVehicle()) {
 				this.damage += 20;
 				if (this.damage > 30) {
-					this.setDead();
+					this.kill();
 
 					ItemStack seamoth = this.toItemStack();
-					if (!player.addItemStackToInventory(seamoth)) {
-						this.entityDropItem(seamoth, 0.0F);
+					if (!player.addItem(seamoth)) {
+						this.spawnAtLocation(seamoth, 0.0F);
 					}
 				}
 				return true;
 			}
 		}
 		return false;
-	}
-
-	@Override
-	public boolean func_241845_aY() {
-		return true;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -253,11 +246,16 @@ public class EntitySeamoth extends Entity implements IEntityAdditionalSpawnData 
 	}
 
 	@Override
-	public ActionResultType processInitialInteract(PlayerEntity player, Hand hand) {
-		if (this.isBeingRidden()) {
+	public boolean isPickable() {
+		return true;
+	}
+
+	@Override
+	public ActionResultType interact(PlayerEntity player, Hand hand) {
+		if (this.isVehicle()) {
 			return ActionResultType.FAIL;
 		}
-		if (!this.world.isRemote) {
+		if (!this.level.isClientSide()) {
 			player.startRiding(this);
 		}
 		return ActionResultType.SUCCESS;
@@ -266,22 +264,22 @@ public class EntitySeamoth extends Entity implements IEntityAdditionalSpawnData 
 	@Override
 	protected void addPassenger(Entity passenger) {
 		super.addPassenger(passenger);
-		passenger.rotationYaw = this.rotationYaw;
-		passenger.rotationPitch = this.rotationPitch;
+		passenger.yRot = this.yRot;
+		passenger.xRot = this.xRot;
 		passenger.setPose(Pose.STANDING);
 		if (passenger instanceof PlayerEntity) {
-			METHOD_UPDATE_POSE.invoke(passenger);
+			((PlayerEntity) passenger).updatePlayerPose();
 		}
-		passenger.recalculateSize();
-		if (!this.world.isRemote) {
+		passenger.refreshDimensions();
+		if (!this.level.isClientSide()) {
 			this.syncPowerCell();
 		} else if (passenger instanceof PlayerEntity) {
-			this.world.playSound((PlayerEntity) passenger, this.getPosition(), BetterDivingSounds.SEAMOTH_ENTER.get(), this.getSoundCategory(), 1.0F, 1.0F);
+			this.level.playSound((PlayerEntity) passenger, this.blockPosition(), BetterDivingSounds.SEAMOTH_ENTER.get(), this.getSoundSource(), 1.0F, 1.0F);
 		}
 	}
 
 	@Override
-	public double getMountedYOffset() {
+	public double getPassengersRidingOffset() {
 		return 0.36D;
 	}
 
@@ -291,7 +289,7 @@ public class EntitySeamoth extends Entity implements IEntityAdditionalSpawnData 
 	}
 
 	@Override
-	public boolean isPushedByWater() {
+	public boolean isPushedByFluid() {
 		return false;
 	}
 
@@ -308,19 +306,19 @@ public class EntitySeamoth extends Entity implements IEntityAdditionalSpawnData 
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void applyOrientationToEntity(Entity entityToUpdate) {
+	public void onPassengerTurned(Entity entityToUpdate) {
 		this.updateRotation();
 
-		entityToUpdate.prevRotationYaw = this.rotationYaw;
-		entityToUpdate.rotationYaw = this.rotationYaw;
-		entityToUpdate.prevRotationPitch = this.rotationPitch;
-		entityToUpdate.rotationPitch = this.rotationPitch;
+		entityToUpdate.yRotO = this.yRot;
+		entityToUpdate.yRot = this.yRot;
+		entityToUpdate.xRotO = this.xRot;
+		entityToUpdate.xRot = this.xRot;
 		if (entityToUpdate instanceof LivingEntity) {
 			LivingEntity entity = (LivingEntity) entityToUpdate;
-			entity.prevRotationYawHead = this.rotationYaw;
-			entity.rotationYawHead = this.rotationYaw;
-			entity.prevRenderYawOffset = this.rotationYaw;
-			entity.renderYawOffset = this.rotationYaw;
+			entity.yHeadRotO = this.yRot;
+			entity.yHeadRot = this.yRot;
+			entity.yBodyRotO = this.yRot;
+			entity.yBodyRot = this.yRot;
 		}
 	}
 
@@ -328,70 +326,70 @@ public class EntitySeamoth extends Entity implements IEntityAdditionalSpawnData 
 	public void updateRotation() {
 		Minecraft mc = Minecraft.getInstance();
 		if (this.getControllingPassenger() == mc.player) {
-			float f = mc.getRenderPartialTicks() - this.partialTicks;
+			float f = mc.getFrameTime() - this.partialTicks;
 			if (f < 0.0F) {
 				f++;
 			}
-			this.partialTicks = mc.getRenderPartialTicks();
+			this.partialTicks = mc.getFrameTime();
 
 			if (this.insideWater && this.hasEnergy()) {
-				double d = mc.gameSettings.mouseSensitivity * 0.6D + 0.2D;
+				double d = mc.options.sensitivity * 0.6D + 0.2D;
 				double d1 = d * d * d * 8.0D;
 				double deltaX = BetterDivingMouseHelper.deltaX;
 				double deltaY = BetterDivingMouseHelper.deltaY;
 				double d2 = MathHelper.clamp(deltaX * d1 * 0.05D, -40.0D * f, 40.0D * f);
 				double d3 = MathHelper.clamp(deltaY * d1 * 0.05D, -40.0D * f, 40.0D * f);
-				if (mc.gameSettings.invertMouse) {
+				if (mc.options.invertYMouse) {
 					d3 *= -1.0D;
 				}
 
-				this.rotationYaw += (float) d2 * 0.5F;
-				this.rotationPitch += (float) d3 * 0.5F;
+				this.yRot += (float) d2 * 0.5F;
+				this.xRot += (float) d3 * 0.5F;
 				this.yaw += (float) d2 * 0.5F;
 				this.pitch += (float) d3 * 0.5F;
 			}
 
 			if (Math.abs(this.yaw) > 0.01F) {
-				this.rotationYaw += this.yaw * 0.5F * f;
+				this.yRot += this.yaw * 0.5F * f;
 				this.yaw *= 1.0F - 0.2F * f;
 			} else {
 				this.yaw = 0.0F;
 			}
 			if (Math.abs(this.pitch) > 0.01F) {
-				this.rotationPitch += this.pitch * 0.5F * f;
+				this.xRot += this.pitch * 0.5F * f;
 				this.pitch *= 1.0F - 0.2F * f;
 			} else {
 				this.pitch = 0.0F;
 			}
 
 			// this.yaw = MathHelper.wrapDegrees(this.yaw);
-			this.rotationPitch = MathHelper.clamp(this.rotationPitch, -90.0F, 90.0F);
+			this.xRot = MathHelper.clamp(this.xRot, -90.0F, 90.0F);
 		}
 	}
 
 	public void updateMotion() {
 		if (this.insideWater) {
-			this.setMotion(this.getMotion().scale(0.95D));
+			this.setDeltaMovement(this.getDeltaMovement().scale(0.95D));
 		} else {
-			this.setMotion(this.getMotion().scale(0.99D));
+			this.setDeltaMovement(this.getDeltaMovement().scale(0.99D));
 		}
 
-		if (Math.abs(this.getMotion().x) < 0.001D) {
-			this.setMotion(new Vector3d(0.0D, this.getMotion().y, this.getMotion().z));
+		if (Math.abs(this.getDeltaMovement().x) < 0.001D) {
+			this.setDeltaMovement(new Vector3d(0.0D, this.getDeltaMovement().y, this.getDeltaMovement().z));
 		}
-		if (Math.abs(this.getMotion().y) < 0.001D) {
-			this.setMotion(new Vector3d(this.getMotion().x, 0.0D, this.getMotion().z));
+		if (Math.abs(this.getDeltaMovement().y) < 0.001D) {
+			this.setDeltaMovement(new Vector3d(this.getDeltaMovement().x, 0.0D, this.getDeltaMovement().z));
 		}
-		if (Math.abs(this.getMotion().z) < 0.001D) {
-			this.setMotion(new Vector3d(this.getMotion().x, this.getMotion().y, 0.0D));
+		if (Math.abs(this.getDeltaMovement().z) < 0.001D) {
+			this.setDeltaMovement(new Vector3d(this.getDeltaMovement().x, this.getDeltaMovement().y, 0.0D));
 		}
 
 		if (!this.insideWater) {
-			this.setMotion(this.getMotion().subtract(0.0D, 0.015D, 0.0D));
+			this.setDeltaMovement(this.getDeltaMovement().subtract(0.0D, 0.015D, 0.0D));
 		}
 
 		if (this.getControllingPassenger() instanceof PlayerEntity && this.isPlayerSteering() && this.hasEnergy()) {
-			if (!this.world.isRemote) {
+			if (!this.level.isClientSide()) {
 				this.extractEnergy(BetterDivingConfig.SERVER_CONFIG.seamoth.seamothEnergyUsage.get());
 			}
 
@@ -437,8 +435,8 @@ public class EntitySeamoth extends Entity implements IEntityAdditionalSpawnData 
 					}
 				}
 
-				Vector3d vec = BetterDivingHelper.getSeamothMoveVec(forward, up, strafe, speed, this.rotationYaw, this.rotationPitch);
-				this.setMotion(this.getMotion().add(vec));
+				Vector3d vec = BetterDivingHelper.getSeamothMoveVec(forward, up, strafe, speed, this.yRot, this.xRot);
+				this.setDeltaMovement(this.getDeltaMovement().add(vec));
 			}
 		}
 	}
@@ -448,27 +446,27 @@ public class EntitySeamoth extends Entity implements IEntityAdditionalSpawnData 
 	}
 
 	@Override
-	public boolean canBePushed() {
+	public boolean isPushable() {
 		return false;
 	}
 
 	@Override
-	public boolean hasNoGravity() {
+	public boolean isNoGravity() {
 		return true;
 	}
 
 	@Override
-	protected boolean canBeRidden(Entity entityIn) {
+	protected boolean canRide(Entity p_184228_1_) {
 		return true;
 	}
 
 	@Override
-	public void onEnterBubbleColumn(boolean downwards) {
+	public void onAboveBubbleCol(boolean p_203002_1_) {
 		// do nothing
 	}
 
 	@Override
-	public void onEnterBubbleColumnWithAirAbove(boolean downwards) {
+	public void onInsideBubbleColumn(boolean p_203004_1_) {
 		// do nothing
 	}
 
@@ -550,14 +548,14 @@ public class EntitySeamoth extends Entity implements IEntityAdditionalSpawnData 
 	}
 
 	public void syncPowerCell() {
-		if (!this.world.isRemote && this.getControllingPassenger() instanceof PlayerEntity) {
+		if (!this.level.isClientSide() && this.getControllingPassenger() instanceof PlayerEntity) {
 			PlayerEntity player = (PlayerEntity) this.getControllingPassenger();
 			BetterDiving.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), new SPacketSyncSeamothPowerCell(this));
 		}
 	}
 
 	public void syncEnergy() {
-		if (!this.world.isRemote && this.getControllingPassenger() instanceof PlayerEntity) {
+		if (!this.level.isClientSide() && this.getControllingPassenger() instanceof PlayerEntity) {
 			PlayerEntity player = (PlayerEntity) this.getControllingPassenger();
 			BetterDiving.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), new SPacketSyncSeamothEnergy(this));
 		}

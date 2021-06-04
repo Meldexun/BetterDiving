@@ -26,15 +26,15 @@ public class CPacketSyncSeamothInput implements IPacket {
 	}
 
 	public CPacketSyncSeamothInput(EntitySeamoth seamoth) {
-		this.entityId = seamoth.getEntityId();
+		this.entityId = seamoth.getId();
 		this.inputForward = seamoth.inputForward;
 		this.inputBack = seamoth.inputBack;
 		this.inputRight = seamoth.inputRight;
 		this.inputLeft = seamoth.inputLeft;
 		this.inputUp = seamoth.inputUp;
 		this.inputDown = seamoth.inputDown;
-		this.yaw = seamoth.rotationYaw;
-		this.pitch = seamoth.rotationPitch;
+		this.yaw = seamoth.yRot;
+		this.pitch = seamoth.xRot;
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class CPacketSyncSeamothInput implements IPacket {
 	public boolean handle(Supplier<Context> ctxSupplier) {
 		ctxSupplier.get().enqueueWork(() -> {
 			PlayerEntity player = ctxSupplier.get().getSender();
-			Entity entity = player.world.getEntityByID(this.entityId);
+			Entity entity = player.level.getEntity(this.entityId);
 			if (entity instanceof EntitySeamoth) {
 				EntitySeamoth seamoth = (EntitySeamoth) entity;
 
@@ -77,8 +77,8 @@ public class CPacketSyncSeamothInput implements IPacket {
 				seamoth.inputLeft = this.inputLeft;
 				seamoth.inputUp = this.inputUp;
 				seamoth.inputDown = this.inputDown;
-				seamoth.rotationYaw = this.yaw;
-				seamoth.rotationPitch = this.pitch;
+				seamoth.yRot = this.yaw;
+				seamoth.xRot = this.pitch;
 			}
 		});
 		return true;

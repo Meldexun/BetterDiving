@@ -15,7 +15,7 @@ public class SeamothStartSound extends TickableSound {
 	private int tick = 10;
 
 	public SeamothStartSound(EntitySeamoth seamoth) {
-		super(BetterDivingSounds.SEAMOTH_START.get(), seamoth.getSoundCategory());
+		super(BetterDivingSounds.SEAMOTH_START.get(), seamoth.getSoundSource());
 		this.seamoth = seamoth;
 		this.volume = 1.0F;
 		this.pitch = 1.0F;
@@ -25,11 +25,11 @@ public class SeamothStartSound extends TickableSound {
 	@Override
 	public void tick() {
 		if (this.seamoth.removed || this.tick < 0) {
-			this.finishPlaying();
+			this.stop();
 		} else {
-			this.x = this.seamoth.getPosX();
-			this.y = this.seamoth.getPosY();
-			this.z = this.seamoth.getPosZ();
+			this.x = this.seamoth.getX();
+			this.y = this.seamoth.getY();
+			this.z = this.seamoth.getZ();
 
 			if (!this.stop && (!this.seamoth.isPlayerSteering() || !this.seamoth.hasEnergy())) {
 				this.stop = true;

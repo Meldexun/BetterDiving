@@ -29,9 +29,9 @@ public class SeafloorOutcropFeature extends Feature<FeatureSpreadConfig> {
 	}
 
 	@Override
-	public boolean generate(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, FeatureSpreadConfig config) {
+	public boolean place(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, FeatureSpreadConfig config) {
 		int i = 0;
-		int j = config.getSpread().getSpread(rand);
+		int j = config.count().sample(rand);
 		for (int k = 0; k < j; k++) {
 			for (int l = 0; l < 4; l++) {
 				int x = rand.nextInt(8) - rand.nextInt(8);
@@ -62,9 +62,9 @@ public class SeafloorOutcropFeature extends Feature<FeatureSpreadConfig> {
 					list.add(Direction.EAST);
 				}
 				Direction dir = list.get(rand.nextInt(list.size()));
-				BlockState state = this.block.getDefaultState().with(BlockStateProperties.FACING, dir);
-				if (reader.getBlockState(p).matchesBlock(Blocks.WATER) && state.isValidPosition((IWorldReader) reader, p)) {
-					reader.setBlockState(p, state, 2);
+				BlockState state = this.block.defaultBlockState().setValue(BlockStateProperties.FACING, dir);
+				if (reader.getBlockState(p).is(Blocks.WATER) && state.canSurvive((IWorldReader) reader, p)) {
+					reader.setBlock(p, state, 2);
 					i++;
 					break;
 				}

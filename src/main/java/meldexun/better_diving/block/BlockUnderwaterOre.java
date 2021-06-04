@@ -33,76 +33,76 @@ public class BlockUnderwaterOre extends Block implements IWaterLoggable {
 	private static final Map<Direction, VoxelShape> SHAPES;
 	static {
 		Map<Direction, VoxelShape> m = new EnumMap<>(Direction.class);
-		m.put(Direction.UP, Block.makeCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 8.0D, 14.0D));
-		m.put(Direction.DOWN, Block.makeCuboidShape(2.0D, 8.0D, 2.0D, 14.0D, 16.0D, 14.0D));
-		m.put(Direction.NORTH, Block.makeCuboidShape(2.0D, 2.0D, 8.0D, 14.0D, 14.0D, 16.0D));
-		m.put(Direction.SOUTH, Block.makeCuboidShape(2.0D, 2.0D, 0.0D, 14.0D, 14.0D, 8.0D));
-		m.put(Direction.EAST, Block.makeCuboidShape(0.0D, 2.0D, 2.0D, 8.0D, 14.0D, 14.0D));
-		m.put(Direction.WEST, Block.makeCuboidShape(8.0D, 2.0D, 2.0D, 16.0D, 14.0D, 14.0D));
+		m.put(Direction.UP, Block.box(2.0D, 0.0D, 2.0D, 14.0D, 8.0D, 14.0D));
+		m.put(Direction.DOWN, Block.box(2.0D, 8.0D, 2.0D, 14.0D, 16.0D, 14.0D));
+		m.put(Direction.NORTH, Block.box(2.0D, 2.0D, 8.0D, 14.0D, 14.0D, 16.0D));
+		m.put(Direction.SOUTH, Block.box(2.0D, 2.0D, 0.0D, 14.0D, 14.0D, 8.0D));
+		m.put(Direction.EAST, Block.box(0.0D, 2.0D, 2.0D, 8.0D, 14.0D, 14.0D));
+		m.put(Direction.WEST, Block.box(8.0D, 2.0D, 2.0D, 16.0D, 14.0D, 14.0D));
 		SHAPES = Collections.unmodifiableMap(m);
 	}
 
 	public BlockUnderwaterOre() {
-		super(AbstractBlock.Properties.create(Material.SAND));
-		this.setDefaultState(this.stateContainer.getBaseState().with(BlockStateProperties.FACING, Direction.UP).with(ROTATION, 0).with(BlockStateProperties.WATERLOGGED, true));
+		super(AbstractBlock.Properties.of(Material.SAND));
+		this.registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.FACING, Direction.UP).setValue(ROTATION, 0).setValue(BlockStateProperties.WATERLOGGED, true));
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
 	public FluidState getFluidState(BlockState state) {
-		return state.get(BlockStateProperties.WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
+		return state.getValue(BlockStateProperties.WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
 	}
 
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		return SHAPES.get(state.get(BlockStateProperties.FACING));
+		return SHAPES.get(state.getValue(BlockStateProperties.FACING));
 	}
 
 	@Override
-	protected void fillStateContainer(Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		builder.add(BlockStateProperties.FACING, ROTATION, BlockStateProperties.WATERLOGGED);
 	}
 
 	@Override
-	public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
-		Direction d = state.get(BlockStateProperties.FACING);
-		BlockPos p = pos.offset(d.getOpposite());
-		return worldIn.getBlockState(p).isSolidSide(worldIn, p, d);
+	public boolean canSurvive(BlockState state, IWorldReader worldIn, BlockPos pos) {
+		Direction d = state.getValue(BlockStateProperties.FACING);
+		BlockPos p = pos.relative(d.getOpposite());
+		return worldIn.getBlockState(p).isFaceSturdy(worldIn, p, d);
 	}
 
 	@Override
 	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		BlockState state = this.getDefaultState();
-		World world = context.getWorld();
-		BlockPos pos = context.getPos();
+		BlockState state = this.defaultBlockState();
+		World world = context.getLevel();
+		BlockPos pos = context.getClickedPos();
 		for (Direction d : context.getNearestLookingDirections()) {
-			state = state.with(BlockStateProperties.FACING, d.getOpposite());
-			if (this.isValidPosition(state, world, pos)) {
-				return state.with(ROTATION, world.rand.nextInt(4));
+			state = state.setValue(BlockStateProperties.FACING, d.getOpposite());
+			if (this.canSurvive(state, world, pos)) {
+				return state.setValue(ROTATION, world.random.nextInt(4));
 			}
 		}
 		return null;
 	}
 
 	@Override
-	public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
-		if (facing.getOpposite() == stateIn.get(BlockStateProperties.FACING) && !stateIn.isValidPosition(worldIn, currentPos)) {
-			return Blocks.AIR.getDefaultState();
+	public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+		if (facing.getOpposite() == stateIn.getValue(BlockStateProperties.FACING) && !stateIn.canSurvive(worldIn, currentPos)) {
+			return Blocks.AIR.defaultBlockState();
 		}
-		if (stateIn.get(BlockStateProperties.WATERLOGGED)) {
-			worldIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(worldIn));
+		if (stateIn.getValue(BlockStateProperties.WATERLOGGED)) {
+			worldIn.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
 		}
 		return stateIn;
 	}
 
 	@Override
 	public BlockState rotate(BlockState state, Rotation rot) {
-		return state.with(BlockStateProperties.FACING, rot.rotate(state.get(BlockStateProperties.FACING)));
+		return state.setValue(BlockStateProperties.FACING, rot.rotate(state.getValue(BlockStateProperties.FACING)));
 	}
 
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn) {
-		return state.with(BlockStateProperties.FACING, mirrorIn.mirror(state.get(BlockStateProperties.FACING)));
+		return state.setValue(BlockStateProperties.FACING, mirrorIn.mirror(state.getValue(BlockStateProperties.FACING)));
 	}
 
 }

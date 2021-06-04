@@ -31,14 +31,14 @@ public class PlayerOxygenEventHandler {
 		}
 		PlayerEntity player = event.player;
 		if (!BetterDivingConfig.SERVER_CONFIG.oxygenChanges.get()) {
-			if (!player.world.isRemote && player.getRidingEntity() instanceof EntitySeamoth) {
-				player.setAir(Math.min(player.getAir() + 5, player.getMaxAir()));
+			if (!player.level.isClientSide() && player.getVehicle() instanceof EntitySeamoth) {
+				player.setAirSupply(Math.min(player.getAirSupply() + 5, player.getMaxAirSupply()));
 			}
 			return;
 		}
 		player.getCapability(CapabilityOxygenProvider.OXYGEN).ifPresent(cap -> {
 			cap.setOxygen(cap.getOxygen());
-			if (!player.world.isRemote) {
+			if (!player.level.isClientSide()) {
 				if (!BetterDivingHelper.canBreath(player)) {
 					int oxygenUsage = 1;
 
@@ -55,20 +55,20 @@ public class PlayerOxygenEventHandler {
 					OxygenPlayerHelper.receiveOxygenRespectEquipment(player, 25);
 				}
 
-				player.setAir((int) (OxygenPlayerHelper.getOxygenRespectEquipmentInPercent(player) * player.getMaxAir()));
+				player.setAirSupply((int) (OxygenPlayerHelper.getOxygenRespectEquipmentInPercent(player) * player.getMaxAirSupply()));
 
 				if (cap.getOxygen() <= -20) {
 					cap.setOxygen(0);
 
-					if (!player.world.isRemote && !MinecraftForge.EVENT_BUS.post(new PlayerSuffocateEvent(player))) {
-						((ServerWorld) player.world).spawnParticle(ParticleTypes.BUBBLE, player.getPosX(), player.getPosY() + player.getHeight() * 0.5D, player.getPosZ(), 8, 0.25D, 0.25D, 0.25D, 0.0D);
+					if (!player.level.isClientSide() && !MinecraftForge.EVENT_BUS.post(new PlayerSuffocateEvent(player))) {
+						((ServerWorld) player.level).sendParticles(ParticleTypes.BUBBLE, player.getX(), player.getY() + player.getBbHeight() * 0.5D, player.getZ(), 8, 0.25D, 0.25D, 0.25D, 0.0D);
 
-						player.attackEntityFrom(DamageSource.DROWN, 2.0F);
+						player.hurt(DamageSource.DROWN, 2.0F);
 					}
 				}
 			}
 
-			if (!player.world.isRemote) {
+			if (!player.level.isClientSide()) {
 				BetterDiving.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), new SPacketSyncOxygen(cap.getOxygen()));
 			}
 		});

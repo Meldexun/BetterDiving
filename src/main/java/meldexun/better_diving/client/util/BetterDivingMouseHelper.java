@@ -23,23 +23,23 @@ public class BetterDivingMouseHelper {
 			return;
 		}
 		Minecraft mc = Minecraft.getInstance();
-		boolean flag = mc.mouseHelper.isMouseGrabbed() && mc.isGameFocused();
+		boolean flag = mc.mouseHandler.isMouseGrabbed() && mc.isWindowActive();
 		if (flag) {
 			if (ignoreFirstMove) {
 				deltaX = 0.0D;
 				deltaY = 0.0D;
 				ignoreFirstMove = false;
 			} else {
-				deltaX = mc.mouseHelper.getMouseX() - previousX;
-				deltaY = mc.mouseHelper.getMouseY() - previousY;
+				deltaX = mc.mouseHandler.xpos() - previousX;
+				deltaY = mc.mouseHandler.ypos() - previousY;
 			}
 		} else {
 			deltaX = 0.0D;
 			deltaY = 0.0D;
 			ignoreFirstMove = true;
 		}
-		previousX = mc.mouseHelper.getMouseX();
-		previousY = mc.mouseHelper.getMouseY();
+		previousX = mc.mouseHandler.xpos();
+		previousY = mc.mouseHandler.ypos();
 	}
 
 }

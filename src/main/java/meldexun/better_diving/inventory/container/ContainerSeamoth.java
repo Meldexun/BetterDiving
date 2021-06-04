@@ -33,15 +33,15 @@ public class ContainerSeamoth extends Container {
 
 		this.addSlot(new SlotItemHandler(seamothInv, 0, 62, 50) {
 			@Override
-			public boolean isItemValid(ItemStack stack) {
+			public boolean mayPlace(ItemStack stack) {
 				return stack.getItem() instanceof ItemPowerCell;
 			}
 
 			@Override
-			public void onSlotChanged() {
+			public void setChanged() {
 				ContainerSeamoth.this.onSeamothSlotChanged(this.getSlotIndex());
 			}
-		}.setBackground(PlayerContainer.LOCATION_BLOCKS_TEXTURE, new ResourceLocation(BetterDiving.MOD_ID, "item/empty_power_cell")));
+		}.setBackground(PlayerContainer.BLOCK_ATLAS, new ResourceLocation(BetterDiving.MOD_ID, "item/empty_power_cell")));
 	}
 
 	/** Client */
@@ -61,40 +61,41 @@ public class ContainerSeamoth extends Container {
 		IInventory seamothInv = new Inventory(1);
 		this.addSlot(new Slot(seamothInv, 0, 62, 50) {
 			@Override
-			public boolean isItemValid(ItemStack stack) {
+			public boolean mayPlace(ItemStack stack) {
 				return stack.getItem() instanceof ItemPowerCell;
 			}
-		}.setBackground(PlayerContainer.LOCATION_BLOCKS_TEXTURE, new ResourceLocation(BetterDiving.MOD_ID, "item/empty_power_cell")));
+		}.setBackground(PlayerContainer.BLOCK_ATLAS, new ResourceLocation(BetterDiving.MOD_ID, "item/empty_power_cell")));
 	}
 
 	@Override
-	public boolean canInteractWith(PlayerEntity playerIn) {
+	public boolean stillValid(PlayerEntity playerIn) {
 		return true;
 	}
 
+	
 	@Override
-	public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
-		Slot slot = this.inventorySlots.get(index);
+	public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+		Slot slot = this.slots.get(index);
 
 		if (slot == null) {
 			return ItemStack.EMPTY;
 		}
 
-		ItemStack stack = slot.getStack();
+		ItemStack stack = slot.getItem();
 
 		if (stack.isEmpty()) {
 			return ItemStack.EMPTY;
 		}
 
 		if (index > 35) {
-			if (!this.mergeItemStack(stack, 0, 35, false)) {
+			if (!this.moveItemStackTo(stack, 0, 35, false)) {
 				return ItemStack.EMPTY;
 			}
-		} else if (!this.mergeItemStack(stack, 36, this.inventorySlots.size(), false)) {
+		} else if (!this.moveItemStackTo(stack, 36, this.slots.size(), false)) {
 			return ItemStack.EMPTY;
 		}
 
-		slot.onSlotChanged();
+		slot.setChanged();
 		return stack;
 	}
 

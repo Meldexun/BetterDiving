@@ -27,9 +27,9 @@ public class PlayerMiningEventHandler {
 		if (player.isInWater()) {
 			float multiplier = 1.0F + (float) DivingGearHelper.getMiningspeedBonus(player);
 
-			if (player.areEyesInFluid(FluidTags.WATER)) {
-				ItemStack head = player.getItemStackFromSlot(EquipmentSlotType.HEAD);
-				int aquaAffinityLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.AQUA_AFFINITY, head);
+			if (player.isEyeInFluid(FluidTags.WATER)) {
+				ItemStack head = player.getItemBySlot(EquipmentSlotType.HEAD);
+				int aquaAffinityLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.AQUA_AFFINITY, head);
 				multiplier *= BetterDivingConfig.SERVER_CONFIG.mining.breakSpeedBase.get();
 				if (aquaAffinityLevel > 0) {
 					multiplier *= BetterDivingConfig.SERVER_CONFIG.mining.breakSpeedAquaAffinity.get() * aquaAffinityLevel;

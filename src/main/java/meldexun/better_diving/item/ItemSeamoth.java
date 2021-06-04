@@ -41,7 +41,7 @@ import net.minecraftforge.items.ItemStackHandler;
 public class ItemSeamoth extends Item {
 
 	public ItemSeamoth() {
-		super(new Item.Properties().maxStackSize(1).group(BetterDivingItemGroups.BETTER_DIVING));
+		super(new Item.Properties().stacksTo(1).tab(BetterDivingItemGroups.BETTER_DIVING));
 	}
 
 	@Override
@@ -50,8 +50,8 @@ public class ItemSeamoth extends Item {
 	}
 
 	@Override
-	public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-		if (this.isInGroup(group)) {
+	public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+		if (this.allowdedIn(group)) {
 			items.add(new ItemStack(this));
 			ItemStack stack = new ItemStack(this);
 			stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(c -> {
@@ -62,44 +62,44 @@ public class ItemSeamoth extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		if (!worldIn.isRemote) {
-			if (playerIn.isSneaking()) {
-				playerIn.openContainer(new SimpleNamedContainerProvider((id, playerInv, player) -> {
-					return new ContainerSeamothItem(id, playerInv, playerIn.getHeldItem(handIn), handIn);
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+		if (!worldIn.isClientSide()) {
+			if (playerIn.isShiftKeyDown()) {
+				playerIn.openMenu(new SimpleNamedContainerProvider((id, playerInv, player) -> {
+					return new ContainerSeamothItem(id, playerInv, playerIn.getItemInHand(handIn), handIn);
 				}, new TranslationTextComponent("Seamoth")));
 			} else {
 				EntitySeamoth seamoth = new EntitySeamoth(BetterDivingEntities.SEAMOTH.get(), worldIn);
 
-				playerIn.getHeldItem(handIn).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(c -> {
+				playerIn.getItemInHand(handIn).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(c -> {
 					seamoth.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(c1 -> {
 						c1.insertItem(0, c.getStackInSlot(0).copy(), false);
 					});
 				});
 
 				Vector3d start = playerIn.getEyePosition(1.0F);
-				Vector3d look = playerIn.getLookVec();
+				Vector3d look = playerIn.getLookAngle();
 				Vector3d end = start.add(look.scale(5.0D));
-				RayTraceResult result = worldIn.rayTraceBlocks(new RayTraceContext(start, end, BlockMode.COLLIDER, FluidMode.NONE, null));
-				Vector3d vec = (result != null ? result.getHitVec() : end).subtract(look);
+				RayTraceResult result = worldIn.clip(new RayTraceContext(start, end, BlockMode.COLLIDER, FluidMode.NONE, null));
+				Vector3d vec = (result != null ? result.getLocation() : end).subtract(look);
 
-				seamoth.setPosition(vec.x, vec.y, vec.z);
-				worldIn.addEntity(seamoth);
+				seamoth.setPos(vec.x, vec.y, vec.z);
+				worldIn.addFreshEntity(seamoth);
 
-				if (worldIn.getBlockState(seamoth.getPosition()).getMaterial() == Material.WATER) {
-					seamoth.playSound(SoundEvents.AMBIENT_UNDERWATER_ENTER, 1.0F, 0.9F + worldIn.rand.nextFloat() * 0.2F);
+				if (worldIn.getBlockState(seamoth.blockPosition()).getMaterial() == Material.WATER) {
+					seamoth.playSound(SoundEvents.AMBIENT_UNDERWATER_ENTER, 1.0F, 0.9F + worldIn.random.nextFloat() * 0.2F);
 				}
 
 				if (!playerIn.isCreative()) {
-					playerIn.getHeldItem(handIn).shrink(1);
+					playerIn.getItemInHand(handIn).shrink(1);
 				}
 			}
 		}
-		return ActionResult.resultSuccess(playerIn.getHeldItem(handIn));
+		return ActionResult.success(playerIn.getItemInHand(handIn));
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		ItemStack powerCell = ItemStack.EMPTY;
 		LazyOptional<IItemHandler> cap = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
 		if (cap.isPresent()) {
@@ -115,12 +115,12 @@ public class ItemSeamoth extends Item {
 		} else {
 			tooltip.add(new StringTextComponent(TextFormatting.GRAY + "No power cell"));
 		}
-		super.addInformation(stack, worldIn, tooltip, flagIn);
+		super.appendHoverText(stack, worldIn, tooltip, flagIn);
 	}
 
 	@Override
-	public void onCreated(ItemStack stack, World worldIn, PlayerEntity playerIn) {
-		super.onCreated(stack, worldIn, playerIn);
+	public void onCraftedBy(ItemStack stack, World worldIn, PlayerEntity playerIn) {
+		super.onCraftedBy(stack, worldIn, playerIn);
 		stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(c -> {
 			((ItemStackHandler) c).setStackInSlot(0, new ItemStack(BetterDivingItems.POWER_CELL.get()));
 		});

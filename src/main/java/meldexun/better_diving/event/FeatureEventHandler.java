@@ -23,7 +23,7 @@ public class FeatureEventHandler {
 	public static ConfiguredFeature<FeatureSpreadConfig, ?> shaleOutcrop;
 
 	private static ConfiguredFeature<FeatureSpreadConfig, ?> register(String name, Feature<FeatureSpreadConfig> feature, int base, int spread) {
-		return Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, new ResourceLocation(BetterDiving.MOD_ID, name), feature.withConfiguration(new FeatureSpreadConfig(FeatureSpread.create(base, spread))));
+		return Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, new ResourceLocation(BetterDiving.MOD_ID, name), feature.configured(new FeatureSpreadConfig(FeatureSpread.of(base, spread))));
 	}
 
 	public static void registerConfiguredFeatures() {
@@ -35,11 +35,11 @@ public class FeatureEventHandler {
 	@SubscribeEvent
 	public static void onBiomeLoadingEvent(BiomeLoadingEvent event) {
 		if (event.getCategory() == Category.OCEAN) {
-			event.getGeneration().withFeature(Decoration.UNDERGROUND_ORES, limestoneOutcrop);
+			event.getGeneration().addFeature(Decoration.UNDERGROUND_ORES, limestoneOutcrop);
 			if (event.getDepth() <= -1.5F) {
-				event.getGeneration().withFeature(Decoration.UNDERGROUND_ORES, sandstoneOutcrop);
+				event.getGeneration().addFeature(Decoration.UNDERGROUND_ORES, sandstoneOutcrop);
 			}
-			event.getGeneration().withFeature(Decoration.UNDERGROUND_ORES, shaleOutcrop);
+			event.getGeneration().addFeature(Decoration.UNDERGROUND_ORES, shaleOutcrop);
 		}
 	}
 

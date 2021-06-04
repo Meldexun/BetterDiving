@@ -17,7 +17,7 @@ public class CapabilityOxygenStorage implements IStorage<ICapabilityOxygen> {
 	@Override
 	public void readNBT(Capability<ICapabilityOxygen> capability, ICapabilityOxygen instance, Direction side, INBT nbt) {
 		if (nbt instanceof IntNBT) {
-			instance.setOxygen(((IntNBT) nbt).getInt());
+			instance.setOxygen(((IntNBT) nbt).getAsInt());
 		}
 	}
 
