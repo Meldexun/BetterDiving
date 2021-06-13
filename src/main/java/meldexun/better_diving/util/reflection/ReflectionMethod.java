@@ -7,7 +7,7 @@ public class ReflectionMethod<T> {
 
 	private final Method method;
 
-	private ReflectionMethod(Class<?> clazz, String obfuscatedName, String deobfuscatedName, Class<?>... parameterTypes) {
+	public ReflectionMethod(Class<?> clazz, String obfuscatedName, String deobfuscatedName, Class<?>... parameterTypes) {
 		Method m = null;
 		try {
 			try {
@@ -23,7 +23,7 @@ public class ReflectionMethod<T> {
 		this.method = m;
 	}
 
-	private ReflectionMethod(String className, String obfuscatedName, String deobfuscatedName, Class<?>... parameterTypes) {
+	public ReflectionMethod(String className, String obfuscatedName, String deobfuscatedName, Class<?>... parameterTypes) {
 		Method m = null;
 		try {
 			Class<?> clazz = Class.forName(className);

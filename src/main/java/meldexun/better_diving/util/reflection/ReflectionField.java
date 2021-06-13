@@ -6,7 +6,7 @@ public class ReflectionField<T> {
 
 	private final Field field;
 
-	private ReflectionField(Class<?> clazz, String obfuscatedName, String deobfuscatedName) {
+	public ReflectionField(Class<?> clazz, String obfuscatedName, String deobfuscatedName) {
 		Field f = null;
 		try {
 			try {
@@ -22,7 +22,7 @@ public class ReflectionField<T> {
 		this.field = f;
 	}
 
-	private ReflectionField(String className, String obfuscatedName, String deobfuscatedName) {
+	public ReflectionField(String className, String obfuscatedName, String deobfuscatedName) {
 		Field f = null;
 		try {
 			Class<?> clazz = Class.forName(className);

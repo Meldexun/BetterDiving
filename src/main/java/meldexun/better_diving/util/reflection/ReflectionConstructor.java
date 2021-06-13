@@ -7,7 +7,7 @@ public class ReflectionConstructor<T> {
 
 	private final Constructor<T> constructor;
 
-	private ReflectionConstructor(Class<T> clazz, Class<?>... parameterTypes) {
+	public ReflectionConstructor(Class<T> clazz, Class<?>... parameterTypes) {
 		Constructor<T> c = null;
 		try {
 			c = clazz.getDeclaredConstructor(parameterTypes);
@@ -19,7 +19,7 @@ public class ReflectionConstructor<T> {
 	}
 
 	@SuppressWarnings("unchecked")
-	private ReflectionConstructor(String className, Class<?>... parameterTypes) {
+	public ReflectionConstructor(String className, Class<?>... parameterTypes) {
 		Constructor<T> c = null;
 		try {
 			Class<T> clazz = (Class<T>) Class.forName(className);
