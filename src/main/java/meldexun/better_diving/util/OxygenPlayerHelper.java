@@ -21,7 +21,7 @@ public class OxygenPlayerHelper {
 
 		Entity ridingEntity = player.getVehicle();
 		if (ridingEntity != null) {
-			oxygenOfPlayer += OxygenEntityHelper.getOxygen(ridingEntity);
+			oxygenOfPlayer += OxygenEntityHelper.getOxygen(ridingEntity, player);
 		}
 
 		for (EquipmentSlotType slot : EquipmentSlotType.values()) {
@@ -42,7 +42,7 @@ public class OxygenPlayerHelper {
 
 		Entity ridingEntity = player.getVehicle();
 		if (ridingEntity != null) {
-			oxygenCapacity += OxygenEntityHelper.getOxygenCapacity(ridingEntity);
+			oxygenCapacity += OxygenEntityHelper.getOxygenCapacity(ridingEntity, player);
 		}
 
 		for (EquipmentSlotType slot : EquipmentSlotType.values()) {
@@ -79,7 +79,7 @@ public class OxygenPlayerHelper {
 
 		Entity ridingEntity = player.getVehicle();
 		if (ridingEntity != null) {
-			int j = OxygenEntityHelper.receiveOxygen(ridingEntity, amount);
+			int j = OxygenEntityHelper.receiveOxygen(ridingEntity, player, amount);
 			amountReceived += j;
 			amount -= j;
 		}
@@ -98,7 +98,7 @@ public class OxygenPlayerHelper {
 
 		Entity ridingEntity = player.getVehicle();
 		if (ridingEntity != null) {
-			int j = OxygenEntityHelper.extractOxygen(ridingEntity, amount);
+			int j = OxygenEntityHelper.extractOxygen(ridingEntity, player, amount);
 			amountExtracted += j;
 			amount -= j;
 		}
