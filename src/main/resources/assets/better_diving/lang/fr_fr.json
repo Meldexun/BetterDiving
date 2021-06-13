@@ -1,0 +1,56 @@
+{
+  "itemGroup.better_diving": "Better Diving",
+
+  "item.better_diving.diving_mask": "Masque de plongée",
+  "item.better_diving.standard_o2_tank": "Réservoir O₂ Standard",
+  "item.better_diving.wetsuit_leggings": "Combinaison de plongée",
+  "item.better_diving.fins": "Palmes",
+
+  "item.better_diving.rebreather": "Recycleur d'air",
+  "item.better_diving.high_capacity_o2_tank": "Réservoir O₂ Haute Capacité",
+  "item.better_diving.improved_wetsuit_leggings": "Combinaison de plongée améliorée",
+  "item.better_diving.ultra_glide_fins": "Palmes Ultra Glissantes",
+
+  "item.better_diving.reinforced_diving_mask": "Masque de plongée renforcée",
+  "item.better_diving.reinforced_o2_tank": "Réservoir O₂ Renforcé",
+  "item.better_diving.reinforced_wetsuit_leggings": "Combinaison de plongée renforcée",
+  "item.better_diving.reinforced_fins": "Palmes renforcées",
+
+  "item.better_diving.coal_chunk": "Morceau de Charbon",
+  "item.better_diving.iron_chunk": "Morceau de Fer",
+  "item.better_diving.gold_chunk": "Morceau d'Or",
+  "item.better_diving.lapis_chunk": "Morceau de Lapis",
+  "item.better_diving.redstone_chunk": "Morceau de Redstone",
+  "item.better_diving.emerald_chunk": "Morceau d'Emeraude",
+  "item.better_diving.diamond_chunk": "Morceau de diamant",
+
+  "item.better_diving.titanium_chunk": "Morceau de Titane",
+  "item.better_diving.copper_chunk": "Morceau de Cuivre",
+  "item.better_diving.silver_chunk": "Morceau d'Argent",
+  "item.better_diving.lead_chunk": "Morceau de Plomb",
+  "item.better_diving.lithium_chunk": "Morceau de Lithium",
+
+  "item.better_diving.titanium_ingot": "Lingot de Titane",
+  "item.better_diving.copper_ingot": "Lingot de Cuivre",
+  "item.better_diving.silver_ingot": "Lingot d'Argent",
+  "item.better_diving.lead_ingot": "Lingot de Plomb",
+  "item.better_diving.lithium_ingot": "Lingot de Lithium",
+
+  "item.better_diving.fiber_mesh": "Maille de fibre",
+
+  "item.better_diving.power_cell": "Batterie Haute Capacité",
+
+  "item.better_diving.seamoth": "Seamoth",
+
+  "block.better_diving.limestone_outcrop": "Affleurement de Calcaire",
+  "block.better_diving.sandstone_outcrop": "Affleurement de Grès",
+  "block.better_diving.shale_outcrop": "Affleurement de Schiste",
+
+  "block.better_diving.titanium_block": "Bloc de Titane",
+  "block.better_diving.copper_block": "Bloc de Cuivre",
+  "block.better_diving.silver_block": "Bloc d'Argent",
+  "block.better_diving.lead_block": "Bloc de Plomb",
+  "block.better_diving.lithium_block": "Bloc de Lithium",
+
+  "entity.better_diving.seamoth": "Seamoth"
+}
