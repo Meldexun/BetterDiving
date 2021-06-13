@@ -82,7 +82,7 @@ public class BetterDivingConfig {
 			public final ForgeConfigSpec.DoubleValue breakSpeedBase;
 
 			public Mining(ForgeConfigSpec.Builder builder) {
-				builder.push("mining");
+				builder.comment("").push("mining");
 
 				this.breakSpeedAquaAffinity = builder.comment("Break speed modifier underwater with the Aqua Affinity enchantment. (Vanilla = 5.0)").defineInRange("breakSpeedAquaAffinity", 1.25D, 0.0D, 10.0D);
 				this.breakSpeedBase = builder.comment("Base break speed in water. (Vanilla = 0.2)").defineInRange("breakSpeedBase", 1.0D, 0.0D, 10.0D);
@@ -125,7 +125,7 @@ public class BetterDivingConfig {
             public final ForgeConfigSpec.BooleanValue weakerSneakDescending;
 
 			public Movement(ForgeConfigSpec.Builder builder) {
-				builder.push("movement");
+				builder.comment("").push("movement");
 
 				this.baseSwimSpeed = builder.comment("Base swim speed. (Vanilla = 0.02)").defineInRange("baseSwimSpeed", 0.04D, 0.0D, 1.0D);
 
@@ -171,7 +171,7 @@ public class BetterDivingConfig {
 			public final ForgeConfigSpec.IntValue oxygenEfficiencyRate;
 
 			public Oxygen(ForgeConfigSpec.Builder builder) {
-				builder.push("oxygen");
+				builder.comment("").push("oxygen");
 
 				this.oxygenBaseDivingDepth = builder.comment("Base diving depth. (Check 'oxygenEfficiencyRate' for more information)").defineInRange("oxygenBaseDivingDepth", 20, 0, 1024);
 				this.oxygenCapacity = builder.comment("Base oxygen capacity in ticks. (20 ticks = 1 second)").defineInRange("oxygenCapacity", 900, 0, 1_000_000);
@@ -190,7 +190,7 @@ public class BetterDivingConfig {
 			public final ForgeConfigSpec.IntValue seamothEnergyUsage;
 
 			public Seamoth(ForgeConfigSpec.Builder builder) {
-				builder.push("seamoth");
+				builder.comment("").push("seamoth");
 
 				this.seamothSpeed = builder.comment("Speed of the seamoth. (blocks per second = x * 400)").defineInRange("seamothSpeed", 0.0275D, 0.0D, 1.0D);
 				this.seamothEnergyUsage = builder.comment("Energy usage of the seamoth per tick.").defineInRange("seamothEnergyUsage", 100, 0, 1_000_000);
@@ -208,7 +208,7 @@ public class BetterDivingConfig {
 			public final ForgeConfigSpec.IntValue energy;
 
 			public EnergyStorageItem(ForgeConfigSpec.Builder builder, String name, int capacity, int maxReceive, int maxExtract, int energy) {
-				builder.push(name);
+				builder.comment("").push(name);
 
 				this.capacity = builder.comment("").defineInRange("capacity", capacity, 0, Integer.MAX_VALUE);
 				this.maxReceive = builder.comment("").defineInRange("maxReceive", maxReceive, 0, Integer.MAX_VALUE);
@@ -229,7 +229,7 @@ public class BetterDivingConfig {
 			public final ForgeConfigSpec.DoubleValue knockbackResistance;
 
 			public ArmorValues(ForgeConfigSpec.Builder builder, String name, int durability, int enchantability, Integer[] protection, double toughness, double knockbackResistance) {
-				builder.push(name);
+				builder.comment("").push(name);
 
 				this.durability = builder.comment("").defineInRange("durability", durability, 0, 1_000_000);
 				this.enchantability = builder.comment("").defineInRange("enchantability", enchantability, 0, 1000);
