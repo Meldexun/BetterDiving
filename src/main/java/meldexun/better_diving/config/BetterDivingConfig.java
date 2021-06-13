@@ -169,6 +169,7 @@ public class BetterDivingConfig {
 			public final ForgeConfigSpec.IntValue oxygenCapacityRespiration;
 			public final ForgeConfigSpec.BooleanValue oxygenEfficiency;
 			public final ForgeConfigSpec.IntValue oxygenEfficiencyRate;
+			public final ForgeConfigSpec.IntValue oxygenRefillRate;
 
 			public Oxygen(ForgeConfigSpec.Builder builder) {
 				builder.comment("").push("oxygen");
@@ -178,6 +179,7 @@ public class BetterDivingConfig {
 				this.oxygenCapacityRespiration = builder.comment("").defineInRange("oxygenCapacityRespiration", 300, 0, 1_000_000);
 				this.oxygenEfficiency = builder.comment("Enable/Disable decreased oxygen efficiency while diving deeper.").define("oxygenEfficiency", true);
 				this.oxygenEfficiencyRate = builder.comment("Every x blocks below the max diving depth (defined by 'oxygenBaseDivingDepth' and equipment) consumes one unit of oxygen more per second.").defineInRange("oxygenEfficiencyRate", 4, 1, 1024);
+				this.oxygenRefillRate = builder.comment("").defineInRange("oxygenRefillRate", 25, 1, 100);
 
 				builder.pop();
 			}
