@@ -10,6 +10,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectUtils;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
@@ -77,10 +78,10 @@ public class BetterDivingHelper {
 	}
 
 	private static Vector3d fromPitchYaw(double pitch, double yaw) {
-		double d1 = Math.cos(Math.toRadians(-yaw - 180.0D));
-		double d2 = Math.sin(Math.toRadians(-yaw - 180.0D));
-		double d3 = -Math.cos(Math.toRadians(-pitch));
-		double d4 = Math.sin(Math.toRadians(-pitch));
+		double d1 = MathHelper.cos((float) Math.toRadians(-yaw - 180.0D));
+		double d2 = MathHelper.sin((float) Math.toRadians(-yaw - 180.0D));
+		double d3 = -MathHelper.cos((float) Math.toRadians(-pitch));
+		double d4 = MathHelper.sin((float) Math.toRadians(-pitch));
 		return new Vector3d(d2 * d3, d4, d1 * d3);
 	}
 
