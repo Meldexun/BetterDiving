@@ -48,9 +48,7 @@ public class PlayerOxygenEventHandler {
 		} else {
 		   OxygenPlayerHelper.receiveOxygenRespectEquipment(player, LIVING_ENTITY_INCREASE_AIR_SUPPLY.invoke(player, 0));
 		}
-		if (true) {
-			return;
-		}
+		/*
 		if (!BetterDivingConfig.SERVER_CONFIG.oxygenChanges.get()) {
 			if (!player.level.isClientSide() && player.getVehicle() instanceof EntitySeamoth) {
 				player.setAirSupply(Math.min(player.getAirSupply() + 5, player.getMaxAirSupply()));
@@ -93,6 +91,7 @@ public class PlayerOxygenEventHandler {
 				BetterDiving.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) player), new SPacketSyncOxygen(cap.getOxygen()));
 			}
 		});
+		*/
 	}
 
 }

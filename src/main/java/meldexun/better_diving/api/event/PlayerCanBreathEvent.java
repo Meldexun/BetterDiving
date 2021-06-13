@@ -7,6 +7,7 @@ import net.minecraftforge.eventbus.api.Event;
  * Use this event to allow/disallow a player to breath.<br>
  * For example could be used to disallow a player to breath while in a moon dimension.
  */
+@Deprecated
 public class PlayerCanBreathEvent extends Event {
 
 	private final PlayerEntity player;

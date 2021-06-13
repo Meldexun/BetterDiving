@@ -9,6 +9,7 @@ import net.minecraftforge.eventbus.api.Event;
  * For example could be cancelled when a player suffocates in a moon dimension<br>
  * because by default drowning damage is dealt which makes the underwater bubble sound.
  */
+@Deprecated
 @Cancelable
 public class PlayerSuffocateEvent extends Event {
 
