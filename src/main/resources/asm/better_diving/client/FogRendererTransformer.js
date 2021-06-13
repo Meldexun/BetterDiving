@@ -11,15 +11,15 @@ function initializeCoreMod() {
       "target": {
         "type": "METHOD",
         "class": "net.minecraft.client.renderer.FogRenderer",
-        "methodName": "updateFogColor",
+        "methodName": "func_228371_a_",
         "methodDesc": "(Lnet/minecraft/client/renderer/ActiveRenderInfo;FLnet/minecraft/client/world/ClientWorld;IF)V"
       },
       "transformer": function(methodNode) {
         ASMAPI.log("INFO", "Transforming method: updateFogColor net.minecraft.client.renderer.FogRenderer");
         //ASMAPI.log("INFO", "{}", ASMAPI.methodNodeToString(methodNode));
         
-        var targetNode = ASMAPI.findFirstMethodCall(methodNode, ASMAPI.MethodType.STATIC, "net/minecraft/util/Util", "milliTime", "()J");
-        var popNode = ASMAPI.findFirstMethodCallAfter(methodNode, ASMAPI.MethodType.VIRTUAL, "net/minecraft/fluid/FluidState", "isTagged", "(Lnet/minecraft/tags/ITag;)Z", methodNode.instructions.indexOf(targetNode));
+        var targetNode = ASMAPI.findFirstMethodCall(methodNode, ASMAPI.MethodType.STATIC, "net/minecraft/util/Util", ASMAPI.mapMethod("func_211177_b"), "()J");
+        var popNode = ASMAPI.findFirstMethodCallAfter(methodNode, ASMAPI.MethodType.VIRTUAL, "net/minecraft/fluid/FluidState", ASMAPI.mapMethod("func_206884_a"), "(Lnet/minecraft/tags/ITag;)Z", methodNode.instructions.indexOf(targetNode));
         //popNode = ASMAPI.findFirstInstructionBefore(methodNode, Opcodes.GOTO, methodNode.instructions.indexOf(popNode));
         for (var i = methodNode.instructions.indexOf(popNode); i >= 0; i--) {
 			var insnNode = methodNode.instructions.get(i);
@@ -41,11 +41,9 @@ function initializeCoreMod() {
         
         methodNode.instructions.insertBefore(targetNode, ASMAPI.listOf(
             new VarInsnNode(Opcodes.ALOAD, 0),
-            new MethodInsnNode(Opcodes.INVOKESTATIC, "meldexun/better_diving/plugin/Hook", "updateFogColor", "(Lnet/minecraft/client/renderer/ActiveRenderInfo;)V", false),
+            new MethodInsnNode(Opcodes.INVOKESTATIC, "meldexun/better_diving/plugin/client/FogRendererHook", "updateFogColor", "(Lnet/minecraft/client/renderer/ActiveRenderInfo;)V", false),
             new JumpInsnNode(Opcodes.GOTO, popNode)
         ));
-        
-        ASMAPI.log("INFO", "{}", ASMAPI.methodNodeToString(methodNode));
         
         return methodNode;
       }

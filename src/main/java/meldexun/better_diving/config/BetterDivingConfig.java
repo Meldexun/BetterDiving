@@ -49,6 +49,7 @@ public class BetterDivingConfig {
 		public final Movement movement;
 		public final Oxygen oxygen;
 		public final Seamoth seamoth;
+		public final UnderwaterVisuals underwaterVisuals;
 
 		public ServerConfig(ForgeConfigSpec.Builder builder) {
 			this.breakSpeedChanges = builder.comment("").define("breakSpeedChanges", true);
@@ -74,6 +75,7 @@ public class BetterDivingConfig {
 			this.movement = new Movement(builder);
 			this.oxygen = new Oxygen(builder);
 			this.seamoth = new Seamoth(builder);
+			this.underwaterVisuals = new UnderwaterVisuals(builder);
 		}
 
 		public static class Mining {
@@ -244,6 +246,30 @@ public class BetterDivingConfig {
 
 		}
 
+		public static class UnderwaterVisuals {
+
+			public final ForgeConfigSpec.DoubleValue brightnessDay;
+			public final ForgeConfigSpec.DoubleValue brightnessNight;
+			public final ForgeConfigSpec.DoubleValue fogDensityDay;
+			public final ForgeConfigSpec.DoubleValue fogDensityNight;
+			public final ForgeConfigSpec.DoubleValue fogBrightnessDay;
+			public final ForgeConfigSpec.DoubleValue fogBrightnessNight;
+
+			public UnderwaterVisuals(ForgeConfigSpec.Builder builder) {
+				builder.comment("").push("underwater_visuals");
+
+				this.brightnessDay = builder.comment("(Vanilla = 0.0)").defineInRange("brightnessDay", 0.3D, 0.0D, 1.0D);
+				this.brightnessNight = builder.comment("(Vanilla = 0.0)").defineInRange("brightnessNight", 0.1D, 0.0D, 1.0D);
+				this.fogBrightnessDay = builder.comment("(Vanilla = 1.0)").defineInRange("fogBrightnessDay", 1.0D, 0.0D, 1.0D);
+				this.fogBrightnessNight = builder.comment("(Vanilla = 1.0)").defineInRange("fogBrightnessNight", 0.05D, 0.0D, 1.0D);
+				this.fogDensityDay = builder.comment("(Vanilla = 0.02)").defineInRange("fogDensityDay", 0.015D, 0.0D, 1.0D);
+				this.fogDensityNight = builder.comment("(Vanilla = 0.02)").defineInRange("fogDensityNight", 0.025D, 0.0D, 1.0D);
+				
+				builder.pop();
+			}
+
+		}
+
 	}
 
 	public static class ClientConfig {
@@ -258,6 +284,8 @@ public class BetterDivingConfig {
 		public final ForgeConfigSpec.IntValue seamothGuiOffsetX;
 		public final ForgeConfigSpec.IntValue seamothGuiOffsetY;
 
+		public final ForgeConfigSpec.BooleanValue skipSkyRendering;
+
 		public ClientConfig(ForgeConfigSpec.Builder builder) {
 			this.oxygenGuiAnchor = builder.comment("0: top-left, 1: top-middle, 2: top-right, 3: bottom-right, 4: bottom-middle, 5: bottom-left").defineInRange("oxygenGuiAnchor", 4, 0, 5);
 			this.oxygenGuiEnabled = builder.comment("").define("oxygenGuiEnabled", true);
@@ -268,6 +296,8 @@ public class BetterDivingConfig {
 			this.seamothGuiEnabled = builder.comment("").define("seamothGuiEnabled", true);
 			this.seamothGuiOffsetX = builder.comment("").defineInRange("seamothGuiOffsetX", -4, -1000, 1000);
 			this.seamothGuiOffsetY = builder.comment("").defineInRange("seamothGuiOffsetY", -8, -1000, 1000);
+
+			this.skipSkyRendering = builder.comment("").define("skipSkyRendering", true);
 		}
 
 	}

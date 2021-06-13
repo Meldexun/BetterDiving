@@ -10,7 +10,7 @@ function initializeCoreMod() {
       "target": {
         "type": "METHOD",
         "class": "net.minecraft.client.entity.player.ClientPlayerEntity",
-        "methodName": "getWaterBrightness",
+        "methodName": "func_203719_J",
         "methodDesc": "()F"
       },
       "transformer": function(methodNode) {
@@ -21,7 +21,7 @@ function initializeCoreMod() {
         
         methodNode.instructions.insert(targetNode, ASMAPI.listOf(
             new VarInsnNode(Opcodes.ALOAD, 0),
-            new MethodInsnNode(Opcodes.INVOKESTATIC, "meldexun/better_diving/plugin/Hook", "getWaterBrightness", "(Lnet/minecraft/client/entity/player/ClientPlayerEntity;)F", false),
+            new MethodInsnNode(Opcodes.INVOKESTATIC, "meldexun/better_diving/plugin/client/ClientPlayerEntityHook", "getWaterBrightness", "(Lnet/minecraft/client/entity/player/ClientPlayerEntity;)F", false),
             new InsnNode(Opcodes.FRETURN)
         ));
         

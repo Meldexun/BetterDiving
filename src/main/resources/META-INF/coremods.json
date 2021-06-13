@@ -1,7 +1,10 @@
 {
+	"ClientPlayerEntity Transformer": "asm/better_diving/client/ClientPlayerEntityTransformer.js",
+	"FogRenderer Transformer": "asm/better_diving/client/FogRendererTransformer.js",
+	"GameRenderer Transformer": "asm/better_diving/client/GameRendererTransformer.js",
+	"LightTexture Transformer": "asm/better_diving/client/LightTextureTransformer.js",
+	"WorldRenderer Transformer": "asm/better_diving/client/WorldRendererTransformer.js",
+	
 	"LivingEntity Transformer": "asm/better_diving/LivingEntityTransformer.js",
-	"ClientPlayerEntity Transformer": "asm/better_diving/ClientPlayerEntityTransformer.js",
-	"LightTexture Transformer": "asm/better_diving/LightTextureTransformer.js",
-	"FogRenderer Transformer": "asm/better_diving/FogRendererTransformer.js"
 	"Entity Transformer": "asm/better_diving/EntityTransformer.js"
 }

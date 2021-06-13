@@ -3,10 +3,6 @@ package meldexun.better_diving.client.event;
 import java.text.DecimalFormat;
 import java.util.List;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
-
 import meldexun.better_diving.BetterDiving;
 import meldexun.better_diving.capability.oxygen.item.CapabilityOxygenItemProvider;
 import meldexun.better_diving.client.gui.GuiOxygen;
@@ -18,40 +14,24 @@ import meldexun.better_diving.oxygenprovider.DivingMaskProviderItem;
 import meldexun.better_diving.oxygenprovider.MiningspeedProviderItem;
 import meldexun.better_diving.oxygenprovider.SwimspeedProviderItem;
 import meldexun.better_diving.util.OxygenPlayerHelper;
-import meldexun.better_diving.util.reflection.ReflectionField;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.FogRenderer;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.renderer.WorldVertexBufferUploader;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.renderer.vertex.VertexBuffer;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.client.world.DimensionRenderInfo;
 import net.minecraft.entity.Entity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.ISkyRenderHandler;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -541,16 +521,18 @@ public class ClientEventHandler {
 		float partialTicks = mc.getFrameTime();
 		ActiveRenderInfo activeRenderInfo = event.getInfo();
 		FluidState fluidState = activeRenderInfo.getFluidInCamera();
+		
 		if (!fluidState.is(FluidTags.WATER)) {
 			return;
 		}
-		float minFogBrightness = 0.05F;
+
+		BetterDivingConfig.ServerConfig.UnderwaterVisuals config = BetterDivingConfig.SERVER_CONFIG.underwaterVisuals;
 		float f = mc.level.getSkyDarken(partialTicks);
 		f = MathHelper.clamp((f - 0.2F) / 0.8F, 0.0F, 1.0F);
-		f = MathHelper.clamp(f * (1.0F - minFogBrightness) + minFogBrightness, 0.0F, 1.0F);
-		event.setRed(event.getRed() * f);
-		event.setGreen(event.getGreen() * f);
-		event.setBlue(event.getBlue() * f);
+		float fogBrightness = (float) MathHelper.lerp(f, config.fogBrightnessNight.get(), config.fogBrightnessDay.get());
+		event.setRed(event.getRed() * fogBrightness);
+		event.setGreen(event.getGreen() * fogBrightness);
+		event.setBlue(event.getBlue() * fogBrightness);
 	}
 
 	private static float fogBiomeFactor;
@@ -563,18 +545,22 @@ public class ClientEventHandler {
 		float partialTicks = mc.getFrameTime();
 		ActiveRenderInfo activeRenderInfo = event.getInfo();
 		FluidState fluidstate = activeRenderInfo.getFluidInCamera();
+
 		if (!fluidstate.is(FluidTags.WATER)) {
 			fogBiomeLastUpdate = -1L;
 			return;
 		}
+
 		Entity entity = activeRenderInfo.getEntity();
-		float fogDensityBase = 0.025F;
-		float fogDensityNightBonus = 0.01F;
-		float f = fogDensityBase + 0.01F;
+		BetterDivingConfig.ServerConfig.UnderwaterVisuals config = BetterDivingConfig.SERVER_CONFIG.underwaterVisuals;
+		float f = mc.level.getSkyDarken(partialTicks);
+		f = MathHelper.clamp((f - 0.2F) / 0.8F, 0.0F, 1.0F);
+		float fogDensity = (float) MathHelper.lerp(f, config.fogDensityNight.get(), config.fogDensityDay.get());
+
 		if (entity instanceof ClientPlayerEntity) {
 			ClientPlayerEntity clientplayerentity = (ClientPlayerEntity) entity;
-			f -= clientplayerentity.getWaterVision() * 0.01F;
-			
+			fogDensity += (1.0F - clientplayerentity.getWaterVision()) * 0.01F;
+
 			Biome biome = clientplayerentity.level.getBiome(clientplayerentity.blockPosition());
 			long time = Util.getMillis();
 			float f1 = biome.getBiomeCategory() == Biome.Category.SWAMP ? 0.005F : 0.0F;
@@ -586,168 +572,17 @@ public class ClientEventHandler {
 
 			float f2 = MathHelper.clamp((float) (time - fogBiomeLastUpdate) / 3000.0F, 0.0F, 1.0F);
 			float f3 = MathHelper.lerp(f2, fogBiomeFactor, fogBiomeFactorTarget);
-			
+
 			if (f1 != fogBiomeFactorTarget) {
 				fogBiomeFactor = f3;
 				fogBiomeFactorTarget = f1;
 				fogBiomeLastUpdate = time;
 			}
-			f += f3;
+			fogDensity += f3;
 		}
-		float f1 = mc.level.getSkyDarken(partialTicks);
-		f1 = MathHelper.clamp((f1 - 0.2F) / 0.8F, 0.0F, 1.0F);
-		f += (1.0F - f1) * fogDensityNightBonus;
-		
+
 		event.setCanceled(true);
-		event.setDensity(f);
+		event.setDensity(fogDensity);
 	}
 
-	@SubscribeEvent
-	public static void t(WorldEvent.Load e) {
-		if (e.getWorld().isClientSide()) {
-			((ClientWorld) e.getWorld()).effects().setSkyRenderHandler(new ISkyRenderHandler() {
-				@SuppressWarnings("deprecation")
-				@Override
-				public void render(int ticks, float partialTicks, MatrixStack matrixStack, ClientWorld world, Minecraft mc) {
-					boolean vanilla = false || !mc.player.isEyeInFluid(FluidTags.WATER);
-					if (mc.level.effects().skyType() == DimensionRenderInfo.FogType.END) {
-						// renderSkyEnd(matrixStack);
-					} else if (mc.level.effects().skyType() == DimensionRenderInfo.FogType.NORMAL) {
-						RenderSystem.disableTexture();
-						Vector3d vector3d = world.getSkyColor(mc.gameRenderer.getMainCamera().getBlockPosition(), partialTicks);
-						float f = (float) vector3d.x;
-						float f1 = (float) vector3d.y;
-						float f2 = (float) vector3d.z;
-						FogRenderer.levelFogColor();
-						BufferBuilder bufferbuilder = Tessellator.getInstance().getBuilder();
-						RenderSystem.depthMask(false);
-						RenderSystem.enableFog();
-						RenderSystem.color3f(f, f1, f2);
-						VertexBuffer skyVBO = mc.levelRenderer.skyBuffer;
-						skyVBO.bind();
-						DefaultVertexFormats.POSITION.setupBufferState(0L);
-						skyVBO.draw(matrixStack.last().pose(), 7);
-						VertexBuffer.unbind();
-						DefaultVertexFormats.POSITION.clearBufferState();
-						RenderSystem.disableFog();
-						RenderSystem.disableAlphaTest();
-						RenderSystem.enableBlend();
-						RenderSystem.defaultBlendFunc();
-						float[] afloat = world.effects().getSunriseColor(world.getTimeOfDay(partialTicks), partialTicks);
-						if (vanilla && afloat != null) {
-							RenderSystem.disableTexture();
-							RenderSystem.shadeModel(7425);
-							matrixStack.pushPose();
-							matrixStack.mulPose(Vector3f.XP.rotationDegrees(90.0F));
-							float f3 = MathHelper.sin(world.getSunAngle(partialTicks)) < 0.0F ? 180.0F : 0.0F;
-							matrixStack.mulPose(Vector3f.ZP.rotationDegrees(f3));
-							matrixStack.mulPose(Vector3f.ZP.rotationDegrees(90.0F));
-							float f4 = afloat[0];
-							float f5 = afloat[1];
-							float f6 = afloat[2];
-							Matrix4f matrix4f = matrixStack.last().pose();
-							bufferbuilder.begin(6, DefaultVertexFormats.POSITION_COLOR);
-							bufferbuilder.vertex(matrix4f, 0.0F, 100.0F, 0.0F).color(f4, f5, f6, afloat[3]).endVertex();
-							int i = 16;
-
-							for (int j = 0; j <= 16; ++j) {
-								float f7 = (float) j * ((float) Math.PI * 2F) / 16.0F;
-								float f8 = MathHelper.sin(f7);
-								float f9 = MathHelper.cos(f7);
-								bufferbuilder.vertex(matrix4f, f8 * 120.0F, f9 * 120.0F, -f9 * 40.0F * afloat[3]).color(afloat[0], afloat[1], afloat[2], 0.0F).endVertex();
-							}
-
-							bufferbuilder.end();
-							WorldVertexBufferUploader.end(bufferbuilder);
-							matrixStack.popPose();
-							RenderSystem.shadeModel(7424);
-						}
-
-						RenderSystem.enableTexture();
-						RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-						matrixStack.pushPose();
-						float f11 = 1.0F - world.getRainLevel(partialTicks);
-						RenderSystem.color4f(1.0F, 1.0F, 1.0F, f11);
-						matrixStack.mulPose(Vector3f.YP.rotationDegrees(-90.0F));
-						matrixStack.mulPose(Vector3f.XP.rotationDegrees(world.getTimeOfDay(partialTicks) * 360.0F));
-						Matrix4f matrix4f1 = matrixStack.last().pose();
-						float f12 = 30.0F;
-						mc.textureManager.bind(new ResourceLocation("textures/environment/sun.png"));
-						bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-						bufferbuilder.vertex(matrix4f1, -f12, 100.0F, -f12).uv(0.0F, 0.0F).endVertex();
-						bufferbuilder.vertex(matrix4f1, f12, 100.0F, -f12).uv(1.0F, 0.0F).endVertex();
-						bufferbuilder.vertex(matrix4f1, f12, 100.0F, f12).uv(1.0F, 1.0F).endVertex();
-						bufferbuilder.vertex(matrix4f1, -f12, 100.0F, f12).uv(0.0F, 1.0F).endVertex();
-						bufferbuilder.end();
-						if (vanilla) {
-							WorldVertexBufferUploader.end(bufferbuilder);
-						} else {
-							bufferbuilder.popNextBuffer().getSecond().clear();
-						}
-						f12 = 20.0F;
-						mc.textureManager.bind(new ResourceLocation("textures/environment/moon_phases.png"));
-						int k = world.getMoonPhase();
-						int l = k % 4;
-						int i1 = k / 4 % 2;
-						float f13 = (float) (l + 0) / 4.0F;
-						float f14 = (float) (i1 + 0) / 2.0F;
-						float f15 = (float) (l + 1) / 4.0F;
-						float f16 = (float) (i1 + 1) / 2.0F;
-						bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-						bufferbuilder.vertex(matrix4f1, -f12, -100.0F, f12).uv(f15, f16).endVertex();
-						bufferbuilder.vertex(matrix4f1, f12, -100.0F, f12).uv(f13, f16).endVertex();
-						bufferbuilder.vertex(matrix4f1, f12, -100.0F, -f12).uv(f13, f14).endVertex();
-						bufferbuilder.vertex(matrix4f1, -f12, -100.0F, -f12).uv(f15, f14).endVertex();
-						bufferbuilder.end();
-						if (vanilla) {
-							WorldVertexBufferUploader.end(bufferbuilder);
-						} else {
-							bufferbuilder.popNextBuffer().getSecond().clear();
-						}
-						RenderSystem.disableTexture();
-						float f10 = world.getStarBrightness(partialTicks) * f11;
-						if (vanilla && f10 > 0.0F) {
-							RenderSystem.color4f(f10, f10, f10, f10);
-							VertexBuffer starVBO = mc.levelRenderer.starBuffer;
-							starVBO.bind();
-							DefaultVertexFormats.POSITION.setupBufferState(0L);
-							starVBO.draw(matrixStack.last().pose(), 7);
-							VertexBuffer.unbind();
-							DefaultVertexFormats.POSITION.clearBufferState();
-						}
-
-						RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-						RenderSystem.disableBlend();
-						RenderSystem.enableAlphaTest();
-						RenderSystem.enableFog();
-						matrixStack.popPose();
-						RenderSystem.disableTexture();
-						RenderSystem.color3f(0.0F, 0.0F, 0.0F);
-						double d0 = mc.player.getEyePosition(partialTicks).y - world.getLevelData().getHorizonHeight();
-						if (vanilla && d0 < 0.0D) {
-							matrixStack.pushPose();
-							matrixStack.translate(0.0D, 12.0D, 0.0D);
-							VertexBuffer sky2VBO = mc.levelRenderer.darkBuffer;
-							sky2VBO.bind();
-							DefaultVertexFormats.POSITION.setupBufferState(0L);
-							sky2VBO.draw(matrixStack.last().pose(), 7);
-							VertexBuffer.unbind();
-							DefaultVertexFormats.POSITION.clearBufferState();
-							matrixStack.popPose();
-						}
-
-						if (world.effects().hasGround()) {
-							RenderSystem.color3f(f * 0.2F + 0.04F, f1 * 0.2F + 0.04F, f2 * 0.6F + 0.1F);
-						} else {
-							RenderSystem.color3f(f, f1, f2);
-						}
-
-						RenderSystem.enableTexture();
-						RenderSystem.depthMask(true);
-						RenderSystem.disableFog();
-					}
-				}
-			});
-		}
-	}
 }

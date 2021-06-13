@@ -1,32 +1,13 @@
-package meldexun.better_diving.plugin;
+package meldexun.better_diving.plugin.client;
 
-import meldexun.better_diving.util.reflection.ReflectionField;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.FogRenderer;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
-public class Hook {
-
-	public static float getWaterBrightness(ClientPlayerEntity player) {
-		if (!player.isEyeInFluid(FluidTags.WATER)) {
-			return 0.0F;
-		}
-		Minecraft mc = Minecraft.getInstance();
-		return MathHelper.clamp((player.waterVisionTime + mc.getFrameTime()) / 60.0F, 0.0F, 1.0F);
-	}
-
-	public static float getLightmapBrightness() {
-		Minecraft mc = Minecraft.getInstance();
-		float partialTicks = mc.getFrameTime();
-		float f = mc.level.getSkyDarken(partialTicks);
-		f = MathHelper.clamp((f - 0.2F) / 0.8F, 0.0F, 1.0F);
-		return f * 0.2F + 0.1F;
-	}
+public class FogRendererHook {
 
 	private static float[] fogColor = new float[3];
 	private static float[] fogColorTarget = new float[3];
@@ -58,7 +39,7 @@ public class Hook {
 		float red1 = MathHelper.lerp(f1, fogColor[0], fogColorTarget[0]);
 		float green1 = MathHelper.lerp(f1, fogColor[1], fogColorTarget[1]);
 		float blue1 = MathHelper.lerp(f1, fogColor[2], fogColorTarget[2]);
-		
+
 		if (red != fogColorTarget[0] || green != fogColorTarget[1] || blue != fogColorTarget[2]) {
 			fogColor[0] = red1;
 			fogColor[1] = green1;
@@ -70,8 +51,8 @@ public class Hook {
 		}
 
 		FogRenderer.fogRed = red1;
-		FogRenderer.fogRed = green1;
-		FogRenderer.fogRed = blue1;
+		FogRenderer.fogGreen = green1;
+		FogRenderer.fogBlue = blue1;
 	}
 
 }
