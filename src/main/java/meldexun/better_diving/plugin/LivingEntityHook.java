@@ -3,6 +3,7 @@ package meldexun.better_diving.plugin;
 import java.util.UUID;
 
 import meldexun.better_diving.config.BetterDivingConfig;
+import meldexun.better_diving.entity.EntitySeamoth;
 import meldexun.better_diving.util.BetterDivingHelper;
 import meldexun.better_diving.util.DivingGearHelper;
 import meldexun.better_diving.util.reflection.ReflectionMethod;
@@ -19,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effects;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -27,7 +29,6 @@ import net.minecraftforge.common.ForgeMod;
 public class LivingEntityHook {
 
 	private static final ReflectionMethod<Float> LIVING_ENTITY_GET_WATER_SLOWDOWN = new ReflectionMethod<>(LivingEntity.class, "func_189749_co", "getWaterSlowDown");
-
 
 	private static final UUID DIVING_GEAR_MODIFIER = UUID.fromString("3f391130-0c29-4347-8ac9-72085af35236");
 	private static final UUID DEPTH_STRIDER_MODIFIER = UUID.fromString("e8b4c5fd-34e6-4b70-bf3e-70718c7fe670");
@@ -189,6 +190,28 @@ public class LivingEntityHook {
 			return;
 		}
 		player.setDeltaMovement(player.getDeltaMovement().subtract(0.0D, (double) -0.04F * player.getAttribute(ForgeMod.SWIM_SPEED.get()).getValue(), 0.0D));
+	}
+
+	public static boolean canBreatheUnderwater(LivingEntity entity) {
+		return entity.getVehicle() instanceof EntitySeamoth && ((EntitySeamoth) entity.getVehicle()).hasEnergy();
+	}
+
+	public static int decreaseAirSupply(PlayerEntity player, int air) {
+		int oxygenUsage = 1;
+
+		if (BetterDivingConfig.SERVER_CONFIG.oxygen.oxygenEfficiency.get()) {
+			int blocksUnderWater = BetterDivingHelper.blocksUnderWater(player);
+			int maxDivingDepth = DivingGearHelper.getMaxDivingDepth(player);
+			if (blocksUnderWater > maxDivingDepth) {
+				oxygenUsage += 1 + (blocksUnderWater - maxDivingDepth) / BetterDivingConfig.SERVER_CONFIG.oxygen.oxygenEfficiencyRate.get();
+			}
+		}
+
+		return MathHelper.clamp(air - oxygenUsage, -20, player.getMaxAirSupply());
+	}
+
+	public static int increaseAirSupply(PlayerEntity player, int air) {
+		return MathHelper.clamp(air + BetterDivingConfig.SERVER_CONFIG.oxygen.oxygenRefillRate.get(), -20, player.getMaxAirSupply());
 	}
 
 }

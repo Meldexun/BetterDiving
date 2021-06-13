@@ -1,23 +1,15 @@
 package meldexun.better_diving.util;
 
-import meldexun.better_diving.api.capability.ICapabilityOxygen;
-import meldexun.better_diving.capability.oxygen.entity.CapabilityOxygenProvider;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.common.util.LazyOptional;
 
 public class OxygenPlayerHelper {
 
 	public static int getOxygenRespectEquipment(PlayerEntity player) {
-		LazyOptional<ICapabilityOxygen> optionalOxygenCap = player.getCapability(CapabilityOxygenProvider.OXYGEN, null);
-		if (!optionalOxygenCap.isPresent()) {
-			return 0;
-		}
-		ICapabilityOxygen oxygenCap = optionalOxygenCap.orElseThrow(NullPointerException::new);
-		int oxygenOfPlayer = oxygenCap.getOxygen();
+		int oxygenOfPlayer = Math.min(player.getAirSupply(), player.getMaxAirSupply());
 
 		Entity ridingEntity = player.getVehicle();
 		if (ridingEntity != null) {
@@ -33,12 +25,7 @@ public class OxygenPlayerHelper {
 	}
 
 	public static int getOxygenCapacityRespectEquipment(PlayerEntity player) {
-		LazyOptional<ICapabilityOxygen> optionalOxygenCap = player.getCapability(CapabilityOxygenProvider.OXYGEN, null);
-		if (!optionalOxygenCap.isPresent()) {
-			return 0;
-		}
-		ICapabilityOxygen oxygenCap = optionalOxygenCap.orElseThrow(NullPointerException::new);
-		int oxygenCapacity = oxygenCap.getOxygenCapacity();
+		int oxygenCapacity = player.getMaxAirSupply();
 
 		Entity ridingEntity = player.getVehicle();
 		if (ridingEntity != null) {
@@ -59,14 +46,10 @@ public class OxygenPlayerHelper {
 
 	public static int receiveOxygenRespectEquipment(PlayerEntity player, int amount) {
 		amount = MathHelper.clamp(amount, 0, getOxygenCapacityRespectEquipment(player) - getOxygenRespectEquipment(player));
-		LazyOptional<ICapabilityOxygen> optionalOxygenCap = player.getCapability(CapabilityOxygenProvider.OXYGEN, null);
-		if (!optionalOxygenCap.isPresent()) {
-			return 0;
-		}
-		ICapabilityOxygen oxygenCap = optionalOxygenCap.orElseThrow(NullPointerException::new);
 		int amountReceived = 0;
 
-		int i = oxygenCap.receiveOxygen(amount);
+		int i = MathHelper.clamp(amount, 0, player.getMaxAirSupply() - player.getAirSupply());
+		player.setAirSupply(player.getAirSupply() + i);
 		amountReceived += i;
 		amount -= i;
 
@@ -89,11 +72,6 @@ public class OxygenPlayerHelper {
 
 	public static int extractOxygenRespectEquipment(PlayerEntity player, int amount) {
 		amount = MathHelper.clamp(amount, 0, getOxygenRespectEquipment(player) + 20);
-		LazyOptional<ICapabilityOxygen> optionalOxygenCap = player.getCapability(CapabilityOxygenProvider.OXYGEN, null);
-		if (!optionalOxygenCap.isPresent()) {
-			return 0;
-		}
-		ICapabilityOxygen oxygenCap = optionalOxygenCap.orElseThrow(NullPointerException::new);
 		int amountExtracted = 0;
 
 		Entity ridingEntity = player.getVehicle();
@@ -110,7 +88,8 @@ public class OxygenPlayerHelper {
 			amount -= j;
 		}
 
-		int i = oxygenCap.extractOxygen(amount);
+		int i = MathHelper.clamp(amount, 0, player.getAirSupply() + 20);
+		player.setAirSupply(player.getAirSupply() - i);
 		amountExtracted += i;
 		amount -= i;
 

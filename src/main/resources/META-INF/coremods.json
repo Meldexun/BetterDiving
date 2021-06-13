@@ -3,4 +3,5 @@
 	"ClientPlayerEntity Transformer": "asm/better_diving/ClientPlayerEntityTransformer.js",
 	"LightTexture Transformer": "asm/better_diving/LightTextureTransformer.js",
 	"FogRenderer Transformer": "asm/better_diving/FogRendererTransformer.js"
+	"Entity Transformer": "asm/better_diving/EntityTransformer.js"
 }

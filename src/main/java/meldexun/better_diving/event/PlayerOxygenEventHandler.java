@@ -9,14 +9,18 @@ import meldexun.better_diving.network.packet.server.SPacketSyncOxygen;
 import meldexun.better_diving.util.BetterDivingHelper;
 import meldexun.better_diving.util.DivingGearHelper;
 import meldexun.better_diving.util.OxygenPlayerHelper;
+import meldexun.better_diving.util.reflection.ReflectionMethod;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.PacketDistributor;
@@ -24,12 +28,29 @@ import net.minecraftforge.fml.network.PacketDistributor;
 @Mod.EventBusSubscriber(modid = BetterDiving.MOD_ID)
 public class PlayerOxygenEventHandler {
 
-	@SubscribeEvent
+	private static final ReflectionMethod<Integer> LIVING_ENTITY_INCREASE_AIR_SUPPLY = new ReflectionMethod<>(LivingEntity.class, "func_207300_l", "increaseAirSupply", int.class);
+
+	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event) {
 		if (event.phase == Phase.START) {
 			return;
 		}
 		PlayerEntity player = event.player;
+		if (player.level.isClientSide) {
+		   return;
+		}
+		if (player.getVehicle() instanceof EntitySeamoth && ((EntitySeamoth) player.getVehicle()).hasEnergy()) {
+			OxygenPlayerHelper.receiveOxygenRespectEquipment(player, LIVING_ENTITY_INCREASE_AIR_SUPPLY.invoke(player, 0));
+		}
+		if (player.getAirSupply() < player.getMaxAirSupply()) {
+			int i = OxygenPlayerHelper.extractOxygenRespectEquipment(player, player.getMaxAirSupply() - player.getAirSupply());
+			player.setAirSupply(player.getAirSupply() + i);
+		} else {
+		   OxygenPlayerHelper.receiveOxygenRespectEquipment(player, LIVING_ENTITY_INCREASE_AIR_SUPPLY.invoke(player, 0));
+		}
+		if (true) {
+			return;
+		}
 		if (!BetterDivingConfig.SERVER_CONFIG.oxygenChanges.get()) {
 			if (!player.level.isClientSide() && player.getVehicle() instanceof EntitySeamoth) {
 				player.setAirSupply(Math.min(player.getAirSupply() + 5, player.getMaxAirSupply()));
