@@ -24,6 +24,10 @@ public class BetterDivingConfig {
 		SERVER_SPEC = serverSpecPair.getRight();
 	}
 
+	public static boolean oxygenChanges() {
+		return SERVER_CONFIG.oxygenChanges.get();
+	}
+
 	public static class ServerConfig {
 
 		public final ForgeConfigSpec.BooleanValue breakSpeedChanges;
