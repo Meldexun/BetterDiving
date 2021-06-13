@@ -52,6 +52,8 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class EntitySeamoth extends Entity implements IEntityAdditionalSpawnData {
 
+	private static final ReflectionMethod<?> PLAYER_ENTITY_UPDATE_PLAYER_POSE = new ReflectionMethod<>(PlayerEntity.class, "func_213832_dB", "updatePlayerPose");
+
 	private int damage = 0;
 
 	private boolean controlled = false;
@@ -268,7 +270,7 @@ public class EntitySeamoth extends Entity implements IEntityAdditionalSpawnData 
 		passenger.xRot = this.xRot;
 		passenger.setPose(Pose.STANDING);
 		if (passenger instanceof PlayerEntity) {
-			((PlayerEntity) passenger).updatePlayerPose();
+			PLAYER_ENTITY_UPDATE_PLAYER_POSE.invoke(passenger);
 		}
 		passenger.refreshDimensions();
 		if (!this.level.isClientSide()) {
