@@ -12,6 +12,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class CustomArmorMaterial implements IArmorMaterial {
 
+	private static final int[] HEALTH_PER_SLOT = new int[] {
+			13,
+			15,
+			16,
+			11 };
 	private final String name;
 	private final BetterDivingConfig.ServerConfig.ArmorValues config;
 	private final Ingredient ingredient;
@@ -28,7 +33,7 @@ public class CustomArmorMaterial implements IArmorMaterial {
 
 	@Override
 	public int getDurabilityForSlot(EquipmentSlotType var1) {
-		return this.config.durability.get();
+		return HEALTH_PER_SLOT[var1.getIndex()] * this.config.durability.get();
 	}
 
 	@Override
