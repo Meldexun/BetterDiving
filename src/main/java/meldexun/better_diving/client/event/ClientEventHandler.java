@@ -9,6 +9,7 @@ import meldexun.better_diving.client.gui.GuiOxygen;
 import meldexun.better_diving.client.gui.GuiSeamoth;
 import meldexun.better_diving.config.BetterDivingConfig;
 import meldexun.better_diving.entity.EntitySeamoth;
+import meldexun.better_diving.network.packet.client.CPacketOpenSeamothInventory;
 import meldexun.better_diving.oxygenprovider.DivingGearManager;
 import meldexun.better_diving.oxygenprovider.DivingMaskProviderItem;
 import meldexun.better_diving.oxygenprovider.MiningspeedProviderItem;
@@ -29,6 +30,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
+import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -91,17 +93,17 @@ public class ClientEventHandler {
 		}
 	}
 
-	/*
-	private static final ReflectionMethod<?> KEY_BINDING_UNPRESS_KEY = new ReflectionMethod<>(KeyBinding.class, "?", "unpressKey");
+	//private static final ReflectionMethod<?> KEY_BINDING_UNPRESS_KEY = new ReflectionMethod<>(KeyBinding.class, "?", "unpressKey");
 
 	@SubscribeEvent
 	public static void onKeyInputEvent(KeyInputEvent event) {
 		Minecraft mc = Minecraft.getInstance();
-		if (mc.player != null && mc.player.getVehicle() instanceof EntitySeamoth && event.getAction() == 1) {
-			EntitySeamoth seamoth = (EntitySeamoth) mc.player.getVehicle();
-			if (event.getKey() == mc.options.keyInventory.getKey().getValue() && event.getAction() == 1 && mc.screen == null) {
+		if (mc.player != null && mc.player.getVehicle() instanceof EntitySeamoth) {
+			if (mc.options.keyInventory.consumeClick()) {
 				BetterDiving.NETWORK.sendToServer(new CPacketOpenSeamothInventory());
 			}
+			/*
+			EntitySeamoth seamoth = (EntitySeamoth) mc.player.getVehicle();
 			for (int i = 0; i < mc.options.keyHotbarSlots.length; i++) {
 				if (event.getKey() == mc.options.keyHotbarSlots[i].getKey().getValue()) {
 					KEY_BINDING_UNPRESS_KEY.invoke(mc.options.keyHotbarSlots[i]);
@@ -119,9 +121,11 @@ public class ClientEventHandler {
 					}
 				}
 			}
+			*/
 		}
 	}
 
+	/*
 	@SubscribeEvent
 	public static void on(MouseScrollEvent event) {
 		Minecraft mc = Minecraft.getInstance();
