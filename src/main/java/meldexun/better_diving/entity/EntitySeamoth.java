@@ -228,12 +228,12 @@ public class EntitySeamoth extends Entity implements IEntityAdditionalSpawnData 
 			} else if (!this.isVehicle()) {
 				this.damage += 20;
 				if (this.damage > 30) {
-					this.kill();
-
 					ItemStack seamoth = this.toItemStack();
 					if (!player.addItem(seamoth)) {
 						this.spawnAtLocation(seamoth, 0.0F);
 					}
+
+					this.kill();
 				}
 				return true;
 			}
