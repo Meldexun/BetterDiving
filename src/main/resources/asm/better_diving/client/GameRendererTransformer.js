@@ -8,7 +8,7 @@ function initializeCoreMod() {
   MethodInsnNode = Java.type("org.objectweb.asm.tree.MethodInsnNode");
   JumpInsnNode = Java.type("org.objectweb.asm.tree.JumpInsnNode");
   return {
-    "GameRenderer Transformer": {
+    "GameRenderer renderLevel Transformer": {
       "target": {
         "type": "METHOD",
         "class": "net.minecraft.client.renderer.GameRenderer",

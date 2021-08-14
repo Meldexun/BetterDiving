@@ -9,7 +9,7 @@ function initializeCoreMod() {
   JumpInsnNode = Java.type("org.objectweb.asm.tree.JumpInsnNode");
   LabelNode = Java.type("org.objectweb.asm.tree.LabelNode");
   return {
-    "WorldRenderer Transformer": {
+    "WorldRenderer renderSky Transformer": {
       "target": {
         "type": "METHOD",
         "class": "net.minecraft.client.renderer.WorldRenderer",

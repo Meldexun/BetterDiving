@@ -9,7 +9,7 @@ function initializeCoreMod() {
   TypeInsnNode = Java.type("org.objectweb.asm.tree.TypeInsnNode");
   AbstractInsnNode = Java.type("org.objectweb.asm.tree.AbstractInsnNode");
   return {
-    "LivingEntity Transformer": {
+    "LivingEntity travel Transformer": {
       "target": {
         "type": "METHOD",
         "class": "net.minecraft.entity.LivingEntity",

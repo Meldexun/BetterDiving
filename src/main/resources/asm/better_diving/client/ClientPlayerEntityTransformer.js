@@ -6,7 +6,7 @@ function initializeCoreMod() {
   MethodInsnNode = Java.type("org.objectweb.asm.tree.MethodInsnNode");
   JumpInsnNode = Java.type("org.objectweb.asm.tree.JumpInsnNode");
   return {
-    "ClientPlayerEntity Transformer": {
+    "ClientPlayerEntity getWaterBrightness Transformer": {
       "target": {
         "type": "METHOD",
         "class": "net.minecraft.client.entity.player.ClientPlayerEntity",
