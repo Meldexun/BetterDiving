@@ -458,17 +458,17 @@ public class EntitySeamoth extends Entity implements IEntityAdditionalSpawnData 
 	}
 
 	@Override
-	protected boolean canRide(Entity p_184228_1_) {
+	protected boolean canRide(Entity entity) {
 		return true;
 	}
 
 	@Override
-	public void onAboveBubbleCol(boolean p_203002_1_) {
+	public void onAboveBubbleCol(boolean pullingDown) {
 		// do nothing
 	}
 
 	@Override
-	public void onInsideBubbleColumn(boolean p_203004_1_) {
+	public void onInsideBubbleColumn(boolean pullingDown) {
 		// do nothing
 	}
 
