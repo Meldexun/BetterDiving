@@ -8,6 +8,7 @@ function initializeCoreMod() {
   InsnNode = Java.type("org.objectweb.asm.tree.InsnNode");
   TypeInsnNode = Java.type("org.objectweb.asm.tree.TypeInsnNode");
   AbstractInsnNode = Java.type("org.objectweb.asm.tree.AbstractInsnNode");
+  FieldInsnNode = Java.type("org.objectweb.asm.tree.FieldInsnNode");
   return {
     "Entity getMaxAirSupply Transformer": {
       "target": {
@@ -33,6 +34,60 @@ function initializeCoreMod() {
             new TypeInsnNode(Opcodes.CHECKCAST, "net/minecraft/entity/player/PlayerEntity"),
             new MethodInsnNode(Opcodes.INVOKESTATIC, "meldexun/better_diving/plugin/EntityHook", "getMaxAirSupply", "(Lnet/minecraft/entity/player/PlayerEntity;)I", false),
             new InsnNode(Opcodes.IRETURN),
+            popNode
+        ));
+        
+        return methodNode;
+      }
+    },
+    "Entity updateFluidHeightAndDoFluidPushing Transformer": {
+      "target": {
+        "type": "METHOD",
+        "class": "net.minecraft.entity.Entity",
+        "methodName": "func_210500_b",
+        "methodDesc": "(Lnet/minecraft/tags/ITag;D)Z"
+      },
+      "transformer": function(methodNode) {
+        ASMAPI.log("INFO", "Transforming method: updateFluidHeightAndDoFluidPushing net.minecraft.entity.Entity");
+        //ASMAPI.log("INFO", "{}", ASMAPI.methodNodeToString(methodNode));
+        
+        var targetNode = methodNode.instructions.getFirst();
+        var popNode = new LabelNode();
+        
+        methodNode.instructions.insert(targetNode, ASMAPI.listOf(
+            new VarInsnNode(Opcodes.ALOAD, 0),
+            new VarInsnNode(Opcodes.ALOAD, 1),
+            new MethodInsnNode(Opcodes.INVOKESTATIC, "meldexun/better_diving/plugin/EntityHook", "canBeInFluid", "(Lnet/minecraft/entity/Entity;Lnet/minecraft/tags/ITag;)Z", false),
+            new JumpInsnNode(Opcodes.IFNE, popNode),
+            new InsnNode(Opcodes.ICONST_0),
+            new InsnNode(Opcodes.IRETURN),
+            popNode
+        ));
+        
+        return methodNode;
+      }
+    },
+    "Entity updateFluidOnEyes Transformer": {
+      "target": {
+        "type": "METHOD",
+        "class": "net.minecraft.entity.Entity",
+        "methodName": "func_205012_q",
+        "methodDesc": "()V"
+      },
+      "transformer": function(methodNode) {
+        ASMAPI.log("INFO", "Transforming method: updateFluidOnEyes net.minecraft.entity.Entity");
+        //ASMAPI.log("INFO", "{}", ASMAPI.methodNodeToString(methodNode));
+        
+        var targetNode = ASMAPI.findFirstMethodCall(methodNode, ASMAPI.MethodType.VIRTUAL, "net/minecraft/fluid/FluidState", "is", "(Lnet/minecraft/tags/ITag;)Z");
+        targetNode = ASMAPI.findFirstInstructionAfter(methodNode, -1, methodNode.instructions.indexOf(targetNode) + 1);
+        var popNode = new LabelNode();
+        
+        methodNode.instructions.insert(targetNode, ASMAPI.listOf(
+            new VarInsnNode(Opcodes.ALOAD, 0),
+            new VarInsnNode(Opcodes.ALOAD, 7),
+            new MethodInsnNode(Opcodes.INVOKESTATIC, "meldexun/better_diving/plugin/EntityHook", "canBeInFluid", "(Lnet/minecraft/entity/Entity;Lnet/minecraft/tags/ITag;)Z", false),
+            new JumpInsnNode(Opcodes.IFNE, popNode),
+            new InsnNode(Opcodes.RETURN),
             popNode
         ));
         
