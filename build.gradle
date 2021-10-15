@@ -1,65 +1,85 @@
 buildscript {
     repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
-        jcenter()
+        maven { url = 'https://maven.minecraftforge.net' }
         mavenCentral()
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:3.+'
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
     }
 }
-        
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
 
 version = '1.12.2-1.5.8'
 group = 'meldexun.better_diving'
 archivesBaseName = 'BetterDiving'
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+java.toolchain.languageVersion = JavaLanguageVersion.of(8)
 
 minecraft {
     mappings channel: 'stable', version: '39-1.12'
 
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+
     runs {
         client {
-            workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
+            taskName 'runClient BD 1.12'
+            environment 'MC_VERSION', '1.12.2'
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
+            property 'forge.logging.console.level', 'info'
         }
 
         server {
-
-            // Recommended logging data for a userdev environment
+            taskName 'runServer BD 1.12'
+            environment 'MC_VERSION', '1.12.2'
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
+            property 'forge.logging.console.level', 'info'
         }
     }
 }
 
+configurations {
+    includedDependencies
+    buildDependencies
+
+    implementation.extendsFrom(includedDependencies)
+}
+
 repositories {
-    maven {
-        url = "https://www.cursemaven.com"
+    ivy {
+        url 'https://github.com/'
+
+        patternLayout {
+            artifact '[organisation]/[module]/releases/download/v[revision]/[module]-[revision].[ext]'
+        }
+
+        metadataSources { artifact() } 
     }
+
+    maven { url = 'https://www.cursemaven.com' }
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
+    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2855'
 
-    if (project.hasProperty('buildjar')) {
-        compile 'curse.maven:ArtemisLib-313590:2741812'
-        compile 'curse.maven:IndustrialCraft-242638:2980904'
-        compile 'curse.maven:MatterOverdrive-308192:2699215'
-        compile 'curse.maven:McLib-304750:3000300'
-        compile 'curse.maven:Metamorph-256932:3000304'
-        compile 'curse.maven:Vampirism-233029:2890062'
+    includedDependencies 'meldexun:ASMUtil:1.0.0@jar'
+    includedDependencies 'meldexun:ReflectionUtil:1.0.0@jar'
+
+    buildDependencies 'curse.maven:ArtemisLib:2741812'
+    buildDependencies 'curse.maven:IndustrialCraft:2980904'
+    buildDependencies 'curse.maven:MatterOverdrive:2699215'
+    buildDependencies 'curse.maven:McLib:3000300'
+    buildDependencies 'curse.maven:Metamorph:3000304'
+    buildDependencies 'curse.maven:Vampirism:2890062'
+}
+
+jar {
+    from {
+        configurations.includedDependencies.collect { it.isDirectory() ? it : zipTree(it) }
     }
+}
+
+compileJava {
+    classpath = sourceSets.main.compileClasspath + configurations.buildDependencies
 }
