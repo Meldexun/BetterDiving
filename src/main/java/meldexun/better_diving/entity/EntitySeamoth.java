@@ -6,7 +6,6 @@ import meldexun.better_diving.BetterDiving;
 import meldexun.better_diving.client.ClientBetterDiving;
 import meldexun.better_diving.client.audio.SeamothEngineLoopSound;
 import meldexun.better_diving.client.audio.SeamothStartSound;
-import meldexun.better_diving.client.util.BetterDivingMouseHelper;
 import meldexun.better_diving.config.BetterDivingConfig;
 import meldexun.better_diving.init.BetterDivingItems;
 import meldexun.better_diving.init.BetterDivingSounds;
@@ -23,7 +22,6 @@ import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.player.PlayerEntity;
@@ -37,7 +35,6 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -66,10 +63,6 @@ public class EntitySeamoth extends Entity implements IEntityAdditionalSpawnData 
 	public boolean inputLeft = false;
 	public boolean inputUp = false;
 	public boolean inputDown = false;
-
-	public float yaw = 0.0F;
-	public float pitch = 0.0F;
-	public float partialTicks = 0.0F;
 
 	public boolean insideWater = false;
 
@@ -309,64 +302,10 @@ public class EntitySeamoth extends Entity implements IEntityAdditionalSpawnData 
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void onPassengerTurned(Entity entityToUpdate) {
-		this.updateRotation();
-
-		entityToUpdate.yRotO = this.yRot;
-		entityToUpdate.yRot = this.yRot;
-		entityToUpdate.xRotO = this.xRot;
-		entityToUpdate.xRot = this.xRot;
-		if (entityToUpdate instanceof LivingEntity) {
-			LivingEntity entity = (LivingEntity) entityToUpdate;
-			entity.yHeadRotO = this.yRot;
-			entity.yHeadRot = this.yRot;
-			entity.yBodyRotO = this.yRot;
-			entity.yBodyRot = this.yRot;
-		}
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	public void updateRotation() {
-		Minecraft mc = Minecraft.getInstance();
-		if (this.getControllingPassenger() == mc.player) {
-			float f = mc.getFrameTime() - this.partialTicks;
-			if (f < 0.0F) {
-				f++;
-			}
-			this.partialTicks = mc.getFrameTime();
-
-			if (this.insideWater && this.hasEnergy()) {
-				double d = mc.options.sensitivity * 0.6D + 0.2D;
-				double d1 = d * d * d * 8.0D;
-				double deltaX = BetterDivingMouseHelper.deltaX;
-				double deltaY = BetterDivingMouseHelper.deltaY;
-				double d2 = MathHelper.clamp(deltaX * d1 * 0.05D, -40.0D * f, 40.0D * f);
-				double d3 = MathHelper.clamp(deltaY * d1 * 0.05D, -40.0D * f, 40.0D * f);
-				if (mc.options.invertYMouse) {
-					d3 *= -1.0D;
-				}
-
-				this.yRot += (float) d2 * 0.5F;
-				this.xRot += (float) d3 * 0.5F;
-				this.yaw += (float) d2 * 0.5F;
-				this.pitch += (float) d3 * 0.5F;
-			}
-
-			if (Math.abs(this.yaw) > 0.01F) {
-				this.yRot += this.yaw * 0.5F * f;
-				this.yaw *= 1.0F - 0.2F * f;
-			} else {
-				this.yaw = 0.0F;
-			}
-			if (Math.abs(this.pitch) > 0.01F) {
-				this.xRot += this.pitch * 0.5F * f;
-				this.pitch *= 1.0F - 0.2F * f;
-			} else {
-				this.pitch = 0.0F;
-			}
-
-			// this.yaw = MathHelper.wrapDegrees(this.yaw);
-			this.xRot = MathHelper.clamp(this.xRot, -90.0F, 90.0F);
-		}
+		this.yRotO = entityToUpdate.yRotO;
+		this.yRot = entityToUpdate.yRot;
+		this.xRotO = entityToUpdate.xRotO;
+		this.xRot = entityToUpdate.xRot;
 	}
 
 	public void updateMotion() {

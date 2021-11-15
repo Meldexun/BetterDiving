@@ -39,11 +39,11 @@ public class RenderSeamoth extends EntityRenderer<EntitySeamoth> {
 
 		if (mc.options.getCameraType() == PointOfView.FIRST_PERSON) {
 			matrixStackIn.translate(0.0D, player.getEyeHeight(), 0.0D);
-			this.setupRotation(entityIn, matrixStackIn);
+			this.setupRotation(entityIn, partialTicks, matrixStackIn);
 			matrixStackIn.translate(0.0D, 0.8125D - player.getEyeHeight(), -0.16D);
 		} else {
 			matrixStackIn.translate(0.0D, 0.8125D, 0.0D);
-			this.setupRotation(entityIn, matrixStackIn);
+			this.setupRotation(entityIn, partialTicks, matrixStackIn);
 		}
 
 		matrixStackIn.scale(-1.0F, -1.0F, 1.0F);
@@ -56,9 +56,19 @@ public class RenderSeamoth extends EntityRenderer<EntitySeamoth> {
 		((IRenderTypeBuffer.Impl) bufferIn).endBatch(RenderType.entityTranslucentCull(TEXTURE));
 	}
 
-	protected void setupRotation(EntitySeamoth entity, MatrixStack matrixStackIn) {
-		matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(180.0F - entity.yRot));
-		matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(-entity.xRot));
+	protected void setupRotation(EntitySeamoth entity, float partialTicks, MatrixStack matrixStackIn) {
+		float yaw;
+		float pitch;
+		Minecraft mc = Minecraft.getInstance();
+		if (entity.getControllingPassenger() == mc.player) {
+			yaw = mc.gameRenderer.mainCamera.getYRot();
+			pitch = mc.gameRenderer.mainCamera.getXRot();
+		} else {
+			yaw = MathHelper.lerp(partialTicks, entity.yRotO, entity.yRot);
+			pitch = MathHelper.lerp(partialTicks, entity.xRotO, entity.xRot);
+		}
+		matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(180.0F - yaw));
+		matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(-pitch));
 	}
 
 	@Override

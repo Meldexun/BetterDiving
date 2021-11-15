@@ -3,6 +3,7 @@
 	"FogRenderer Transformer": "asm/better_diving/client/FogRendererTransformer.js",
 	"GameRenderer Transformer": "asm/better_diving/client/GameRendererTransformer.js",
 	"LightTexture Transformer": "asm/better_diving/client/LightTextureTransformer.js",
+	"MouseHelper Transformer": "asm/better_diving/client/MouseHelperTransformer.js",
 	"WorldRenderer Transformer": "asm/better_diving/client/WorldRendererTransformer.js",
 	
 	"LivingEntity Transformer": "asm/better_diving/LivingEntityTransformer.js",
