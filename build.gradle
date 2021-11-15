@@ -23,37 +23,37 @@ minecraft {
 
     runs {
         client {
-            workingDirectory project.file('run')
+            taskName 'runClient BD 1.16'
             property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
+            property 'forge.logging.console.level', 'info'
 
             mods {
-                examplemod {
+                better_diving {
                     source sourceSets.main
                 }
             }
         }
 
         server {
-            workingDirectory project.file('run')
+            taskName 'runServer BD 1.16'
             property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
+            property 'forge.logging.console.level', 'info'
 
             mods {
-                examplemod {
+                better_diving {
                     source sourceSets.main
                 }
             }
         }
 
         data {
-            workingDirectory project.file('run')
+            taskName 'runData BD 1.16'
             property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            property 'forge.logging.console.level', 'info'
+            args '--mod', 'better_diving', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
-                examplemod {
+                better_diving {
                     source sourceSets.main
                 }
             }
