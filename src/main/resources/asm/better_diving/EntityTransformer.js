@@ -78,7 +78,7 @@ function initializeCoreMod() {
         ASMAPI.log("INFO", "Transforming method: updateFluidOnEyes net.minecraft.entity.Entity");
         //ASMAPI.log("INFO", "{}", ASMAPI.methodNodeToString(methodNode));
         
-        var targetNode = ASMAPI.findFirstMethodCall(methodNode, ASMAPI.MethodType.VIRTUAL, "net/minecraft/fluid/FluidState", "is", "(Lnet/minecraft/tags/ITag;)Z");
+        var targetNode = ASMAPI.findFirstMethodCall(methodNode, ASMAPI.MethodType.VIRTUAL, "net/minecraft/fluid/FluidState", ASMAPI.mapMethod("func_206884_a"), "(Lnet/minecraft/tags/ITag;)Z");
         targetNode = ASMAPI.findFirstInstructionAfter(methodNode, -1, methodNode.instructions.indexOf(targetNode) + 1);
         var popNode = new LabelNode();
         
