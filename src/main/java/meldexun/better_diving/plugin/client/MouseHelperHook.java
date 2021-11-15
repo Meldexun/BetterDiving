@@ -19,6 +19,9 @@ public class MouseHelperHook {
 		if (!(mc.player.getVehicle() instanceof EntitySeamoth)) {
 			return 0.0D;
 		}
+		if (!((EntitySeamoth) mc.player.getVehicle()).insideWater) {
+			return 0.0D;
+		}
 		if (!((EntitySeamoth) mc.player.getVehicle()).hasEnergy()) {
 			return 0.0D;
 		}
@@ -38,6 +41,9 @@ public class MouseHelperHook {
 	public static double onTurnPlayerY(double deltaTime, double sensitivity, double deltaY) {
 		Minecraft mc = Minecraft.getInstance();
 		if (!(mc.player.getVehicle() instanceof EntitySeamoth)) {
+			return 0.0D;
+		}
+		if (!((EntitySeamoth) mc.player.getVehicle()).insideWater) {
 			return 0.0D;
 		}
 		if (!((EntitySeamoth) mc.player.getVehicle()).hasEnergy()) {
