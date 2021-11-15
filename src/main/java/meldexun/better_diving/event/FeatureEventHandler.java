@@ -1,5 +1,7 @@
 package meldexun.better_diving.event;
 
+import java.util.Random;
+
 import meldexun.better_diving.BetterDiving;
 import meldexun.better_diving.config.BetterDivingConfig;
 import meldexun.better_diving.config.BetterDivingConfig.ServerConfig.Ores.OreConfig;
@@ -25,7 +27,13 @@ public class FeatureEventHandler {
 	public static ConfiguredFeature<FeatureSpreadConfig, ?> shaleOutcrop;
 
 	private static ConfiguredFeature<FeatureSpreadConfig, ?> register(String name, Feature<FeatureSpreadConfig> feature, OreConfig config) {
-		return Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, new ResourceLocation(BetterDiving.MOD_ID, name), feature.configured(new FeatureSpreadConfig(FeatureSpread.of(config.base.get(), config.spread.get()))));
+		FeatureSpreadConfig c = new FeatureSpreadConfig(new FeatureSpread(0, 0) {
+			@Override
+			public int sample(Random random) {
+			      return config.base.get() == 0 ? config.base.get() : config.base.get() + random.nextInt(config.spread.get() + 1);
+			}
+		});
+		return Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, new ResourceLocation(BetterDiving.MOD_ID, name), feature.configured(c));
 	}
 
 	public static void registerConfiguredFeatures() {
