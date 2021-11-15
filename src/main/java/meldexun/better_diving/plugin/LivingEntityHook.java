@@ -6,7 +6,7 @@ import meldexun.better_diving.config.BetterDivingConfig;
 import meldexun.better_diving.entity.EntitySeamoth;
 import meldexun.better_diving.util.BetterDivingHelper;
 import meldexun.better_diving.util.DivingGearHelper;
-import meldexun.better_diving.util.reflection.ReflectionMethod;
+import meldexun.reflectionutil.ReflectionMethod;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;

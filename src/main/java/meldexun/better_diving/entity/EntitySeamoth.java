@@ -15,7 +15,7 @@ import meldexun.better_diving.network.packet.client.CPacketSyncSeamothInput;
 import meldexun.better_diving.network.packet.server.SPacketSyncSeamothEnergy;
 import meldexun.better_diving.network.packet.server.SPacketSyncSeamothPowerCell;
 import meldexun.better_diving.util.BetterDivingHelper;
-import meldexun.better_diving.util.reflection.ReflectionMethod;
+import meldexun.reflectionutil.ReflectionMethod;
 import net.minecraft.client.GameSettings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
@@ -49,7 +49,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class EntitySeamoth extends Entity implements IEntityAdditionalSpawnData {
 
-	private static final ReflectionMethod<?> PLAYER_ENTITY_UPDATE_PLAYER_POSE = new ReflectionMethod<>(PlayerEntity.class, "func_213832_dB", "updatePlayerPose");
+	private static final ReflectionMethod<Void> PLAYER_ENTITY_UPDATE_PLAYER_POSE = new ReflectionMethod<>(PlayerEntity.class, "func_213832_dB", "updatePlayerPose");
 
 	private int damage = 0;
 

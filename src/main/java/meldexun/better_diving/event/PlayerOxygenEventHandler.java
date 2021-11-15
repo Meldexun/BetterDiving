@@ -1,29 +1,16 @@
 package meldexun.better_diving.event;
 
 import meldexun.better_diving.BetterDiving;
-import meldexun.better_diving.api.event.PlayerSuffocateEvent;
-import meldexun.better_diving.capability.oxygen.entity.CapabilityOxygenProvider;
-import meldexun.better_diving.config.BetterDivingConfig;
 import meldexun.better_diving.entity.EntitySeamoth;
-import meldexun.better_diving.network.packet.server.SPacketSyncOxygen;
-import meldexun.better_diving.util.BetterDivingHelper;
-import meldexun.better_diving.util.DivingGearHelper;
 import meldexun.better_diving.util.OxygenPlayerHelper;
-import meldexun.better_diving.util.reflection.ReflectionMethod;
+import meldexun.reflectionutil.ReflectionMethod;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.tags.FluidTags;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.network.PacketDistributor;
 
 @Mod.EventBusSubscriber(modid = BetterDiving.MOD_ID)
 public class PlayerOxygenEventHandler {
