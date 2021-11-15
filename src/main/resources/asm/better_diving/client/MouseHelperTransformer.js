@@ -60,14 +60,14 @@ function initializeCoreMod() {
 	    	new VarInsnNode(Opcodes.DLOAD, 3),
 	    	new VarInsnNode(Opcodes.DLOAD, 7),
 	    	new VarInsnNode(Opcodes.ALOAD, 0),
-	    	new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/MouseHelper", "accumulatedDX", "D"),
+	    	new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/MouseHelper", ASMAPI.mapField("field_198048_m"), "D"),
 	    	new MethodInsnNode(Opcodes.INVOKESTATIC, "meldexun/better_diving/plugin/client/MouseHelperHook", "onTurnPlayerX", "(DDD)D"),
 	    	new VarInsnNode(Opcodes.DSTORE, 9),
 	    	
 	    	new VarInsnNode(Opcodes.DLOAD, 3),
 	    	new VarInsnNode(Opcodes.DLOAD, 7),
 	    	new VarInsnNode(Opcodes.ALOAD, 0),
-	    	new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/MouseHelper", "accumulatedDY", "D"),
+	    	new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/client/MouseHelper", ASMAPI.mapField("field_198049_n"), "D"),
 	    	new MethodInsnNode(Opcodes.INVOKESTATIC, "meldexun/better_diving/plugin/client/MouseHelperHook", "onTurnPlayerY", "(DDD)D"),
 	    	new VarInsnNode(Opcodes.DSTORE, 11),
 	    	
