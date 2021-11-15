@@ -9,7 +9,6 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
 
 version = "$mcVersion-$modVersion"
 group = 'meldexun.better_diving'
