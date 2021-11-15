@@ -47,6 +47,7 @@ public class BetterDivingConfig {
 
 		public final Mining mining;
 		public final Movement movement;
+		public final Ores ores;
 		public final Oxygen oxygen;
 		public final Seamoth seamoth;
 		public final UnderwaterVisuals underwaterVisuals;
@@ -73,6 +74,7 @@ public class BetterDivingConfig {
 
 			this.mining = new Mining(builder);
 			this.movement = new Movement(builder);
+			this.ores = new Ores(builder);
 			this.oxygen = new Oxygen(builder);
 			this.seamoth = new Seamoth(builder);
 			this.underwaterVisuals = new UnderwaterVisuals(builder);
@@ -160,6 +162,40 @@ public class BetterDivingConfig {
 				this.weakerSneakDescending = builder.comment("When enabled sneaking in water only let's you descend slowly. The idea is that when you are in water you can still use items that require you to sneak without descending too far. Note that you can always use the descend key (default C) to descend while in water.").define("weakerSneakDescending", false);
 
 				builder.pop();
+			}
+
+		}
+
+		public static class Ores {
+
+			public final OreConfig limestone;
+			public final OreConfig sandstone;
+			public final OreConfig shale;
+
+			public Ores(ForgeConfigSpec.Builder builder) {
+				builder.comment("").push("ores");
+
+				this.limestone = new OreConfig(builder, "limestone", 0, 2);
+				this.sandstone = new OreConfig(builder, "sandstone", 0, 1);
+				this.shale = new OreConfig(builder, "shale", 3, 5);
+	
+				builder.pop();
+			}
+
+			public static class OreConfig {
+
+				public final ForgeConfigSpec.IntValue base;
+				public final ForgeConfigSpec.IntValue spread;
+
+				public OreConfig(ForgeConfigSpec.Builder builder, String name, int base, int spread) {
+					builder.comment("").push(name);
+
+					this.base = builder.comment("").defineInRange("base", base, 0, 1024);
+					this.spread = builder.comment("").defineInRange("spread", spread, 0, 1024);
+					
+					builder.pop();
+				}
+				
 			}
 
 		}

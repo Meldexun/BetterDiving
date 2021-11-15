@@ -1,6 +1,8 @@
 package meldexun.better_diving.event;
 
 import meldexun.better_diving.BetterDiving;
+import meldexun.better_diving.config.BetterDivingConfig;
+import meldexun.better_diving.config.BetterDivingConfig.ServerConfig.Ores.OreConfig;
 import meldexun.better_diving.init.BetterDivingFeatures;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
@@ -22,14 +24,14 @@ public class FeatureEventHandler {
 	public static ConfiguredFeature<FeatureSpreadConfig, ?> sandstoneOutcrop;
 	public static ConfiguredFeature<FeatureSpreadConfig, ?> shaleOutcrop;
 
-	private static ConfiguredFeature<FeatureSpreadConfig, ?> register(String name, Feature<FeatureSpreadConfig> feature, int base, int spread) {
-		return Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, new ResourceLocation(BetterDiving.MOD_ID, name), feature.configured(new FeatureSpreadConfig(FeatureSpread.of(base, spread))));
+	private static ConfiguredFeature<FeatureSpreadConfig, ?> register(String name, Feature<FeatureSpreadConfig> feature, OreConfig config) {
+		return Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, new ResourceLocation(BetterDiving.MOD_ID, name), feature.configured(new FeatureSpreadConfig(FeatureSpread.of(config.base.get(), config.spread.get()))));
 	}
 
 	public static void registerConfiguredFeatures() {
-		limestoneOutcrop = register("limestone_outcrop", BetterDivingFeatures.LIMESTONE_OUTCROP.get(), 0, 2);
-		sandstoneOutcrop = register("sandstone_outcrop", BetterDivingFeatures.SANDSTONE_OUTCROP.get(), 0, 1);
-		shaleOutcrop = register("shalestone_outcrop", BetterDivingFeatures.SHALE_OUTCROP.get(), 3, 5);
+		limestoneOutcrop = register("limestone_outcrop", BetterDivingFeatures.LIMESTONE_OUTCROP.get(), BetterDivingConfig.SERVER_CONFIG.ores.limestone);
+		sandstoneOutcrop = register("sandstone_outcrop", BetterDivingFeatures.SANDSTONE_OUTCROP.get(), BetterDivingConfig.SERVER_CONFIG.ores.sandstone);
+		shaleOutcrop = register("shalestone_outcrop", BetterDivingFeatures.SHALE_OUTCROP.get(), BetterDivingConfig.SERVER_CONFIG.ores.shale);
 	}
 
 	@SubscribeEvent
