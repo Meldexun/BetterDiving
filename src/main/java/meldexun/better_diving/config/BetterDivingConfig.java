@@ -175,24 +175,32 @@ public class BetterDivingConfig {
 			public Ores(ForgeConfigSpec.Builder builder) {
 				builder.comment("").push("ores");
 
-				this.limestone = new OreConfig(builder, "limestone", 0, 2);
-				this.sandstone = new OreConfig(builder, "sandstone", 0, 1);
-				this.shale = new OreConfig(builder, "shale", 3, 5);
+				this.limestone = new OreConfig(builder, "limestone", true, 1, 0, 2, 0, 64);
+				this.sandstone = new OreConfig(builder, "sandstone", true, 1, 0, 1, 0, 40);
+				this.shale = new OreConfig(builder, "shale", true, 1, 3, 8, 0, 64);
 	
 				builder.pop();
 			}
 
 			public static class OreConfig {
 
-				public final ForgeConfigSpec.IntValue base;
-				public final ForgeConfigSpec.IntValue spread;
+				public final ForgeConfigSpec.BooleanValue enabled;
+				public final ForgeConfigSpec.IntValue chance;
+				public final ForgeConfigSpec.IntValue minAmount;
+				public final ForgeConfigSpec.IntValue maxAmount;
+				public final ForgeConfigSpec.IntValue minHeight;
+				public final ForgeConfigSpec.IntValue maxHeight;
 
-				public OreConfig(ForgeConfigSpec.Builder builder, String name, int base, int spread) {
+				public OreConfig(ForgeConfigSpec.Builder builder, String name, boolean enabled, int chance, int minAmount, int maxAmount, int minHeight, int maxHeight) {
 					builder.comment("").push(name);
 
-					this.base = builder.comment("").defineInRange("base", base, 0, 1024);
-					this.spread = builder.comment("").defineInRange("spread", spread, 0, 1024);
-					
+					this.enabled = builder.comment("").define("enabled", enabled);
+					this.chance = builder.comment("").defineInRange("chance", chance, 0, 1024);
+					this.minAmount = builder.comment("").defineInRange("minAmount", minAmount, 0, 1024);
+					this.maxAmount = builder.comment("").defineInRange("maxAmount", maxAmount, 0, 1024);
+					this.minHeight = builder.comment("").defineInRange("minHeight", minHeight, -1024, 1024);
+					this.maxHeight = builder.comment("").defineInRange("maxHeight", maxHeight, -1024, 1024);
+
 					builder.pop();
 				}
 				

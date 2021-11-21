@@ -7,7 +7,6 @@ import java.util.Random;
 
 import com.mojang.serialization.Codec;
 
-import meldexun.better_diving.block.BlockUnderwaterOre;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -19,21 +18,20 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.Heightmap.Type;
 import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.FeatureSpreadConfig;
 
-public class RavineOutcropFeature extends Feature<FeatureSpreadConfig> {
+public class RavineOutcropFeature extends Feature<OceanOreFeatureConfig> {
 
-	private final BlockUnderwaterOre block;
-
-	public RavineOutcropFeature(Codec<FeatureSpreadConfig> codec, BlockUnderwaterOre block) {
+	public RavineOutcropFeature(Codec<OceanOreFeatureConfig> codec) {
 		super(codec);
-		this.block = block;
 	}
 
 	@Override
-	public boolean place(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, FeatureSpreadConfig config) {
+	public boolean place(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, OceanOreFeatureConfig config) {
+		if (config.getConfig().chance.get() > 0 && rand.nextInt(config.getConfig().chance.get()) != 0) {
+			return false;
+		}
 		int i = 0;
-		int j = config.count().sample(rand);
+		int j = config.sample(rand);
 		for (int k = 0; k < j; k++) {
 			for (int l = 0; l < 16; l++) {
 				int x = rand.nextInt(8) - rand.nextInt(8);
@@ -43,6 +41,12 @@ public class RavineOutcropFeature extends Feature<FeatureSpreadConfig> {
 					continue;
 				}
 				int y = 1 + rand.nextInt(height - 1);
+				if (y < config.getConfig().minHeight.get()) {
+					continue;
+				}
+				if (y > config.getConfig().maxHeight.get()) {
+					continue;
+				}
 				BlockPos p = new BlockPos(pos.getX() + x, y, pos.getZ() + z);
 				if (!reader.getBlockState(p).is(Blocks.WATER)) {
 					continue;
@@ -70,7 +74,7 @@ public class RavineOutcropFeature extends Feature<FeatureSpreadConfig> {
 				list.add(Direction.WEST);
 				Collections.shuffle(list);
 				for (Direction d : list) {
-					BlockState state = this.block.defaultBlockState().setValue(BlockStateProperties.FACING, d);
+					BlockState state = config.getBlock().defaultBlockState().setValue(BlockStateProperties.FACING, d);
 					if (state.canSurvive((IWorldReader) reader, p)) {
 						reader.setBlock(p, state, 2);
 						i++;
