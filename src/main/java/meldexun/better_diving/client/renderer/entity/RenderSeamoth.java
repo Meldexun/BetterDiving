@@ -61,8 +61,8 @@ public class RenderSeamoth extends EntityRenderer<EntitySeamoth> {
 		float pitch;
 		Minecraft mc = Minecraft.getInstance();
 		if (entity.getControllingPassenger() == mc.player) {
-			yaw = mc.gameRenderer.mainCamera.getYRot();
-			pitch = mc.gameRenderer.mainCamera.getXRot();
+			yaw = mc.player.getViewYRot(partialTicks);
+			pitch = mc.player.getViewXRot(partialTicks);
 		} else {
 			yaw = MathHelper.lerp(partialTicks, entity.yRotO, entity.yRot);
 			pitch = MathHelper.lerp(partialTicks, entity.xRotO, entity.xRot);
