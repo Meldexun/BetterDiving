@@ -27,6 +27,9 @@ public class RavineOutcropFeature extends Feature<OceanOreFeatureConfig> {
 
 	@Override
 	public boolean place(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, OceanOreFeatureConfig config) {
+		if (!config.getConfig().enabled.get()) {
+			return false;
+		}
 		if (config.getConfig().chance.get() > 0 && rand.nextInt(config.getConfig().chance.get()) != 0) {
 			return false;
 		}
