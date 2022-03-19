@@ -2,26 +2,26 @@
   "itemGroup.better_diving": "Better Diving",
 
   "item.better_diving.diving_mask": "Tauchmaske",
-  "item.better_diving.standard_o2_tank": "Standard-O₂-Tank",
-  "item.better_diving.wetsuit_leggings": "Neoprenanzug-Leggings",
-  "item.better_diving.fins": "Flossen",
+  "item.better_diving.standard_o2_tank": "Standard-Tauchflasche",
+  "item.better_diving.wetsuit_leggings": "Neoprenanzug",
+  "item.better_diving.fins": "Schwimmflossen",
 
-  "item.better_diving.rebreather": "Kreislaufatemgerät",
-  "item.better_diving.high_capacity_o2_tank": "O₂-Tank mit hoher Kapazität",
-  "item.better_diving.improved_wetsuit_leggings": "Verbesserte Neoprenanzug-Leggings",
-  "item.better_diving.ultra_glide_fins": "Ultra-Glide-Flossen",
+  "item.better_diving.rebreather": "Kreislauftauchgerät",
+  "item.better_diving.high_capacity_o2_tank": "Tauchflasche mit hoher Kapazität",
+  "item.better_diving.improved_wetsuit_leggings": "Verbesserter Neoprenanzug",
+  "item.better_diving.ultra_glide_fins": "Ultragleitfähige Schwimmflossen",
 
-  "item.better_diving.strong_diving_mask": "Verstärkte Tauchermaske",
-  "item.better_diving.stronger_o2_tank": "Verstärkter O₂-Tank",
-  "item.better_diving.stronger_wetsuit_leggings": "Verstärkte Neoprenanzug-Leggings",
-  "item.better_diving.stronger_fins": "Verstärkte Flossen",
+  "item.better_diving.reinforced_diving_mask": "Verstärkte Tauchmaske",
+  "item.better_diving.reinforced_o2_tank": "Verstärkte Tauchflasche",
+  "item.better_diving.reinforced_wetsuit_leggings": "Verstärkter Neoprenanzug",
+  "item.better_diving.reinforced_fins": "Verstärkte Schwimmflossen",
 
   "item.better_diving.coal_chunk": "Kohlebrocken",
   "item.better_diving.iron_chunk": "Eisenbrocken",
   "item.better_diving.gold_chunk": "Goldbrocken",
-  "item.better_diving.lapis_chunk": "Lapisbrocken",
-  "item.better_diving.redstone_chunk": "Redstonebrocken",
-  "item.better_diving.emerald_chunk": "Smaragdstück",
+  "item.better_diving.lapis_chunk": "Lapislazulibrocken",
+  "item.better_diving.redstone_chunk": "Redstone-Brocken",
+  "item.better_diving.emerald_chunk": "Smaragdbrocken",
   "item.better_diving.diamond_chunk": "Diamantbrocken",
 
   "item.better_diving.titanium_chunk": "Titanbrocken",
@@ -42,9 +42,9 @@
 
   "item.better_diving.seamoth": "Seemotte",
 
-  "block.better_diving.limestone_outcrop": "Kalksteinfelsen",
-  "block.better_diving.sandstone_outcrop": "Sandsteinfelsen",
-  "block.better_diving.shale_outcrop": "Schieferfelsen",
+  "block.better_diving.limestone_outcrop": "Kalksteinablagerung",
+  "block.better_diving.sandstone_outcrop": "Sandsteinablagerung",
+  "block.better_diving.shale_outcrop": "Schieferablagerung",
 
   "block.better_diving.titanium_block": "Titanblock",
   "block.better_diving.copper_block": "Kupferblock",
