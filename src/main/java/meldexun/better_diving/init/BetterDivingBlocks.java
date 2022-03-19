@@ -2,9 +2,9 @@ package meldexun.better_diving.init;
 
 import meldexun.better_diving.BetterDiving;
 import meldexun.better_diving.block.BlockUnderwaterOre;
-import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.AbstractBlock.Properties;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.Blocks;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
@@ -18,11 +18,11 @@ public class BetterDivingBlocks {
 	public static final RegistryObject<BlockUnderwaterOre> SANDSTONE_OUTCROP = BLOCKS.register("sandstone_outcrop", BlockUnderwaterOre::new);
 	public static final RegistryObject<BlockUnderwaterOre> SHALE_OUTCROP = BLOCKS.register("shale_outcrop", BlockUnderwaterOre::new);
 
-	public static final RegistryObject<Block> TITANIUM_BLOCK = BLOCKS.register("titanium_block", () -> new Block(AbstractBlock.Properties.of(Material.STONE)));
-	public static final RegistryObject<Block> COPPER_BLOCK = BLOCKS.register("copper_block", () -> new Block(AbstractBlock.Properties.of(Material.STONE)));
-	public static final RegistryObject<Block> SILVER_BLOCK = BLOCKS.register("silver_block", () -> new Block(AbstractBlock.Properties.of(Material.STONE)));
-	public static final RegistryObject<Block> LEAD_BLOCK = BLOCKS.register("lead_block", () -> new Block(AbstractBlock.Properties.of(Material.STONE)));
-	public static final RegistryObject<Block> LITHIUM_BLOCK = BLOCKS.register("lithium_block", () -> new Block(AbstractBlock.Properties.of(Material.STONE)));
+	public static final RegistryObject<Block> TITANIUM_BLOCK = BLOCKS.register("titanium_block", () -> new Block(Properties.copy(Blocks.IRON_BLOCK)));
+	public static final RegistryObject<Block> COPPER_BLOCK = BLOCKS.register("copper_block", () -> new Block(Properties.copy(Blocks.IRON_BLOCK)));
+	public static final RegistryObject<Block> SILVER_BLOCK = BLOCKS.register("silver_block", () -> new Block(Properties.copy(Blocks.IRON_BLOCK)));
+	public static final RegistryObject<Block> LEAD_BLOCK = BLOCKS.register("lead_block", () -> new Block(Properties.copy(Blocks.IRON_BLOCK)));
+	public static final RegistryObject<Block> LITHIUM_BLOCK = BLOCKS.register("lithium_block", () -> new Block(Properties.copy(Blocks.IRON_BLOCK)));
 
 	public static void registerBlocks() {
 		BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
