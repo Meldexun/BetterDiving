@@ -322,6 +322,9 @@ public class BetterDivingConfig {
 		public final ForgeConfigSpec.BooleanValue oxygenGuiEnabled;
 		public final ForgeConfigSpec.IntValue oxygenGuiOffsetX;
 		public final ForgeConfigSpec.IntValue oxygenGuiOffsetY;
+		public final ForgeConfigSpec.BooleanValue oxygenGuiRenderAlways;
+		public final ForgeConfigSpec.BooleanValue oxygenGuiRenderNotFull;
+		public final ForgeConfigSpec.BooleanValue oxygenGuiRenderUnderwater;
 
 		public final ForgeConfigSpec.IntValue seamothGuiAnchor;
 		public final ForgeConfigSpec.BooleanValue seamothGuiEnabled;
@@ -335,6 +338,9 @@ public class BetterDivingConfig {
 			this.oxygenGuiEnabled = builder.comment("").define("oxygenGuiEnabled", true);
 			this.oxygenGuiOffsetX = builder.comment("").defineInRange("oxygenGuiOffsetX", 62, -1000, 1000);
 			this.oxygenGuiOffsetY = builder.comment("").defineInRange("oxygenGuiOffsetY", -32, -1000, 1000);
+			this.oxygenGuiRenderAlways = builder.comment("If enabled the oxygen gui will always be rendered.").define("oxygenGuiRenderAlways", false);
+			this.oxygenGuiRenderNotFull = builder.comment("If enabled the oxygen gui will be rendered when current oxygen is less than the oxygen capacity.").define("oxygenGuiRenderNotFull", true);
+			this.oxygenGuiRenderUnderwater = builder.comment("If enabled the oxygen gui will be rendered when underwater.").define("oxygenGuiRenderUnderwater", true);
 
 			this.seamothGuiAnchor = builder.comment("0: top-left, 1: top-middle, 2: top-right, 3: bottom-right, 4: bottom-middle, 5: bottom-left").defineInRange("seamothGuiAnchor", 3, 0, 5);
 			this.seamothGuiEnabled = builder.comment("").define("seamothGuiEnabled", true);

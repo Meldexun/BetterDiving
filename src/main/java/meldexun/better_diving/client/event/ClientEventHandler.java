@@ -49,7 +49,9 @@ public class ClientEventHandler {
 		if (event.getType() == ElementType.AIR && BetterDivingConfig.CLIENT_CONFIG.oxygenGuiEnabled.get()) {
 			event.setCanceled(true);
 
-			if (mc.player.isEyeInFluid(FluidTags.WATER) || OxygenPlayerHelper.getOxygenRespectEquipment(mc.player) < OxygenPlayerHelper.getOxygenCapacityRespectEquipment(mc.player)) {
+			if (BetterDivingConfig.CLIENT_CONFIG.oxygenGuiRenderAlways.get()
+					|| (BetterDivingConfig.CLIENT_CONFIG.oxygenGuiRenderUnderwater.get() && mc.player.isEyeInFluid(FluidTags.WATER))
+					|| (BetterDivingConfig.CLIENT_CONFIG.oxygenGuiRenderNotFull.get() && OxygenPlayerHelper.getOxygenRespectEquipment(mc.player) < OxygenPlayerHelper.getOxygenCapacityRespectEquipment(mc.player))) {
 				GuiOxygen.render(event.getMatrixStack());
 			}
 		}
