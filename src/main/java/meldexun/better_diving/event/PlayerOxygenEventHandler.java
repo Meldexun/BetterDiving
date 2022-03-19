@@ -1,7 +1,6 @@
 package meldexun.better_diving.event;
 
 import meldexun.better_diving.BetterDiving;
-import meldexun.better_diving.entity.EntitySeamoth;
 import meldexun.better_diving.util.OxygenPlayerHelper;
 import meldexun.reflectionutil.ReflectionMethod;
 import net.minecraft.entity.LivingEntity;
@@ -25,9 +24,6 @@ public class PlayerOxygenEventHandler {
 		PlayerEntity player = event.player;
 		if (player.level.isClientSide) {
 		   return;
-		}
-		if (player.getVehicle() instanceof EntitySeamoth && ((EntitySeamoth) player.getVehicle()).hasEnergy()) {
-			OxygenPlayerHelper.receiveOxygenRespectEquipment(player, LIVING_ENTITY_INCREASE_AIR_SUPPLY.invoke(player, 0));
 		}
 		if (player.getAirSupply() < player.getMaxAirSupply()) {
 			int i = OxygenPlayerHelper.extractOxygenRespectEquipment(player, player.getMaxAirSupply() - player.getAirSupply());
