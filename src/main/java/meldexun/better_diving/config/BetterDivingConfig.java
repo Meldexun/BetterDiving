@@ -331,7 +331,10 @@ public class BetterDivingConfig {
 		public final ForgeConfigSpec.IntValue seamothGuiOffsetX;
 		public final ForgeConfigSpec.IntValue seamothGuiOffsetY;
 
-		public final ForgeConfigSpec.BooleanValue skipSkyRendering;
+		public final ForgeConfigSpec.BooleanValue seaLevelOverride;
+		public final ForgeConfigSpec.IntValue seaLevel;
+		public final ForgeConfigSpec.BooleanValue skipSkyRenderingUnderwater;
+		public final ForgeConfigSpec.BooleanValue skipSkyRenderingBelowSealevel;
 
 		public ClientConfig(ForgeConfigSpec.Builder builder) {
 			this.oxygenGuiAnchor = builder.comment("0: top-left, 1: top-middle, 2: top-right, 3: bottom-right, 4: bottom-middle, 5: bottom-left").defineInRange("oxygenGuiAnchor", 4, 0, 5);
@@ -347,7 +350,10 @@ public class BetterDivingConfig {
 			this.seamothGuiOffsetX = builder.comment("").defineInRange("seamothGuiOffsetX", -4, -1000, 1000);
 			this.seamothGuiOffsetY = builder.comment("").defineInRange("seamothGuiOffsetY", -8, -1000, 1000);
 
-			this.skipSkyRendering = builder.comment("").define("skipSkyRendering", true);
+			this.seaLevelOverride = builder.comment("When enabled a custom sea level can be set using the 'seaLevel' option.").define("seaLevelOverride", false);
+			this.seaLevel = builder.comment("").defineInRange("seaLevel", 64, -1024, 1024);
+			this.skipSkyRenderingUnderwater = builder.comment("When enabled and the player is underwater and below the sea level then the sky rendering will be skipped.").define("skipSkyRenderingInWater", true);
+			this.skipSkyRenderingBelowSealevel = builder.comment("When enabled and the player is below the sea level then the sky rendering will be skipped.").define("skipSkyRenderingBelowSealevel", false);
 		}
 
 	}
