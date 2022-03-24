@@ -5,10 +5,12 @@ buildscript {
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7.+'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
+apply plugin: 'org.spongepowered.mixin'
 
 version = "$mcVersion-$modVersion"
 group = 'meldexun.better_diving'
@@ -65,8 +67,9 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 configurations {
     includedDependencies
-
     implementation.extendsFrom(includedDependencies)
+
+    buildDependencies
 }
 
 repositories {
@@ -79,17 +82,30 @@ repositories {
 
         metadataSources { artifact() } 
     }
+
+    maven { url 'https://www.cursemaven.com' }
 }
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.31'
     includedDependencies 'meldexun:ReflectionUtil:1.0.0@jar'
+    buildDependencies 'curse.maven:BeyonEarth-377448:3581611'
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+}
+
+mixin {
+    add sourceSets.main, 'mixins.better_diving.refmap.json'
+    config 'mixins.better_diving.json'
 }
 
 jar {
     from {
         configurations.includedDependencies.collect { it.isDirectory() ? it : zipTree(it) }
     }
+}
+
+compileJava {
+    classpath = sourceSets.main.compileClasspath + configurations.buildDependencies
 }
 
 jar.finalizedBy('reobfJar') 

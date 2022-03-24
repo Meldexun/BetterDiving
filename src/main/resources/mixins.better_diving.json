@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "meldexun.better_diving.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "mixins.better_diving.refmap.json",
+  "mixins": [
+    "MixinOxygenSystem"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

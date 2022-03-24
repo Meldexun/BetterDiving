@@ -9,6 +9,7 @@ import meldexun.better_diving.client.gui.GuiOxygen;
 import meldexun.better_diving.client.gui.GuiSeamoth;
 import meldexun.better_diving.config.BetterDivingConfig;
 import meldexun.better_diving.entity.EntitySeamoth;
+import meldexun.better_diving.integration.BeyondEarth;
 import meldexun.better_diving.network.packet.client.CPacketOpenSeamothInventory;
 import meldexun.better_diving.oxygenprovider.DivingGearManager;
 import meldexun.better_diving.oxygenprovider.DivingMaskProviderItem;
@@ -36,6 +37,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = BetterDiving.MOD_ID, value = Dist.CLIENT)
@@ -49,9 +51,7 @@ public class ClientEventHandler {
 		if (event.getType() == ElementType.AIR && BetterDivingConfig.CLIENT_CONFIG.oxygenGuiEnabled.get()) {
 			event.setCanceled(true);
 
-			if (BetterDivingConfig.CLIENT_CONFIG.oxygenGuiRenderAlways.get()
-					|| (BetterDivingConfig.CLIENT_CONFIG.oxygenGuiRenderUnderwater.get() && mc.player.isEyeInFluid(FluidTags.WATER))
-					|| (BetterDivingConfig.CLIENT_CONFIG.oxygenGuiRenderNotFull.get() && OxygenPlayerHelper.getOxygenRespectEquipment(mc.player) < OxygenPlayerHelper.getOxygenCapacityRespectEquipment(mc.player))) {
+			if (shouldRenderOxygen()) {
 				GuiOxygen.render(event.getMatrixStack());
 			}
 		}
@@ -62,6 +62,23 @@ public class ClientEventHandler {
 			// event.setCanceled(true);
 			// HotbarSeamoth.render(event.getMatrixStack());
 		}
+	}
+
+	private static boolean shouldRenderOxygen() {
+		if (BetterDivingConfig.CLIENT_CONFIG.oxygenGuiRenderAlways.get()) {
+			return true;
+		}
+		Minecraft mc = Minecraft.getInstance();
+		if (ModList.get().isLoaded("boss_tools")
+				&& BeyondEarth.isSpace(mc.level)) {
+			return false;
+		}
+		if (BetterDivingConfig.CLIENT_CONFIG.oxygenGuiRenderUnderwater.get()
+				&& mc.player.isEyeInFluid(FluidTags.WATER)) {
+			return true;
+		}
+		return BetterDivingConfig.CLIENT_CONFIG.oxygenGuiRenderNotFull.get()
+				&& OxygenPlayerHelper.getOxygenRespectEquipment(mc.player) < OxygenPlayerHelper.getOxygenCapacityRespectEquipment(mc.player);
 	}
 
 	@SubscribeEvent

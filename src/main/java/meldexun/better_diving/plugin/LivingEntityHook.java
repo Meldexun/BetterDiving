@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import meldexun.better_diving.config.BetterDivingConfig;
 import meldexun.better_diving.entity.EntitySeamoth;
+import meldexun.better_diving.integration.BeyondEarth;
 import meldexun.better_diving.util.BetterDivingHelper;
 import meldexun.better_diving.util.DivingGearHelper;
 import meldexun.reflectionutil.ReflectionMethod;
@@ -25,6 +26,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.fml.ModList;
 
 public class LivingEntityHook {
 
@@ -193,6 +195,11 @@ public class LivingEntityHook {
 	}
 
 	public static boolean canBreatheUnderwater(LivingEntity entity) {
+		if (ModList.get().isLoaded("boss_tools")
+				&& entity instanceof PlayerEntity
+				&& BeyondEarth.isSpace(entity.level)) {
+			return true;
+		}
 		return entity.getVehicle() instanceof EntitySeamoth && ((EntitySeamoth) entity.getVehicle()).hasEnergy();
 	}
 
