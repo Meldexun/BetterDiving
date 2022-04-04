@@ -12,22 +12,19 @@ A clear and concise description of what the bug is.
 
 **To Reproduce**
 Steps to reproduce the behavior:
-1. Go to...
-2. Use item...
-3. Place block...
-.
-.
-.
+1. Go to '...'
+2. Click on '....'
+3. Scroll down to '....'
 4. See error
 
-**Versions**
-Better Diving:
-Forge:
-Minecraft:
+**Screenshots/Videos**
+If applicable, add screenshots/videos to help explain your problem.
 
-**Other**
-Crash report (if one exists):
-Latest log:
-Singleplayer/Multiplayer:
-Other mods (that are necessary to produce the bug):
-Other mods (that are also installed):
+**Versions**
+Better Diving: 
+Forge: 
+Minecraft: 
+Other mods (necessary to reproduce the bug): 
+
+**Log File**
+Please use a paste site to upload the log file (for example https://gist.github.com/) and provide the link to the file here:
